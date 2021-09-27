@@ -24,7 +24,17 @@ def grect(xa, ya, width, height, x):
 def duga(xa, ya, xb, yb, angle1, angle2):
     arc(screen, cgreen, (xa, ya, xb-xa, yb-ya), angle1, angle2, 2)
 
-grect(500, 600, 30, 120, 0)
+x1 = 500
+y1 = 600
+w1 = 30
+h1 = 120
+a1 = 0
+gap=20
+
+grect(x1, y1, w1, h1, 0)
+grect(x1, y1-gap-h1, w1, h1, 0)
+grect(x1+w1-10, y1-gap-2*h1, w1, h1-20, np.pi/12)
+grect(x1+2*w1+40, y1-gap-2.7*h1-100, w1-10, h1+70, np.pi/8)
 
 
 pygame.display.update()
