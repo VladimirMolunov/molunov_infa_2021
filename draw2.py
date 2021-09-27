@@ -58,8 +58,11 @@ leaf(surface, 130,160,100,20)
 leaf(surface, 110,200,100,20)
 leaf(surface, 115,250,100,20)
 surface2 = pygame.transform.rotate(surface, 40)
+surface3 = pygame.transform.rotate(surface, -70)
+surface3 = pygame.transform.scale(surface3, (300,300))
 
 screen.blit(surface2, (35,50))
+screen.blit(surface3, (635,30))
 pygame.display.update()
 clock = pygame.time.Clock()
 finished = False
