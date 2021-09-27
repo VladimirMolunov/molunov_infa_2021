@@ -29,12 +29,24 @@ y1 = 600
 w1 = 30
 h1 = 120
 a1 = 0
-gap=20
+gap = 20
 
 grect(x1, y1, w1, h1, 0)
 grect(x1, y1-gap-h1, w1, h1, 0)
-grect(x1+w1-10, y1-gap-2*h1, w1, h1-20, np.pi/12)
-grect(x1+2*w1+40, y1-gap-2.7*h1-100, w1-10, h1+70, np.pi/8)
+grect(x1+w1-gap/2, y1-gap-2*h1, w1, h1-gap, np.pi/12)
+grect(x1+2*w1+2*gap, y1-gap-2.7*h1-5*gap, w1-gap/2, h1+3.5*gap, np.pi/8)
+
+x1 = 300
+y1 = 700
+w1 = 15
+h1 = 60
+a1 = 0
+gap = 10
+
+grect(x1, y1, w1, h1, 0)
+grect(x1, y1-gap-h1, w1, h1, 0)
+grect(x1+w1-gap/2, y1-4*gap-2*h1, w1, h1+2*gap, np.pi/12)
+grect(x1+2*w1+2*gap, y1-6*gap-2.7*h1-5*gap, w1-gap/2, h1+4.5*gap, np.pi/8)
 
 
 pygame.display.update()
