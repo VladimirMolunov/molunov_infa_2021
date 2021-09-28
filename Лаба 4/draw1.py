@@ -1,37 +1,58 @@
 import pygame
-import numpy as np
 from pygame.draw import *
 
 pygame.init()
 
 FPS = 30
-size = 1000
-screen = pygame.display.set_mode((size, size))
+screen = pygame.display.set_mode((800, 800))
 
-cgreen = (0, 104, 52)
-cpink = (255, 176, 129)
+cyellow = (255, 255 ,0)
+cred = (255, 0, 0)
 cblack = (0, 0, 0)
-cwhite = (255, 255, 255)
+x1 = 400
+y1 = 400
+r = 200
+r2=40
+r4=20
+r3=15
+r5=10
+x2=300
+y2=350
+x3=500
 
-rect(screen, cpink, (0, 0, size, size))
+abrl = []
+abrr = []
 
-def leaf(xa, ya, xb, yb):
-    ellipse(screen, cgreen, (xa, ya, xb-xa, yb-ya))
+xbrl=[350, 360, 300, 290]
+ybrl=[340, 335, 305, 310]
 
-def grect(xa, ya, width, height, x):
-    polygon(screen, cgreen, [(xa, ya), (xa+width*np.cos(x), ya+width*np.sin(x)), (xa+width*np.cos(x)-height*np.sin(x), ya+width*np.sin(x)+height*np.cos(x)), (xa-height*np.sin(x), ya+height*np.cos(x))])
+abrl = zip(xbrl, ybrl)
+abrl = [(365, 305), (350,325),(220,250),(190,230)]
 
-def duga(xa, ya, xb, yb, angle1, angle2):
-    arc(screen, cgreen, (xa, ya, xb-xa, yb-ya), angle1, angle2, 2)
+xbrr=[450, 440, 480, 490]
+ybrr=[340, 335, 320, 324]
 
-grect(500, 600, 30, 120, 0)
+abrr = zip(xbrr, ybrr)
+abrr = [(450,340),(440,315),(540,280),(555,310)]
 
+yu=500
+
+circle(screen, cyellow, (x1, y1), r)
+circle(screen, cred, (x2, y2), r2)
+circle(screen, cblack, (x2, y2), r3)
+circle(screen, cred, (x3, y2), r4)
+circle(screen, cblack, (x3, y2), r5)
+
+polygon(screen, cblack, abrl)
+polygon(screen, cblack, abrr)
+
+rect(screen, cblack, (295,500,210,25))
 
 pygame.display.update()
 clock = pygame.time.Clock()
 finished = False
 
-while True:
+while finished == False:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finished = True
