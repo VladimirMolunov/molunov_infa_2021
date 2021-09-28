@@ -24,8 +24,8 @@ def leaf(surf, xa, ya, xb, yb):
 
 def grect(xa, ya, width, height, x):
     polygon(screen, cgreen, [(xa, ya), (xa+width*np.cos(x), ya+width*np.sin(x)),
-                             (xa+width*np.cos(x)-height*np.sin(x), ya+width*np.sin(x)+height*np.cos(x)),
-                             (xa-height*np.sin(x), ya+height*np.cos(x))])
+                             (xa + width*np.cos(x) - height * np.sin(x), ya + width * np.sin(x) + height * np.cos(x)),
+                             (xa - height*np.sin(x), ya + height * np.cos(x))])
 
 
 def duga(xa, ya, xb, yb, angle1, angle2):
@@ -40,9 +40,9 @@ a1 = 0
 gap = size / 50
 
 grect(x1, y1, w1, h1, 0)
-grect(x1, y1-gap-h1, w1, h1, 0)
-grect(x1+w1-gap/2, y1-gap-2*h1, w1, h1-gap, np.pi/12)
-grect(x1+2*w1+2*gap, y1-gap-2.7*h1-5*gap, w1-gap/2, h1+3.5*gap, np.pi/8)
+grect(x1, y1 - gap - h1, w1, h1, 0)
+grect(x1 + w1 - gap / 2, y1 - gap - 2 * h1, w1, h1 - gap, np.pi / 12)
+grect(x1 + 2 * w1 + 2 * gap, y1 - gap - 2.7 * h1 - 5 * gap, w1 - gap / 2, h1 + 3.5 * gap, np.pi / 8)
 
 x1 = size / 10 * 3
 y1 = size / 40 * 33
@@ -51,26 +51,26 @@ h1 = size / 50 * 3
 gap = size / 100
 
 grect(x1, y1, w1, h1, 0)
-grect(x1, y1-gap-h1, w1, h1, 0)
-grect(x1+w1+gap/2, y1-4*gap-2*h1, w1, h1+2*gap, np.pi/12)
-grect(x1+2*w1+3*gap, y1-6*gap-2.7*h1-5*gap, w1-gap/2, h1+4.5*gap, np.pi/8)
+grect(x1, y1 - gap - h1, w1, h1, 0)
+grect(x1 + w1 + gap / 2, y1 - 4 * gap - 2 * h1, w1, h1 + 2 * gap, np.pi / 12)
+grect(x1 + 2 * w1 + 3 * gap, y1 - 6 * gap - 2.7 * h1 - 5 * gap, w1 - gap / 2, h1 + 4.5 * gap, np.pi / 8)
 
 surface = pygame.Surface((size / 8 * 3, size / 8 * 3), pygame.SRCALPHA)
-rect(surface, transparent, (0, 0, 300, 300))
-leaf(surface, 80, 80, 80, 16)
-leaf(surface, 96, 104, 80, 16)
-leaf(surface, 104, 128, 80, 16)
-leaf(surface, 88, 160, 80, 16)
-leaf(surface, 92, 200, 80, 16)
+rect(surface, transparent, (0, 0, int(size / 8 * 3), int(size / 8 * 3)))
+leaf(surface, size / 10, size / 10, size / 10, size / 50)
+leaf(surface, size / 25 * 3, size / 100 * 13, size / 10, size / 50)
+leaf(surface, size / 100 * 13, size / 25 * 4, size / 10, size / 50)
+leaf(surface, size / 100 * 11, size / 5, size / 10, size / 50)
+leaf(surface, size / 200 * 23, size / 4, size / 10, size / 50)
 surface2 = pygame.transform.rotate(surface, 55)
 surface3 = pygame.transform.rotate(surface, -70)
-surface3 = pygame.transform.scale(surface3, (300, 300))
+surface3 = pygame.transform.scale(surface3, (int(size / 8 * 3), int(size / 8 * 3)))
 surface4 = pygame.transform.rotate(surface, 55)
-surface4 = pygame.transform.scale(surface4, (220, 220))
+surface4 = pygame.transform.scale(surface4, (int(size / 40 * 11), int(size / 40 * 11)))
 
-screen.blit(surface2, (24, 50))
-screen.blit(surface3, (458, 164))
-screen.blit(surface4, (86, 370))
+screen.blit(surface2, (size / 200 * 11, size / 16))
+screen.blit(surface3, (size / 100 * 57, size / 200 * 41))
+screen.blit(surface4, (size / 400 * 43, size / 80 * 37))
 pygame.display.update()
 clock = pygame.time.Clock()
 finished = False

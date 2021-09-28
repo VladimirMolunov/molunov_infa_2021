@@ -24,8 +24,6 @@ abrl = [(365, 305), (350, 325), (220, 250), (190, 230)]
 
 abrr = [(450, 340), (440, 315), (540, 280), (555, 310)]
 
-yu = 500
-
 circle(screen, cyellow, (x1, y1), r)
 circle(screen, cred, (x2, y2), r2)
 circle(screen, cblack, (x2, y2), r3)
