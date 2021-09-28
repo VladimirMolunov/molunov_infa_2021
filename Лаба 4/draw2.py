@@ -48,7 +48,6 @@ x1 = size / 10 * 3
 y1 = size / 40 * 33
 w1 = size / 200 * 3
 h1 = size / 50 * 3
-a1 = 0
 gap = size / 100
 
 grect(x1, y1, w1, h1, 0)
@@ -76,7 +75,7 @@ pygame.display.update()
 clock = pygame.time.Clock()
 finished = False
 
-while finished == False:
+while finished is False:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finished = True
