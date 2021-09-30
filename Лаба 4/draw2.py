@@ -29,9 +29,16 @@ def grect(xa, ya, width, height, x):
                              (xa - height*np.sin(x), ya + height * np.cos(x))])
 
 
-def duga(xa, ya, xb, yb, angle1, angle2):
-    arc(screen, cgreen, (xa, ya, xb-xa, yb-ya), angle1, angle2, 2)
+def grid(gridxsize, gridysize, xstep, ystep):
+    cgray = (128, 128, 128)
+    for i in range (1, int(gridxsize / xstep) + 1, 1):
+        pygame.draw.line(screen, cgray, (i * xstep, 0), (i * xstep, gridysize), 1)
+    for i in range(1, int(gridysize / ystep) + 1, 1):
+        pygame.draw.line(screen, cgray, (0, i * ystep), (gridxsize, i * ystep), 1)
 
+
+xgridstep = 50
+ygridstep = xgridstep
 
 rightmove = size / 200 * 0
 rightup = size / 200 * -10
@@ -119,6 +126,13 @@ threemoreleaves2 = pygame.transform.rotate(threemoreleaves, 80)
 threemoreleaves2 = pygame.transform.scale(threemoreleaves2, (int(size / 16 * 3), int(size / 16 * 3)))
 screen.blit(threemoreleaves1, (size / 200 * 54 - leftmove, size / 200 * 132 + leftup))
 screen.blit(threemoreleaves2, (size / 200 * 31 - leftmove, size / 200 * 139 + leftup))
+
+def pandahead(right, down, pandascale):
+    pandasize = size * pandascale
+
+
+
+grid(xsize, ysize, xgridstep, ygridstep)
 
 pygame.display.update()
 clock = pygame.time.Clock()
