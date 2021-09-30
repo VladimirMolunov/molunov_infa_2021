@@ -1,7 +1,6 @@
 import pygame
 import numpy as np
 from pygame.draw import *
-from pygame import transform
 
 pygame.init()
 
@@ -61,20 +60,17 @@ grect(x1 + 2 * w1 + 3 * gap, y1 - 6 * gap - 2.7 * h1 - 5 * gap, w1 - gap / 2, h1
 surface = pygame.Surface((int(size / 8 * 3), int(size / 8 * 3)), pygame.SRCALPHA)
 rect(surface, transparent, (0, 0, int(size / 8 * 3), int(size / 8 * 3)))
 leaf(surface, size / 10, size / 10, leaflength, leafhight)
-leaf(surface, size / 25 * 3, size / 100 * 13, leaflength, leafhight)
-leaf(surface, size / 100 * 13, size / 25 * 4, leaflength, leafhight)
-leaf(surface, size / 100 * 11, size / 5, leaflength, leafhight)
-leaf(surface, size / 200 * 23, size / 4, leaflength, leafhight)
+leaf(surface, size / 25 * 3, size / 100 * 14, leaflength, leafhight)
+leaf(surface, size / 100 * 13, size / 50 * 9, leaflength, leafhight)
+leaf(surface, size / 100 * 11, size / 100 * 22, leaflength, leafhight)
+leaf(surface, size / 200 * 23, size / 100 * 29, leaflength, leafhight)
 
 surface2 = pygame.transform.rotate(surface, 55)
 surface3 = pygame.transform.rotate(surface, -70)
 surface3 = pygame.transform.scale(surface3, (int(size / 8 * 3), int(size / 8 * 3)))
-surface4 = pygame.transform.rotate(surface, 55)
-surface4 = pygame.transform.scale(surface4, (int(size / 40 * 11), int(size / 40 * 11)))
 
-screen.blit(surface2, (size / 200 * 11, size / 16))
-screen.blit(surface3, (size / 100 * 57, size / 200 * 41))
-screen.blit(surface4, (size / 400 * 43, size / 80 * 37))
+screen.blit(surface2, (size / 800 * 44, size / 800 * 50))
+screen.blit(surface3, (size / 800 * 456, size / 800 * 164))
 
 threeleaves = pygame.Surface((int(size / 8 * 3), int(size / 8 * 3)), pygame.SRCALPHA)
 rect(threeleaves, transparent, (0, 0, int(size / 8 * 3), int(size / 8 * 3)))
@@ -92,13 +88,27 @@ leaf(threemoreleaves, size / 10, size / 10, size / 6, size / 50)
 leaf(threemoreleaves, size / 11, size / 100 * 15, size / 6, size / 50)
 leaf(threemoreleaves, size / 10, size / 100 * 20, size / 6, size / 50)
 
+leaflength = size / 6
+
 fiveleaves = pygame.Surface((int(size / 8 * 3), int(size / 8 * 3)), pygame.SRCALPHA)
 rect(fiveleaves, transparent, (0, 0, int(size / 8 * 3), int(size / 8 * 3)))
+leaf(fiveleaves, size / 200 * 20, size / 100 * 10, leaflength, leafhight)
+leaf(fiveleaves, size / 200 * 20, size / 100 * 13, leaflength, leafhight)
+leaf(fiveleaves, size / 200 * 22, size / 100 * 16, leaflength, leafhight)
+leaf(fiveleaves, size / 200 * 23, size / 100 * 19, leaflength, leafhight)
+leaf(fiveleaves, size / 200 * 20, size / 100 * 22, leaflength, leafhight)
+
+fiveleaves1 = pygame.transform.rotate(fiveleaves, -80)
+fiveleaves1 = pygame.transform.scale(fiveleaves1, (int(size / 16 * 3), int(size / 16 * 3)))
+fiveleaves2 = pygame.transform.rotate(fiveleaves, 255)
+fiveleaves2 = pygame.transform.scale(fiveleaves2, (int(size / 14 * 3), int(size / 14 * 3)))
+screen.blit(fiveleaves1, (size / 800 * 260, size / 800 * 400))
+screen.blit(fiveleaves2, (size / 800 * 92, size / 800 * 415))
 
 threemoreleaves1 = pygame.transform.rotate(threemoreleaves, -80)
-threemoreleaves1 = pygame.transform.scale(threemoreleaves1, (int(size / 32 * 6), int(size / 32 * 6)))
+threemoreleaves1 = pygame.transform.scale(threemoreleaves1, (int(size / 16 * 3), int(size / 16 * 3)))
 threemoreleaves2 = pygame.transform.rotate(threemoreleaves, 80)
-threemoreleaves2 = pygame.transform.scale(threemoreleaves2, (int(size / 32 * 6), int(size / 32 * 6)))
+threemoreleaves2 = pygame.transform.scale(threemoreleaves2, (int(size / 16 * 3), int(size / 16 * 3)))
 screen.blit(threemoreleaves1, (size / 100 * 27, size / 200 * 132))
 screen.blit(threemoreleaves2, (size / 200 * 31, size / 200 * 139))
 
