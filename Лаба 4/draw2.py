@@ -6,7 +6,9 @@ pygame.init()
 
 FPS = 30
 size = 800
-screen = pygame.display.set_mode((size, size))
+xsize = size
+ysize = size
+screen = pygame.display.set_mode((xsize, ysize))
 
 cgreen = (0, 104, 52)
 cpink = (255, 176, 129)
@@ -14,7 +16,7 @@ cblack = (0, 0, 0)
 cwhite = (255, 255, 255)
 transparent = (200, 100, 90, 0)
 
-rect(screen, cpink, (0, 0, size, size))
+rect(screen, cpink, (0, 0, xsize, ysize))
 
 
 def leaf(surf, xa, ya, xb, yb):
@@ -29,6 +31,7 @@ def grect(xa, ya, width, height, x):
 
 def duga(xa, ya, xb, yb, angle1, angle2):
     arc(screen, cgreen, (xa, ya, xb-xa, yb-ya), angle1, angle2, 2)
+
 
 rightmove = size / 200 * 0
 rightup = size / 200 * -10
