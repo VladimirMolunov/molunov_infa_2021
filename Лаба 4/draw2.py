@@ -92,6 +92,9 @@ leaf(threemoreleaves, size / 10, size / 10, size / 6, size / 50)
 leaf(threemoreleaves, size / 11, size / 100 * 15, size / 6, size / 50)
 leaf(threemoreleaves, size / 10, size / 100 * 20, size / 6, size / 50)
 
+fiveleaves = pygame.Surface((int(size / 8 * 3), int(size / 8 * 3)), pygame.SRCALPHA)
+rect(fiveleaves, transparent, (0, 0, int(size / 8 * 3), int(size / 8 * 3)))
+
 threemoreleaves1 = pygame.transform.rotate(threemoreleaves, -80)
 threemoreleaves1 = pygame.transform.scale(threemoreleaves1, (int(size / 32 * 6), int(size / 32 * 6)))
 threemoreleaves2 = pygame.transform.rotate(threemoreleaves, 80)
