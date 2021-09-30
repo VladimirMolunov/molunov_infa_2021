@@ -30,17 +30,16 @@ def grect(xa, ya, width, height, x):
 def duga(xa, ya, xb, yb, angle1, angle2):
     arc(screen, cgreen, (xa, ya, xb-xa, yb-ya), angle1, angle2, 2)
 
-rightmove = 0
-rightup = -40
+rightmove = size / 200 * 0
+rightup = size / 200 * -10
 x1 = size / 200 * 100 + rightmove
 y1 = size / 200 * 150 + rightup
 w1 = size / 200 * 6
 h1 = size / 200 * 24
-a1 = 0
 gap = size / 200 * 4
 initial = size / 200 * 8
-leftmove = 80
-leftup = -40
+leftmove = size / 200 * 20
+leftup = size / 200 * -10
 
 grect(x1, y1 + initial, w1, h1 + initial, 0)
 grect(x1, y1 - gap - h1, w1, h1 + initial, 0)
