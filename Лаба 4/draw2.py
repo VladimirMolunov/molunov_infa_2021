@@ -221,10 +221,10 @@ def pandahead(right, down, pandascale):
     pygame.draw.ellipse(panda_ear, cblack, (550, 600, 70, 150))
     panda_ear = pygame.transform.rotate(panda_ear, 30)
     panda_ear = pygame.transform.scale(panda_ear, (int(pandasize), int(pandasize)))
-    panda_head.blit(panda_ear, (right - 20, down + 50))
+    panda_head.blit(panda_ear, (- 20, 50))
 
     panda_ear = pygame.transform.rotate(panda_ear, -70)
-    panda_head.blit(panda_ear, (right - 10, down - 220))
+    panda_head.blit(panda_ear, (- 10, - 220))
     screen.blit(panda_head, (right, down))
 
 
@@ -266,7 +266,7 @@ drawleftbamboo(leftmove, leftup, defaultscale)
 drawrightbamboo(rightmove, rightup, defaultscale)
 panda(0, 0, 1)
 pandahead(0, 0, 1)
-grid(xsize, ysize, xgridstep, ygridstep, 10)
+# grid(xsize, ysize, xgridstep, ygridstep, 10)
 
 pygame.display.update()
 clock = pygame.time.Clock()
