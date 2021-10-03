@@ -206,12 +206,52 @@ def drawleftbamboo(left_move, left_up, scale):
 
 def pandahead(right, down, pandascale):
     """Рисует голову панды"""
-    pandasize = size * pandascale
+    pandasize = 800 * pandascale
+    panda_head = pygame.Surface((800, 800), pygame.SRCALPHA)
+    pygame.draw.ellipse(panda_head, cwhite, (450, 500, 170, 200))
+    pygame.draw.ellipse(panda_head, cblack, (452, 606, 37, 50))  # Правый глаз
+    pygame.draw.ellipse(panda_head, cblack, (515, 612, 50, 50))  # Левый глаз
+    pygame.draw.ellipse(panda_head, cblack, (478, 665, 50, 30))  # Нос
+    panda_head = pygame.transform.scale(panda_head, (int(pandasize), int(pandasize)))
+
+    panda_ear = pygame.Surface((800, 800), pygame.SRCALPHA)
+    pygame.draw.ellipse(panda_ear, cblack, (550, 600, 70, 150))
+    panda_ear = pygame.transform.rotate(panda_ear, 30)
+    panda_ear = pygame.transform.scale(panda_ear, (int(pandasize), int(pandasize)))
+    panda_head.blit(panda_ear, (right - 20, down + 50))
+
+    panda_ear = pygame.transform.rotate(panda_ear, -70)
+    panda_head.blit(panda_ear, (right - 10, down - 220))
+    screen.blit(panda_head, (right, down))
+
+
+def panda(right, down, scale):
+    panda_surface = pygame.Surface((800, 800), pygame.SRCALPHA)
+    pygame.draw.ellipse(panda_surface, cwhite, (480, 530, 300, 150))
+
+    panda_leg1 = pygame.Surface((800, 800), pygame.SRCALPHA)
+    pygame.draw.ellipse(panda_leg1, cblack, (480, 530, 200, 95))
+    panda_leg1 = pygame.transform.rotate(panda_leg1, 64)
+    panda_leg1 = pygame.transform.scale(panda_leg1, (int(scale * size), int(scale * size)))
+    panda_surface.blit(panda_leg1, (155, 350))
+
+    panda_leg2 = pygame.Surface((800, 800), pygame.SRCALPHA)
+    pygame.draw.polygon(panda_leg2, cblack, [(620, 520), (620, 680), (580, 760), (510, 730)])
+    panda_surface.blit(panda_leg2, (4, 0))
+
+    panda_leg2_1 = pygame.Surface((800, 800), pygame.SRCALPHA)
+    pygame.draw.ellipse(panda_leg2_1, cblack, (500, 500, 60, 77))
+    panda_leg2_1 = pygame.transform.rotate(panda_leg2_1, 60)
+    panda_surface.blit(panda_leg2_1, (-180, 240))
+
+    panda_surface = pygame.transform.scale(panda_surface, (int(scale * size), int(scale * size)))
+    screen.blit(panda_surface, (right, down))
 
 
 drawleftbamboo(leftmove, leftup, defaultscale)
 drawrightbamboo(rightmove, rightup, defaultscale)
-pandahead(0, 0, 0)
+panda(0, 0, 1)
+pandahead(0, 0, 1)
 grid(xsize, ysize, xgridstep, ygridstep, 10)
 
 pygame.display.update()
