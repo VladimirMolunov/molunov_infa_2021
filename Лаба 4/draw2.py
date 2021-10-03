@@ -10,20 +10,23 @@ xsize = size
 ysize = size
 screen = pygame.display.set_mode((xsize, ysize))
 
+# Объявление цветов
 cgreen = (0, 104, 52)
 cpink = (255, 176, 129)
 cblack = (0, 0, 0)
 cwhite = (255, 255, 255)
 transparent = (200, 100, 90, 0)
 
-xgridstep = 20
-ygridstep = xgridstep
+# Некоторые глобальные переменные
+xgridstep = 20  # Шаг сетки по x
+ygridstep = xgridstep  # Шаг сетки по y
 leftmove = size / 200 * - 20
 leftup = size / 200 * -10
 rightmove = size / 200 * 0
 rightup = size / 200 * -10
 defaultscale = 1
 
+# Заливка полотна розовым
 rect(screen, cpink, (0, 0, xsize, ysize))
 
 
@@ -33,7 +36,7 @@ def leaf(surf, xa, ya, xb, yb):
 
 
 def grect(scr, xa, ya, width, height, x):
-    """Рисует зелёный прямоугольник, из которых стебель"""
+    """Рисует зелёный прямоугольник, из которых состоит стебель"""
     polygon(scr, cgreen, [(xa, ya), (xa+width*np.cos(x), ya+width*np.sin(x)),
                           (xa + width*np.cos(x) - height * np.sin(x), ya + width * np.sin(x) + height * np.cos(x)),
                           (xa - height*np.sin(x), ya + height * np.cos(x))])
@@ -226,6 +229,7 @@ def pandahead(right, down, pandascale):
 
 
 def panda(right, down, scale):
+    """Рисует туловище панды с ногами"""
     panda_surface = pygame.Surface((800, 800), pygame.SRCALPHA)
     pygame.draw.ellipse(panda_surface, cwhite, (480, 530, 300, 150))
 
@@ -236,7 +240,7 @@ def panda(right, down, scale):
     panda_surface.blit(panda_leg1, (155, 350))
 
     panda_leg2 = pygame.Surface((800, 800), pygame.SRCALPHA)
-    pygame.draw.polygon(panda_leg2, cblack, [(620, 520), (620, 680), (580, 760), (510, 730)])
+    pygame.draw.polygon(panda_leg2, cblack, [(600, 540), (620, 520), (620, 680), (580, 760), (510, 730)])
     panda_surface.blit(panda_leg2, (4, 0))
 
     panda_leg2_1 = pygame.Surface((800, 800), pygame.SRCALPHA)
@@ -244,10 +248,20 @@ def panda(right, down, scale):
     panda_leg2_1 = pygame.transform.rotate(panda_leg2_1, 60)
     panda_surface.blit(panda_leg2_1, (-180, 240))
 
+    panda_leg3 = pygame.Surface((800, 800), pygame.SRCALPHA)
+    pygame.draw.polygon(panda_leg3, cblack, [(500, 740), (470, 780), (450, 760), (500, 660)])
+    panda_surface.blit(panda_leg3, (4, 0))
+
+    panda_leg3_1 = pygame.Surface((800, 800), pygame.SRCALPHA)
+    pygame.draw.ellipse(panda_leg3_1, cblack, (500, 500, 40, 115))
+    panda_leg3_1 = pygame.transform.rotate(panda_leg3_1, -5)
+    panda_surface.blit(panda_leg3_1, (-68, 113))
+
     panda_surface = pygame.transform.scale(panda_surface, (int(scale * size), int(scale * size)))
     screen.blit(panda_surface, (right, down))
 
 
+# Вызов всех функций рисования
 drawleftbamboo(leftmove, leftup, defaultscale)
 drawrightbamboo(rightmove, rightup, defaultscale)
 panda(0, 0, 1)
