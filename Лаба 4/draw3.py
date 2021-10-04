@@ -219,11 +219,11 @@ def pandahead(right, down, pandascale):
     panda_ear = pygame.Surface((800, 800), pygame.SRCALPHA)
     pygame.draw.ellipse(panda_ear, cblack, (550, 600, 70, 150))
     panda_ear = pygame.transform.rotate(panda_ear, 30)
-    panda_ear = pygame.transform.scale(panda_ear, (int(pandasize), int(pandasize)))
-    panda_head.blit(panda_ear, (- 20, 50))
+    panda_ear = pygame.transform.scale(panda_ear, (int(800), int(800)))
+    panda_head.blit(panda_ear, (- pandascale * 20, pandascale * 50))
 
     panda_ear = pygame.transform.rotate(panda_ear, -70)
-    panda_head.blit(panda_ear, (- 10, - 220))
+    panda_head.blit(panda_ear, (- pandascale * 10, - pandascale * 220 / pandascale))
     panda_head = pygame.transform.scale(panda_head, (int(pandasize), int(pandasize)))
     screen.blit(panda_head, (right, down))
 
@@ -236,7 +236,7 @@ def panda(right, down, scale):
     panda_leg1 = pygame.Surface((800, 800), pygame.SRCALPHA)
     pygame.draw.ellipse(panda_leg1, cblack, (480, 530, 200, 95))
     panda_leg1 = pygame.transform.rotate(panda_leg1, 64)
-    panda_surface.blit(panda_leg1, (155, 350))
+    panda_surface.blit(panda_leg1, (-60, 240))
 
     panda_leg2 = pygame.Surface((800, 800), pygame.SRCALPHA)
     pygame.draw.polygon(panda_leg2, cblack, [(600, 540), (620, 520), (620, 680), (580, 760), (510, 730)])
@@ -266,8 +266,8 @@ drawrightbamboo(0, 200, 0.5)
 panda(300, 0, 1)
 pandahead(300, 0, 1)
 
-panda(300, 0, 1)
-pandahead(300, 0, 1)
+panda(205, 240, 0.7)
+pandahead(210, 250, 0.7)
 
 pygame.display.update()
 clock = pygame.time.Clock()
