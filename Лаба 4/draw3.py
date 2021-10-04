@@ -31,19 +31,35 @@ rect(screen, cpink, (0, 0, xsize, ysize))
 
 
 def leaf(surf, xa, ya, xb, yb):
-    """Рисует листик бамбука"""
+    """
+    Рисует листик бамбука
+    surf -- поверхность рисования
+    xa, ya --координаты первой точки, задающей эллипс
+    xb, yb -- координаты второй точки, задающей эллипс, относительно первой
+    """
     ellipse(surf, cgreen, (xa, ya, xb, yb))
 
 
 def grect(scr, xa, ya, width, height, x):
-    """Рисует зелёный прямоугольник, из которых состоит стебель"""
+    """
+    Рисует зелёный прямоугольник, из которых состоит стебель
+    scr -- поверхность рисования
+    xa, ya -- координаты одной из точек прямоугольника
+    width, height -- его ширина и высота соотв.
+    x - угол, на который повёрнут стебель
+    """
     polygon(scr, cgreen, [(xa, ya), (xa+width*np.cos(x), ya+width*np.sin(x)),
                           (xa + width*np.cos(x) - height * np.sin(x), ya + width * np.sin(x) + height * np.cos(x)),
                           (xa - height*np.sin(x), ya + height * np.cos(x))])
 
 
 def grid(gridxsize, gridysize, xstep, ystep, addit):
-    """Вспомогательная функция, рисует сетку"""
+    """
+    Вспомогательная функция, рисует сетку
+    gridxsize, gridysize -- размеры сетки по x и по y соотв.
+    xstep, ystep -- расстояния между линиями сетки вдоль осей x и y соотв.
+    addit -- переменная, определяющая, какие по счёту линии сетки выделить ещё ярче
+    """
     cgray = (128, 128, 128)
     for i in range(1, int(gridxsize / xstep) + 1, 1):
         pygame.draw.line(screen, cgray, (i * xstep, 0), (i * xstep, gridysize), 1)
@@ -56,17 +72,31 @@ def grid(gridxsize, gridysize, xstep, ystep, addit):
 
 
 def duga(scr, xa, ya, xb, yb, angle1, angle2):
-    """Функция дуги эллипса для рисования веток"""
+    """
+    Функция дуги эллипса для рисования веток
+    scr -- поверхность рисования
+    xa, ya, xb, yb -- две пары точек, задающих эллипс, дуга которого отсекается
+    angle1, angle2 -- значения, определяющие угол, стягивающий дугу
+    """
     arc(scr, cgreen, (xa, ya, xb, yb), angle1, angle2, 4)
 
 
 def duga2(scr, xa, ya, xb, yb, angle1, angle2):
-    """Тоже функция дуги эллипса для рисования веток, только толщина поменьше"""
+    """
+    Тоже функция дуги эллипса для рисования веток, только толщина поменьше
+    scr -- поверхность рисования
+    xa, ya, xb, yb -- две пары точек, задающих эллипс, дуга которого отсекается
+    angle1, angle2 -- значения, определяющие угол, стягивающий дугу
+    """
     arc(scr, cgreen, (xa, ya, xb, yb), angle1, angle2, 3)
 
 
 def drawrightbamboo(right_move, right_up, scale):
-    """Рисует правый бамбук"""
+    """
+    Рисует правый бамбук
+    right_move, right_up -- отвечают за расположение на экране
+    scale -- переменная масштаба
+    """
     rightbamboo = pygame.Surface((xsize, ysize), pygame.SRCALPHA)
 
     x1 = size / 200 * 100
@@ -78,6 +108,7 @@ def drawrightbamboo(right_move, right_up, scale):
     leaflength = size / 8  # Ширина листика
     leafhight = size / 200 * 4  # Длина листика
 
+    # Рисование стебля
     grect(rightbamboo, x1, y1 + initial, w1, h1 + initial, 0)
     grect(rightbamboo, x1, y1 - gap - h1, w1, h1 + initial, 0)
     grect(rightbamboo, x1 + w1 + 3 * gap / 4, y1 + gap - 3 * h1, w1, h1 + 3 * gap, np.pi / 12)
@@ -138,7 +169,12 @@ def drawrightbamboo(right_move, right_up, scale):
 
 
 def drawleftbamboo(left_move, left_up, scale):
-    """Рисует левый бамбук"""
+    """
+    Рисует левый бамбук
+    left_move, left_up -- отвечают за расположение на экране
+    scale -- переменная масштаба
+    """
+
     leftbamboo = pygame.Surface((xsize, ysize), pygame.SRCALPHA)
 
     x1 = size / 200 * 60
@@ -149,6 +185,7 @@ def drawleftbamboo(left_move, left_up, scale):
     initial = size / 200 * 9  # Отвечает за длину двух нижних колен бамбука
     leafhight = size / 200 * 4  # Длина листика
 
+    # Рисование стебля
     grect(leftbamboo, x1, y1 + initial, w1, h1 + initial, 0)
     grect(leftbamboo, x1, y1 - gap - h1, w1, h1 + initial, 0)
     grect(leftbamboo, x1 + w1 + gap / 2, y1 - 4 * gap - 2 * h1, w1, h1 + 2 * gap, np.pi / 12)
@@ -212,7 +249,11 @@ def drawleftbamboo(left_move, left_up, scale):
 
 
 def pandahead(right, down, pandascale):
-    """Рисует голову панды"""
+    """
+    Рисует голову панды
+    right, down -- отвечают за расположение головы панды на экране
+    pandascale -- переменная масштаба
+    """
     pandasize = 800 * pandascale
     panda_head = pygame.Surface((800, 800), pygame.SRCALPHA)
     pygame.draw.ellipse(panda_head, cwhite, (450, 500, 170, 200))
@@ -233,7 +274,11 @@ def pandahead(right, down, pandascale):
 
 
 def panda(right, down, scale):
-    """Рисует туловище панды с ногами"""
+    """
+    Рисует туловище панды с ногами
+    right, down -- отвечают за расположение туловища панды на экране
+    scale -- переменная масштаба
+    """
     panda_surface = pygame.Surface((800, 800), pygame.SRCALPHA)
     pygame.draw.ellipse(panda_surface, cwhite, (480, 530, 300, 150))
 
@@ -263,7 +308,7 @@ def panda(right, down, scale):
     panda_surface = pygame.transform.scale(panda_surface, (int(scale * size), int(scale * size)))
     screen.blit(panda_surface, (right, down))
 
-
+# рисуем саму картинку
 drawleftbamboo(200, -180, 1)
 drawrightbamboo(300, -150, 1)
 drawleftbamboo(880, -380, 1.3)
