@@ -5,9 +5,9 @@ from pygame.draw import *
 pygame.init()
 
 FPS = 30
-size = 800
-xsize = int(1.8 * size)
-ysize = size
+size = 800  # Глобальная переменная размера
+xsize = int(1.8 * size)  # Ширина окошка
+ysize = size  # Высота окошка
 screen = pygame.display.set_mode((xsize, ysize))
 
 # Объявление цветов
@@ -20,11 +20,11 @@ transparent = (200, 100, 90, 0)
 # Некоторые глобальные переменные
 xgridstep = 20  # Шаг сетки по x
 ygridstep = xgridstep  # Шаг сетки по y
-leftmove = size / 200 * - 20
-leftup = size / 200 * -10
-rightmove = size / 200 * 0
-rightup = size / 200 * -10
-defaultscale = 1
+leftmove = size / 200 * - 2000  # Смещение левого бамбука вправо
+leftup = size / 200 * -1000  # Смещение левого бамбука вверх
+rightmove = size / 200 * 1000  # Смещение правого бамбука вправо
+rightup = size / 200 * -1000  # Смещение правого бамбука вверх
+defaultscale = 1  # Масштаб бамбука
 
 # Заливка полотна розовым
 rect(screen, cpink, (0, 0, xsize, ysize))
@@ -73,16 +73,17 @@ def drawrightbamboo(right_move, right_up, scale):
     y1 = size / 200 * 150
     w1 = size / 200 * 6
     h1 = size / 200 * 24
-    gap = size / 200 * 4
-    initial = size / 200 * 8
-    leaflength = size / 8
-    leafhight = size / 200 * 4
+    gap = size / 200 * 4  # Просто переменная для подгона значений :)
+    initial = size / 200 * 8  # Отвечает за длину двух нижних колен бамбука
+    leaflength = size / 8  # Ширина листика
+    leafhight = size / 200 * 4  # Длина листика
 
     grect(rightbamboo, x1, y1 + initial, w1, h1 + initial, 0)
     grect(rightbamboo, x1, y1 - gap - h1, w1, h1 + initial, 0)
     grect(rightbamboo, x1 + w1 + 3 * gap / 4, y1 + gap - 3 * h1, w1, h1 + 3 * gap, np.pi / 12)
     grect(rightbamboo, x1 + 2 * w1 + 3.4 * gap, y1 - gap - 3.4 * h1 - 5 * gap, w1 - gap / 2, h1 + 3.5 * gap, np.pi / 8)
 
+    # Рисование листьев
     surface = pygame.Surface((int(size / 8 * 3), int(size / 8 * 3)), pygame.SRCALPHA)
     rect(surface, transparent, (0, 0, int(size / 8 * 3), int(size / 8 * 3)))
     leaf(surface, size / 200 * 20, size / 200 * 20, leaflength, leafhight)
@@ -110,6 +111,7 @@ def drawrightbamboo(right_move, right_up, scale):
     rightbamboo.blit(threeleaves1, (size / 200 * 104, size / 200 * 85))
     rightbamboo.blit(threeleaves2, (size / 200 * 19, size / 200 * 98))
 
+    # Рисование веток
     branches = pygame.Surface((size, size), pygame.SRCALPHA)
     rect(branches, transparent, (0, 0, size, size))
     duga(branches, 100, 100, 300, 180, 0.8, 2.4)
@@ -143,17 +145,18 @@ def drawleftbamboo(left_move, left_up, scale):
     y1 = size / 200 * 165
     w1 = size / 200 * 3
     h1 = size / 200 * 12
-    gap = size / 200 * 2
-    initial = size / 200 * 9
-    leafhight = size / 200 * 4
+    gap = size / 200 * 2  # Просто переменная для подгона значений :)
+    initial = size / 200 * 9  # Отвечает за длину двух нижних колен бамбука
+    leafhight = size / 200 * 4  # Длина листика
 
     grect(leftbamboo, x1, y1 + initial, w1, h1 + initial, 0)
     grect(leftbamboo, x1, y1 - gap - h1, w1, h1 + initial, 0)
     grect(leftbamboo, x1 + w1 + gap / 2, y1 - 4 * gap - 2 * h1, w1, h1 + 2 * gap, np.pi / 12)
     grect(leftbamboo, x1 + 2 * w1 + 3 * gap, y1 - 6 * gap - 2.7 * h1 - 5 * gap, w1 - gap / 2, h1 + 4.5 * gap, np.pi / 8)
 
-    leaflength = size / 6
+    leaflength = size / 6  # Ширина листика
 
+    # Рисование листьев
     threemoreleaves = pygame.Surface((int(size / 8 * 3), int(size / 8 * 3)), pygame.SRCALPHA)
     rect(threemoreleaves, transparent, (0, 0, int(size / 8 * 3), int(size / 8 * 3)))
     leaf(threemoreleaves, size / 200 * 22, size / 200 * 20, leaflength, leafhight)
@@ -182,6 +185,7 @@ def drawleftbamboo(left_move, left_up, scale):
     leftbamboo.blit(threemoreleaves1, (size / 200 * 58, size / 200 * 131))
     leftbamboo.blit(threemoreleaves2, (size / 200 * 31, size / 200 * 139))
 
+    # Рисование веток
     branches = pygame.Surface((size, size), pygame.SRCALPHA)
     rect(branches, transparent, (0, 0, size, size))
     duga2(branches, 100, 100, 160, 160, 0.2, 2.1)
@@ -223,7 +227,7 @@ def pandahead(right, down, pandascale):
     panda_head.blit(panda_ear, (- pandascale * 20, pandascale * 50))
 
     panda_ear = pygame.transform.rotate(panda_ear, -70)
-    panda_head.blit(panda_ear, (- pandascale * 10, - pandascale * 220 / pandascale))
+    panda_head.blit(panda_ear, (- pandascale * 10, - 220))
     panda_head = pygame.transform.scale(panda_head, (int(pandasize), int(pandasize)))
     screen.blit(panda_head, (right, down))
 
@@ -258,6 +262,7 @@ def panda(right, down, scale):
 
     panda_surface = pygame.transform.scale(panda_surface, (int(scale * size), int(scale * size)))
     screen.blit(panda_surface, (right, down))
+
 
 drawleftbamboo(200, -180, 1)
 drawrightbamboo(300, -150, 1)

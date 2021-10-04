@@ -5,9 +5,9 @@ from pygame.draw import *
 pygame.init()
 
 FPS = 30
-size = 800
-xsize = size
-ysize = size
+size = 800  # Глобальная переменная размера
+xsize = size  # Ширина окошка
+ysize = size  # Высота окошка
 screen = pygame.display.set_mode((xsize, ysize))
 
 # Объявление цветов
@@ -20,11 +20,11 @@ transparent = (200, 100, 90, 0)
 # Некоторые глобальные переменные
 xgridstep = 20  # Шаг сетки по x
 ygridstep = xgridstep  # Шаг сетки по y
-leftmove = size / 200 * - 20
-leftup = size / 200 * -10
-rightmove = size / 200 * 0
-rightup = size / 200 * -10
-defaultscale = 1
+leftmove = size / 200 * - 20  # Смещение левого бамбука вправо
+leftup = size / 200 * -10  # Смещение левого бамбука вверх
+rightmove = size / 200 * 0  # Смещение правого бамбука вправо
+rightup = size / 200 * -10  # Смещение правого бамбука вверх
+defaultscale = 1  # Масштаб бамбука
 
 # Заливка полотна розовым
 rect(screen, cpink, (0, 0, xsize, ysize))
