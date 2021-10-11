@@ -10,9 +10,20 @@ score = 0
 (x, y, r) = (-2, -2, 0)
 max_number_of_balls = 4
 
+
+class Ball:
+    def __init__(self, status):
+        self.status = status
+
+    def moveball(self, x, y):
+        self[0] += x
+        self[1] += y
+
+
 ball_list = []
 for i in range(0, max_number_of_balls + 1, 1):
-    ball_list.append([0] * 3)
+    ball_list.append([0, 0, 0])
+    ball_list[i] = Ball(True)
 
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
@@ -36,9 +47,9 @@ def new_ball(balllist):
     color = COLORS[randint(0, 5)]
     circle(screen, color, (x, y), r)
     balllist.append([x, y, r])
-    if balllist[max_number_of_balls] != (0, 0, 0):
-        for j in (0, 1, 2):
-            balllist.pop([0][j])
+    balllist[-1] = Ball(True)
+    if balllist[max_number_of_balls] != [0, 0, 0]:
+        balllist.pop(0)
 
 
 def inside(position, x, y, r):
@@ -66,7 +77,9 @@ while not finished:
             for ball in ball_list:
                 is_inside = inside(event.pos, x, y, r)
                 if is_inside:
-                    score += 1
+                    if ball.status is True:
+                        score += 1
+                        ball.status = False
     if tickcount % TicksPerFrame == 0:
         tickcount = 0
         new_ball(ball_list)
