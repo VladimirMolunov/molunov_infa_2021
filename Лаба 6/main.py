@@ -106,7 +106,7 @@ while not finished:
             for ball in ball_list:
                 is_inside = inside(event.pos, ball.x, ball.y, ball.r)
                 if is_inside:
-                    if ball.status is True:
+                    if ball.status:
                         score += 1
                         ball.status = False
     if tickcount % TicksPerFrame == 0:
