@@ -10,13 +10,12 @@ TicksPerBall = 15
 screen = pygame.display.set_mode((screen_width, screen_height))
 score = 0
 (x, y, r) = (-2, -2, 0)
-max_number_of_balls = 20
+max_number_of_balls = 12
 max_radius = 100
-max_speed = 160
+max_speed = 320
 min_radius = 10
-gap = 50
-(leftborder, rightborder, topborder, bottomborder) = (max_radius + gap, screen_width - max_radius - gap,
-                                                      max_radius + gap, screen_height - max_radius - gap)
+gap = 25
+(leftborder, rightborder, topborder, bottomborder) = (gap, screen_width - gap, gap, screen_height - gap)
 
 
 class Ball:
@@ -53,8 +52,19 @@ class Ball:
         leftborder (координата x левой границы), rightborder (координата x правой границы),
         topborder (координата y верхней границы), bottomborder (координата y нижней границы).
         """
-        self.x += velx * dt
-        self.y += vely * dt
+        if rightborder - self.r > (self.x + velx * dt) > leftborder + self.r:
+            self.x += velx * dt
+        else:
+            self.vx = -1 * self.vx
+            velx = -1 * velx
+            self.x += velx * dt
+
+        if bottomborder - self.r > (self.y + vely * dt) > topborder + self.r:
+            self.y += vely * dt
+        else:
+            self.vy = -1 * self.vy
+            vely = -1 * vely
+            self.y += vely * dt
 
 
 RED = (255, 0, 0)
@@ -66,6 +76,7 @@ CYAN = (0, 255, 255)
 BLACK = (0, 0, 0)
 transparent = (200, 200, 200, 0)
 background = (0, 50, 80)
+border = (0, 20, 40)
 COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
 
 ball_list = []
@@ -82,9 +93,9 @@ def new_ball(balllist):
     Добавляет его параметры в список balllist
     """
     global x, y, r, surface_list
-    x = randint(max_radius, screen_width - max_radius)
-    y = randint(max_radius, screen_height - max_radius)
     r = randint(min_radius, max_radius)
+    x = randint(leftborder + r, rightborder - r)
+    y = randint(topborder + r, bottomborder - r)
     vx = randint(-1 * max_speed, max_speed)
     vy = randint(-1 * max_speed, max_speed)
     color = COLORS[randint(0, 5)]
@@ -115,7 +126,8 @@ tickcount = 0
 while not finished:
     clock.tick(TPS)
     tickcount += 1
-    screen.fill(background)
+    screen.fill(border)
+    rect(screen, background, (gap, gap, screen_width - 2 * gap, screen_height - 2 * gap))
     for ball in ball_list:
         ball.moveball(ball.vx, ball.vy, dt, leftborder, rightborder, topborder, bottomborder)
         if ball.status is True:
