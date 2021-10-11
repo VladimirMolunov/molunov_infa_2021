@@ -86,6 +86,5 @@ while not finished:
         pygame.display.update()
         screen.fill(BLACK)
 
-
 pygame.quit()
 print("Well done, your score is", score)
