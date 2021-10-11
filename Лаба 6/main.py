@@ -3,10 +3,11 @@ from pygame.draw import *
 from random import randint
 pygame.init()
 
-FPS = 0.5
+TPS = 30
+TicksPerFrame = 15
 screen = pygame.display.set_mode((1200, 900))
 score = 0
-(x, y, r) = (0, 0, 0)
+(x, y, r) = (-2, -2, 0)
 
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
@@ -41,9 +42,11 @@ def inside(position, x, y, r):
 pygame.display.update()
 clock = pygame.time.Clock()
 finished = False
+tickcount = 0
 
 while not finished:
-    clock.tick(FPS)
+    clock.tick(TPS)
+    tickcount += 1
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finished = True
@@ -51,9 +54,11 @@ while not finished:
             is_inside = inside(event.pos, x, y, r)
             if is_inside:
                 score += 1
-    new_ball()
-    pygame.display.update()
-    screen.fill(BLACK)
+    if tickcount % TicksPerFrame == 0:
+        tickcount = 0
+        new_ball()
+        pygame.display.update()
+        screen.fill(BLACK)
 
 pygame.quit()
 print("Well done, your score is", score)
