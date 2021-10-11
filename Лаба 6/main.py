@@ -11,7 +11,7 @@ score = 0
 (x, y, r) = (-2, -2, 0)
 max_number_of_balls = 4
 max_radius = 100
-
+max_speed = 100
 
 class Ball:
     def __init__(self, initialised, status, x, y, r, vx, vy, color, surface):
@@ -43,12 +43,14 @@ GREEN = (0, 255, 0)
 MAGENTA = (255, 0, 255)
 CYAN = (0, 255, 255)
 BLACK = (0, 0, 0)
+transparent = (200, 100, 90, 0)
 COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
 
 ball_list = []
 surface_list = []
 for i in range(0, max_number_of_balls + 1, 1):
     surface_list.append(pygame.Surface((2 * max_radius, 2 * max_radius)))
+    surface_list[-1].fill(transparent)
     ball_list.append(Ball(False, True, 0, 0, 0, 0, 0, BLACK, surface_list[i]))
     # x, y, радиус, скорость x, скорость y
 
@@ -62,14 +64,15 @@ def new_ball(balllist):
     x = randint(100, 1100)
     y = randint(100, 900)
     r = randint(10, max_radius)
-    vx = randint(10, 100)
-    vy = randint(10, 100)
+    vx = randint(-1 * max_speed, max_speed)
+    vy = randint(-1 * max_speed, max_speed)
     color = COLORS[randint(0, 5)]
     surface_list.pop(0)
     surface_list.append(pygame.Surface((2 * max_radius, 2 * max_radius)))
     balllist.append(Ball(True, True, x, y, r, vx, vy, color, surface_list[-1]))
     balllist.pop(0)
     ball = balllist[-1]
+    ball.surface.fill(transparent)
     circle(ball.surface, ball.color, (max_radius, max_radius), ball.r)
 
 
@@ -81,7 +84,6 @@ def inside(position, x, y, r):
     r - радиус шарика
     """
     return True if ((position[0]-x)**2 + (position[1]-y)**2 <= r**2) else False
-
 
 pygame.display.update()
 clock = pygame.time.Clock()
