@@ -9,7 +9,6 @@ TicksPerBall = 15
 (screen_width, screen_height) = (1200, 750)
 screen = pygame.display.set_mode((screen_width, screen_height))
 score = 0
-(x, y, r) = (-2, -2, 0)
 max_number_of_balls = 12
 max_radius = 100
 max_speed = 320
@@ -32,8 +31,8 @@ class Ball:
     :param surface: поверхность, на которой нарисован шарик
     """
     def __init__(self, initialised, status, x, y, r, vx, vy, color, surface):
-        self.status = status
         self.initialised = initialised
+        self.status = status
         self.x = x
         self.y = y
         self.r = r
@@ -42,29 +41,29 @@ class Ball:
         self.color = color
         self.surface = surface
 
-    def moveball(self, velx, vely, dt, leftborder, rightborder, topborder, bottomborder):
+    def moveball(self, velx, vely, time, left_border, right_border, top_border, bottom_border):
         """
         Двигает шарик в соответствии с заданной скоростью
         velx - скорость по x в секунду
         vely - скорость по y в секунду
-        dt - время за 1 обновление экрана
+        time - время одного обновления экрана
         При необходимости осуществляет отражение шарика от стенок с координатами:
-        leftborder (координата x левой границы), rightborder (координата x правой границы),
-        topborder (координата y верхней границы), bottomborder (координата y нижней границы).
+        left_border (координата x левой границы), right_border (координата x правой границы),
+        top_border (координата y верхней границы), bottom_border (координата y нижней границы).
         """
-        if rightborder - self.r > (self.x + velx * dt) > leftborder + self.r:
-            self.x += velx * dt
+        if right_border - self.r > (self.x + velx * time) > left_border + self.r:
+            self.x += velx * time
         else:
             self.vx = -1 * self.vx
             velx = -1 * velx
-            self.x += velx * dt
+            self.x += velx * time
 
-        if bottomborder - self.r > (self.y + vely * dt) > topborder + self.r:
-            self.y += vely * dt
+        if bottom_border - self.r > (self.y + vely * time) > top_border + self.r:
+            self.y += vely * time
         else:
             self.vy = -1 * self.vy
             vely = -1 * vely
-            self.y += vely * dt
+            self.y += vely * time
 
 
 RED = (255, 0, 0)
@@ -92,7 +91,7 @@ def new_ball(balllist):
     Рисует новый шарик со случайными координатами и радиусом
     Добавляет его параметры в список balllist
     """
-    global x, y, r, surface_list
+    global surface_list
     r = randint(min_radius, max_radius)
     x = randint(leftborder + r, rightborder - r)
     y = randint(topborder + r, bottomborder - r)
@@ -103,9 +102,9 @@ def new_ball(balllist):
     surface_list.append(pygame.Surface((2 * max_radius, 2 * max_radius), pygame.SRCALPHA))
     balllist.append(Ball(True, True, x, y, r, vx, vy, color, surface_list[-1]))
     balllist.pop(0)
-    ball = balllist[-1]
-    ball.surface.fill(transparent)
-    circle(ball.surface, ball.color, (max_radius, max_radius), ball.r)
+    newball = balllist[-1]
+    newball.surface.fill(transparent)
+    circle(newball.surface, newball.color, (max_radius, max_radius), newball.r)
 
 
 def inside(position, x, y, r):
