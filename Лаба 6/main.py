@@ -9,9 +9,9 @@ TicksPerFrame = 15
 screen = pygame.display.set_mode((1200, 900))
 score = 0
 (x, y, r) = (-2, -2, 0)
-max_number_of_balls = 11
+max_number_of_balls = 20
 max_radius = 100
-max_speed = 100
+max_speed = 160
 
 class Ball:
     def __init__(self, initialised, status, x, y, r, vx, vy, color, surface):
@@ -103,12 +103,15 @@ while not finished:
         if event.type == pygame.QUIT:
             finished = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
+            ball_list.reverse()
             for ball in ball_list:
-                is_inside = inside(event.pos, ball.x, ball.y, ball.r)
+                is_inside = inside(event.pos, ball.x + 100, ball.y + 100, ball.r)
                 if is_inside:
                     if ball.status:
                         score += 1
                         ball.status = False
+                        break
+            ball_list.reverse()
     if tickcount % TicksPerFrame == 0:
         tickcount = 0
         new_ball(ball_list)
