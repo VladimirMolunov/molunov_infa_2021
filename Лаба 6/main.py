@@ -21,6 +21,7 @@ max_speed = 320
 min_radius = 10
 max_height = 200
 min_height = 50
+min_amogus_speed = 240
 max_amogus_speed = 480
 ratio = 19 / 50
 gap = 25
@@ -264,9 +265,15 @@ def new_amogus(amoguslist):
     h = randint(min_height, max_height)
     x = randint(leftborder + int(ratio * h), rightborder - int(ratio * h))
     y = randint(topborder + int(h / 2), bottomborder - int(h / 2))
-    vx = randint(-1 * max_amogus_speed, max_amogus_speed)
+    vertical = randint(0, 1)
+    horizontal = randint(0, 1)
+    vx = randint(min_amogus_speed, max_amogus_speed)
+    if horizontal == 1:
+        vx = -1 * vx
     orientated_right = True if (vx > 0) else False
-    vy = randint(-1 * max_amogus_speed, max_amogus_speed)
+    vy = randint(min_amogus_speed, max_amogus_speed)
+    if vertical == 1:
+        vy = -1 * vy
     color = AMOGUS_COLORS[randint(0, len(AMOGUS_COLORS)) - 1]
     amogus_surface_list.pop(0)
     amogus_surface_list.append(pygame.Surface((380, 500), pygame.SRCALPHA))
