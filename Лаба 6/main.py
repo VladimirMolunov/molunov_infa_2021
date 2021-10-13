@@ -6,19 +6,22 @@ pygame.init()
 TPS = 30
 dt = float(1/TPS)
 TicksPerBall = 15
-TicksPerAmogus = 100
+TicksPerAmogus = 50
+chance = 3
 (screen_width, screen_height) = (1200, 750)
 screen = pygame.display.set_mode((screen_width, screen_height))
 score = 0
+score_for_ball = 1
+score_for_amogus = 10
 max_number_of_balls = 12
 max_number_of_amogus = 2
 max_radius = 100
 max_speed = 320
 min_radius = 10
 max_height = 200
-max_amogus_speed = 480
 min_height = 50
-ratio = 0.4
+max_amogus_speed = 480
+ratio = 19 / 50
 gap = 25
 (leftborder, rightborder, topborder, bottomborder) = (gap, screen_width - gap, gap, screen_height - gap)
 
@@ -185,17 +188,28 @@ def new_ball(balllist):
     circle(newball.surface, newball.color, (max_radius, max_radius), newball.r)
 
 
-def drawamogus(surface, color, x, y, height, right_orientation):
+def draw_amogus(surface, lightcolor, darkcolor):
     """
-    Рисует мишень
+    Рисует мишень стандартного размера
+    :param surface: поерхность для рисования мишени размера 380x500 пикселей
+    :param lightcolor: основной цвет
+    :param darkcolor: цвет тени
+    """
+    pass
+
+
+def drawamogus(surface, color, height, right_orientation):
+    """
+    Рисует мишень заданного размера
     :param surface: поерхность для рисования мишени
     :param color: кортеж цветов мишени
-    :param x: координата центра мишени по горизонтали
-    :param y: координата центра мишени по вертикали
     :param height: высота мишени
     :param right_orientation: ориентация по горизонтали: вправо - True, влево - False
     """
-    pass
+    draw_amogus(surface, color[0], color[1])
+    if right_orientation:
+        surface = pygame.transform.flip(surface, True, False)
+    surface = pygame.transform.scale(surface, (int(height * ratio * 2), height))
 
 
 def new_amogus(amoguslist):
@@ -212,13 +226,12 @@ def new_amogus(amoguslist):
     vy = randint(-1 * max_amogus_speed, max_amogus_speed)
     color = AMOGUS_COLORS[randint(0, len(AMOGUS_COLORS)) - 1]
     amogus_surface_list.pop(0)
-    amogus_surface_list.append(pygame.Surface((2 * max_height, 2 * max_height), pygame.SRCALPHA))
-    amoguslist.append(Amogus(True, True, orientated_right, x, y, h, vx, vy, color, surface_list[-1]))
+    amogus_surface_list.append(pygame.Surface((380, 500), pygame.SRCALPHA))
+    amoguslist.append(Amogus(True, True, orientated_right, x, y, h, vx, vy, color, amogus_surface_list[-1]))
     amoguslist.pop(0)
     newamogus = amoguslist[-1]
     newamogus.surface.fill(transparent)
-    drawamogus(newamogus.surface, newamogus.color, int(max_height * ratio), int(max_height / 2), newamogus.r,
-               newamogus.faces_right)
+    drawamogus(newamogus.surface, newamogus.color, newamogus.r, newamogus.faces_right)
 
 
 def inside_rect(position, x, y, w, h):
@@ -232,6 +245,18 @@ def inside_rect(position, x, y, w, h):
     return True if ((x <= position[0] <= x+w) and (y <= position[1] <= y+h)) else False
 
 
+def inside_ellipse(position, x, y, half_w, half_h):
+    """
+    Проверяет попадание курсора внутрь эллипса
+    position - координаты клика (кортеж из 2 элементов - x и y)
+    x, y - координаты левого верхнего угла прямоугольника, задающего эллипс
+    w - половина ширины эллипса
+    h - половина высоты эллипса
+    """
+    return True if (half_h ** 2 * (position[0] - x - half_w) ** 2 + half_w ** 2 * (position[1] - y - half_h) ** 2 <=
+                    (half_w * half_h) ** 2) else False
+
+
 def inside_circle(position, x, y, r):
     """
     Проверяет попадание курсора внутрь круга
@@ -240,6 +265,13 @@ def inside_circle(position, x, y, r):
     r - радиус круга
     """
     return True if ((position[0] - x) ** 2 + (position[1] - y)**2 <= r ** 2) else False
+
+
+def inside_amogus(amogus):
+    """
+    Проверяет попадание курсора внутрь данной мишени
+    """
+    return False
 
 
 pygame.display.update()
@@ -256,6 +288,10 @@ while not finished:
         ball.moveball(ball.vx, ball.vy, dt, leftborder, rightborder, topborder, bottomborder)
         if ball.status is True:
             screen.blit(ball.surface, (ball.x - max_radius, ball.y - max_radius))
+    for amogus in amogus_list:
+        amogus.moveamogus(amogus.vx, amogus.vy, dt, leftborder, rightborder, topborder, bottomborder)
+        if amogus.status is True:
+            screen.blit(amogus.surface, (int(max_height * ratio), int(max_height / 2)))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finished = True
@@ -264,12 +300,20 @@ while not finished:
                 is_inside = inside_circle(event.pos, ball.x, ball.y, ball.r)
                 if is_inside:
                     if ball.status:
-                        score += 1
+                        score += score_for_ball
                         ball.status = False
+                        break
+            for amogus in reversed(amogus_list):
+                is_inside = inside_amogus(amogus)
+                if is_inside:
+                    if amogus.status:
+                        score += score_for_amogus
+                        amogus.status = False
                         break
     if tickcount % TicksPerBall == 0:
         tickcount = 0
         new_ball(ball_list)
+
     pygame.display.update()
 
 pygame.quit()
