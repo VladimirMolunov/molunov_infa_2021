@@ -14,7 +14,8 @@ score = 0
 score_for_ball = 1
 score_for_amogus = 10
 max_number_of_balls = 12
-max_number_of_amogus = 2
+max_number_of_amogus = 12
+amogus_lifetime = 6
 max_radius = 100
 max_speed = 320
 min_radius = 10
@@ -88,8 +89,9 @@ class Amogus:
     :param vy: скорость мишени по вертикали
     :param color: цвет мишени
     :param surface: поверхность, на которой нарисована мишень
+    :param timeleft: оставшееся время жизни мишени (в кадрах)
     """
-    def __init__(self, initialised, status, faces_right, x, y, r, vx, vy, color, surface):
+    def __init__(self, initialised, status, faces_right, x, y, r, vx, vy, color, surface, timeleft):
         self.initialised = initialised
         self.status = status
         self.faces_right = faces_right
@@ -100,6 +102,7 @@ class Amogus:
         self.vy = vy
         self.color = color
         self.surface = surface
+        self.timeleft = timeleft
 
     def moveamogus(self, velx, vely, time, left_border, right_border, top_border, bottom_border):
         """
@@ -164,7 +167,7 @@ amogus_surface_list = []
 for i in range(0, max_number_of_amogus + 1, 1):
     amogus_surface_list.append(pygame.Surface((2 * max_height, 2 * max_height), pygame.SRCALPHA))
     amogus_surface_list[-1].fill(transparent)
-    amogus_list.append(Amogus(False, True, True, 0, 0, 0, 0, 0, BLACK, amogus_surface_list[i]))
+    amogus_list.append(Amogus(False, True, True, 0, 0, 0, 0, 0, BLACK, amogus_surface_list[i], 0))
 
 
 def new_ball(balllist):
@@ -195,20 +198,47 @@ def draw_amogus(surface, lightcolor, darkcolor):
     :param lightcolor: основной цвет
     :param darkcolor: цвет тени
     """
+    surface1 = pygame.Surface((280, 398), pygame.SRCALPHA)
+    surface2 = pygame.Surface((500, 900), pygame.SRCALPHA)
+    surface3 = pygame.Surface((280, 120), pygame.SRCALPHA)
+    surface1.fill(transparent)
+    rect(surface1, darkcolor, (15, 0, 250, 398))
+    ellipse(surface2, lightcolor, (115, 115, 275, 478))
+    surface2 = pygame.transform.rotate(surface2, -10)
+    surface1.blit(surface2, (-222, -260))
+    rect(surface1, transparent, (0, 0, 280, 70))
+    rect(surface1, transparent, (0, 0, 15, 390))
+    surface3.fill(transparent)
+    ellipse(surface3, BLACK, (0, 0, 280, 240), 15)
+
     rect(surface, lightcolor, (50, 153, 315, 100), 0, -1, -1, 40, -1, 40)
     ellipse(surface, darkcolor, (180, 195, 240, 268))
     rect(surface, transparent, (0, 376, 380, 124))
     rect(surface, transparent, (365, 340, 15, 40))
     rect(surface, BLACK, (50, 153, 330, 238), 15, 40, -1, 40, -1, 40)
-    circle(surface, BLACK, (170, 140), 140)
-    rect(surface, BLACK, (30, 140, 280, 253))
-    circle(surface, lightcolor, (170, 140), 125)
-    rect(surface, lightcolor, (45, 140, 250, 253))
+    ellipse(surface, lightcolor, (30, 0, 280, 240))
+    ellipse(surface, darkcolor, (191, 360, 119, 140))
+    rect(surface, BLACK, (191, 300, 119, 130))
+    rect(surface, BLACK, (30, 350, 114, 64))
+    rect(surface, BLACK, (30, 120, 280, 273))
+    ellipse(surface, BLACK, (191, 360, 119, 140), 15)
+    rect(surface, darkcolor, (206, 363, 89, 67))
+    ellipse(surface, darkcolor, (30, 334, 114, 160))
+    ellipse(surface, BLACK, (30, 334, 114, 160), 15)
+    rect(surface, darkcolor, (45, 363, 84, 41))
+    rect(surface, darkcolor, (45, 363, 250, 50))
+    rect(surface, BLACK, (129, 398, 77, 15), 0, -1, 10, 10, 0, 0)
+    surface.blit(surface1, (30, 0))
+    surface.blit(surface3, (30, 0))
+    ellipse(surface, amogus_dark, (0, 83, 230, 150))
+    ellipse(surface, amogus_light, (25, 95, 150, 91))
+    ellipse(surface, amogus_white, (45, 112, 100, 41))
+    ellipse(surface, BLACK, (0, 83, 230, 150), 15)
 
 
 def drawamogus(surface, color, height, right_orientation):
     """
-    Рисует мишень заданного размера
+    Рисует мишень заданного размера и возвращает поверхность с ней
     :param surface: поерхность для рисования мишени
     :param color: кортеж цветов мишени
     :param height: высота мишени
@@ -218,6 +248,7 @@ def drawamogus(surface, color, height, right_orientation):
     if right_orientation:
         surface = pygame.transform.flip(surface, True, False)
     surface = pygame.transform.scale(surface, (int(height * ratio * 2), height))
+    return surface
 
 
 def new_amogus(amoguslist):
@@ -235,11 +266,12 @@ def new_amogus(amoguslist):
     color = AMOGUS_COLORS[randint(0, len(AMOGUS_COLORS)) - 1]
     amogus_surface_list.pop(0)
     amogus_surface_list.append(pygame.Surface((380, 500), pygame.SRCALPHA))
-    amoguslist.append(Amogus(True, True, orientated_right, x, y, h, vx, vy, color, amogus_surface_list[-1]))
+    amoguslist.append(Amogus(True, True, orientated_right, x, y, h, vx, vy, color, amogus_surface_list[-1],
+                             amogus_lifetime * TPS))
     amoguslist.pop(0)
     newamogus = amoguslist[-1]
     newamogus.surface.fill(transparent)
-    drawamogus(newamogus.surface, newamogus.color, newamogus.r, newamogus.faces_right)
+    newamogus.surface = drawamogus(newamogus.surface, newamogus.color, newamogus.r, newamogus.faces_right)
 
 
 def inside_rect(position, x, y, w, h):
@@ -293,13 +325,16 @@ while not finished:
     screen.fill(border)
     rect(screen, background, (gap, gap, screen_width - 2 * gap, screen_height - 2 * gap))
     for ball in ball_list:
-        ball.moveball(ball.vx, ball.vy, dt, leftborder, rightborder, topborder, bottomborder)
-        if ball.status is True:
+        if ball.status:
+            ball.moveball(ball.vx, ball.vy, dt, leftborder, rightborder, topborder, bottomborder)
             screen.blit(ball.surface, (ball.x - max_radius, ball.y - max_radius))
     for amogus in amogus_list:
-        amogus.moveamogus(amogus.vx, amogus.vy, dt, leftborder, rightborder, topborder, bottomborder)
-        if amogus.status is True:
+        if amogus.status:
+            amogus.moveamogus(amogus.vx, amogus.vy, dt, leftborder, rightborder, topborder, bottomborder)
             screen.blit(amogus.surface, (int(max_height * ratio), int(max_height / 2)))
+            amogus.timeleft -= 1
+            if amogus.timeleft <= 0:
+                amogus.status = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finished = True
