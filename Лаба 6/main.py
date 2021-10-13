@@ -3,10 +3,10 @@ from pygame.draw import *
 from random import randint
 pygame.init()
 
-TPS = 30
+TPS = 60
 dt = float(1/TPS)
-TicksPerBall = 15
-TicksPerAmogus = 50
+TicksPerBall = 30
+TicksPerAmogus = 100
 chance = 3
 (screen_width, screen_height) = (1200, 750)
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -14,8 +14,8 @@ score = 0
 score_for_ball = 1
 score_for_amogus = 10
 max_number_of_balls = 12
-max_number_of_amogus = 12
-amogus_lifetime = 6
+max_number_of_amogus = 10
+amogus_lifetime = 8
 max_radius = 100
 max_speed = 320
 min_radius = 10
@@ -87,7 +87,7 @@ class Amogus:
     :param r: высота мишени
     :param vx: скорость мишени по горизонтали
     :param vy: скорость мишени по вертикали
-    :param color: цвет мишени
+    :param color: кортеж цветов мишени
     :param surface: поверхность, на которой нарисована мишень
     :param timeleft: оставшееся время жизни мишени (в кадрах)
     """
@@ -104,6 +104,9 @@ class Amogus:
         self.surface = surface
         self.timeleft = timeleft
 
+    def rotate(self):
+        self.surface = pygame.transform.flip(self.surface, True, False)
+
     def moveamogus(self, velx, vely, time, left_border, right_border, top_border, bottom_border):
         """
         Двигает мишень в соответствии с заданной скоростью
@@ -114,15 +117,16 @@ class Amogus:
         left_border (координата x левой границы), right_border (координата x правой границы),
         top_border (координата y верхней границы), bottom_border (координата y нижней границы).
         """
-        if right_border - self.r * ratio > (self.x + velx * time) > left_border + self.r * ratio:
+        if right_border - int(self.r * ratio) > (self.x + velx * time) > left_border + int(self.r * ratio):
             self.x += velx * time
         else:
             self.vx = -1 * self.vx
             velx = -1 * velx
             self.x += velx * time
             self.faces_right = True if (self.vx > 0) else False
+            self.rotate()
 
-        if bottom_border - self.r / 2 > (self.y + vely * time) > top_border + self.r / 2:
+        if bottom_border - int(self.r / 2) > (self.y + vely * time) > top_border + int(self.r / 2):
             self.y += vely * time
         else:
             self.vy = -1 * self.vy
@@ -167,7 +171,7 @@ amogus_surface_list = []
 for i in range(0, max_number_of_amogus + 1, 1):
     amogus_surface_list.append(pygame.Surface((2 * max_height, 2 * max_height), pygame.SRCALPHA))
     amogus_surface_list[-1].fill(transparent)
-    amogus_list.append(Amogus(False, True, True, 0, 0, 0, 0, 0, BLACK, amogus_surface_list[i], 0))
+    amogus_list.append(Amogus(False, True, True, 0, 0, 0, 0, 0, amogus_red, amogus_surface_list[i], 0))
 
 
 def new_ball(balllist):
@@ -331,7 +335,7 @@ while not finished:
     for amogus in amogus_list:
         if amogus.status:
             amogus.moveamogus(amogus.vx, amogus.vy, dt, leftborder, rightborder, topborder, bottomborder)
-            screen.blit(amogus.surface, (amogus.x - int(max_height * ratio), amogus.y - int(max_height / 2)))
+            screen.blit(amogus.surface, (amogus.x - int(amogus.r * ratio), amogus.y - int(amogus.r / 2)))
             amogus.timeleft -= 1
             if amogus.timeleft <= 0:
                 amogus.status = False
