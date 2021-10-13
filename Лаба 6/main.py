@@ -3,31 +3,70 @@ from pygame.draw import *
 from random import randint
 pygame.init()
 
+# настраиваемые параметры
 TPS = 60  # количество кадров в секунду
 TicksPerBall = 30  # количество кадров, через которое появляется шарик
-TicksPerAmogus = 100  # количество кадров, через которое может появиться мишень
-chance = 3  # 1:chance - шанс появления мишени
+TicksPerAmogus = 50  # количество кадров, через которое может появиться мишень
+chance = 1  # 1:chance - шанс появления мишени
 (screen_width, screen_height) = (1200, 750)  # размеры экрана
 score_for_ball = 1  # количество очков за клик по шарику
 score_for_amogus = 10  # количество очков за клик по мишени
-max_number_of_balls = 12  # максимальное количество шариков на экране, по достижении которого они начинают исчезать
+max_number_of_balls = 1  # максимальное количество шариков на экране, по достижении которого они начинают исчезать
 max_number_of_amogus = 10  # максимальное количество мишеней на экране, по достижении которого они начинают исчезать
 amogus_lifetime = 8  # время жизни мишени
 max_radius = 100  # максимальный радиус шарика
 max_speed = 320  # максимальная скорость шарика (в проекции на горизонтальную или вертикальную ось)
 min_radius = 20  # минимальный радиус шарика
 max_height = 200  # максимальная высота мишени
-min_height = 50  # минимальная высота мишени
-min_amogus_speed = 240  # максимальная скорость мишени (в проекции на горизонтальную или вертикальную ось)
-max_amogus_speed = 480  # минимальная скорость мишени (в проекции на горизонтальную или вертикальную ось)
+min_height = 150  # минимальная высота мишени
+min_amogus_speed = 20  # максимальная скорость мишени (в проекции на горизонтальную или вертикальную ось)
+max_amogus_speed = 40  # минимальная скорость мишени (в проекции на горизонтальную или вертикальную ось)
 gap = 25  # отступ от края окошка до границы игрового поля
 
+# неизменяемые параметры
 ratio = 19 / 50  # отношение роловины ширины мишени к её высоте
 dt = float(1/TPS)  # время в секундах, которое проходит за 1 кадр
 # объявление границ игрового поля
 (leftborder, rightborder, topborder, bottomborder) = (gap, screen_width - gap, gap, screen_height - gap)
 screen = pygame.display.set_mode((screen_width, screen_height))
 score = 0  # набранные очки
+
+# объявление цветов шариков
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+YELLOW = (255, 255, 0)
+LIME = (0, 255, 0)
+GREEN = (30, 123, 30)
+MAGENTA = (255, 0, 255)
+VIOLET = (170, 0, 170)
+CYAN = (0, 255, 255)
+ORANGE = (255, 128, 0)
+BLACK = (0, 0, 0)
+COLORS = [RED, BLUE, YELLOW, LIME, GREEN, MAGENTA, CYAN, ORANGE, VIOLET]
+
+# объявление цветов мишеней
+amogus_red = (RED, (170, 0, 0))
+amogus_blue = (BLUE, (0, 0, 170))
+amogus_white = (255, 255, 255)
+amogus_gray = (170, 170, 170)
+amogus_green = (GREEN, (20, 82, 20))
+amogus_yellow = (YELLOW, (170, 170, 0))
+amogus_orange = (ORANGE, (170, 85, 0))
+
+amogus_cyan = (CYAN, (0, 170, 170))
+amogus_pink = ((255, 105, 192), (170, 70, 128))
+amogus_purple = ((105, 0, 128), (70, 0, 85))
+amogus_brown = ((139, 69, 19), (93, 46, 13))
+amogus_lime = (LIME, (0, 170, 0))
+
+AMOGUS_COLORS = [amogus_red, amogus_blue, (amogus_white, amogus_gray), amogus_green, amogus_yellow, amogus_orange,
+                 amogus_cyan, amogus_pink, amogus_purple, amogus_brown, amogus_lime]
+(amogus_light, amogus_dark) = ((104, 226, 227), (40, 128, 129))
+
+# объявление остальных цветов
+transparent = (200, 200, 200, 0)
+background = (0, 50, 80)
+border = (0, 20, 40)
 
 
 class Ball:
@@ -136,35 +175,6 @@ class Amogus:
             vely = -1 * vely
             self.y += vely * time
 
-
-# объявление цветов шариков
-RED = (255, 0, 0)
-BLUE = (0, 0, 255)
-YELLOW = (255, 255, 0)
-LIME = (0, 255, 0)
-GREEN = (0, 170, 60)
-MAGENTA = (255, 0, 255)
-VIOLET = (170, 0, 170)
-CYAN = (0, 255, 255)
-ORANGE = (255, 128, 0)
-BLACK = (0, 0, 0)
-COLORS = [RED, BLUE, YELLOW, LIME, GREEN, MAGENTA, CYAN, ORANGE, VIOLET]
-
-# объявление цветов мишеней
-amogus_red = ((255, 0, 0), (170, 0, 0))
-amogus_blue = ((0, 0, 255), (0, 0, 170))
-amogus_white = (255, 255, 255)
-amogus_gray = (170, 170, 170)
-amogus_green = ((0, 255, 0), (0, 170, 0))
-amogus_yellow = ((255, 255, 0), (170, 170, 0))
-amogus_orange = ((255, 128, 0), (170, 85, 0))
-AMOGUS_COLORS = [amogus_red, amogus_blue, (amogus_white, amogus_gray), amogus_green, amogus_yellow, amogus_orange]
-(amogus_light, amogus_dark) = ((104, 226, 227), (40, 128, 129))
-
-# объявление остальных цветов
-transparent = (200, 200, 200, 0)
-background = (0, 50, 80)
-border = (0, 20, 40)
 
 # объявление поверхностей рисования и их списков
 ball_list = []
