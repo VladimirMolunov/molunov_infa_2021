@@ -195,7 +195,15 @@ def draw_amogus(surface, lightcolor, darkcolor):
     :param lightcolor: основной цвет
     :param darkcolor: цвет тени
     """
-    pass
+    rect(surface, lightcolor, (50, 153, 315, 100), 0, -1, -1, 40, -1, 40)
+    ellipse(surface, darkcolor, (180, 195, 240, 268))
+    rect(surface, transparent, (0, 376, 380, 124))
+    rect(surface, transparent, (365, 340, 15, 40))
+    rect(surface, BLACK, (50, 153, 330, 238), 15, 40, -1, 40, -1, 40)
+    circle(surface, BLACK, (170, 140), 140)
+    rect(surface, BLACK, (30, 140, 280, 253))
+    circle(surface, lightcolor, (170, 140), 125)
+    rect(surface, lightcolor, (45, 140, 250, 253))
 
 
 def drawamogus(surface, color, height, right_orientation):
