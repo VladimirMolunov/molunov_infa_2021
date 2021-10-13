@@ -17,7 +17,7 @@ amogus_lifetime = 8  # время жизни мишени
 max_radius = 100  # максимальный радиус шарика
 max_speed = 320  # максимальная скорость шарика (в проекции на горизонтальную или вертикальную ось)
 min_radius = 20  # минимальный радиус шарика
-max_height = 200  # максимальная высота мишени  
+max_height = 200  # максимальная высота мишени
 min_height = 50  # минимальная высота мишени
 min_amogus_speed = 240  # максимальная скорость мишени (в проекции на горизонтальную или вертикальную ось)
 max_amogus_speed = 480  # минимальная скорость мишени (в проекции на горизонтальную или вертикальную ось)
@@ -38,11 +38,11 @@ YELLOW = (255, 255, 0)
 LIME = (0, 255, 0)
 GREEN = (30, 123, 30)
 MAGENTA = (255, 0, 255)
-VIOLET = (170, 0, 170)
+PURPLE = (105, 0, 128)
 CYAN = (0, 255, 255)
 ORANGE = (255, 128, 0)
 BLACK = (0, 0, 0)
-COLORS = [RED, BLUE, YELLOW, LIME, GREEN, MAGENTA, CYAN, ORANGE, VIOLET]
+COLORS = [RED, BLUE, YELLOW, LIME, GREEN, MAGENTA, CYAN, ORANGE, PURPLE]
 
 # объявление цветов мишеней
 amogus_red = (RED, (170, 0, 0))
@@ -55,7 +55,7 @@ amogus_orange = (ORANGE, (170, 85, 0))
 amogus_black = ((60, 60, 60), (40, 40, 40))
 amogus_cyan = (CYAN, (0, 170, 170))
 amogus_pink = ((255, 105, 192), (170, 70, 128))
-amogus_purple = ((105, 0, 128), (70, 0, 85))
+amogus_purple = (PURPLE, (70, 0, 85))
 amogus_brown = ((139, 69, 19), (93, 46, 13))
 amogus_lime = (LIME, (0, 170, 0))
 
