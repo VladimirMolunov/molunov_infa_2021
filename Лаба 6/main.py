@@ -114,7 +114,7 @@ class Amogus:
         left_border (координата x левой границы), right_border (координата x правой границы),
         top_border (координата y верхней границы), bottom_border (координата y нижней границы).
         """
-        if right_border - self.r > (self.x + velx * time) > left_border + self.r:
+        if right_border - self.r * ratio > (self.x + velx * time) > left_border + self.r * ratio:
             self.x += velx * time
         else:
             self.vx = -1 * self.vx
@@ -122,7 +122,7 @@ class Amogus:
             self.x += velx * time
             self.faces_right = True if (self.vx > 0) else False
 
-        if bottom_border - self.r > (self.y + vely * time) > top_border + self.r:
+        if bottom_border - self.r / 2 > (self.y + vely * time) > top_border + self.r / 2:
             self.y += vely * time
         else:
             self.vy = -1 * self.vy
@@ -247,8 +247,8 @@ def drawamogus(surface, color, height, right_orientation):
     draw_amogus(surface, color[0], color[1])
     if right_orientation:
         surface = pygame.transform.flip(surface, True, False)
-    surface = pygame.transform.scale(surface, (int(height * ratio * 2), height))
-    return surface
+    scaled_surface = pygame.transform.scale(surface, (int(height * ratio * 2), height))
+    return scaled_surface
 
 
 def new_amogus(amoguslist):
@@ -256,7 +256,7 @@ def new_amogus(amoguslist):
     Рисует новую мишень со случайными координатами и высотой
     Добавляет его параметры в список amoguslist
     """
-    global amogus_list
+    global amogus_surface_list
     h = randint(min_height, max_height)
     x = randint(leftborder + int(ratio * h), rightborder - int(ratio * h))
     y = randint(topborder + int(h / 2), bottomborder - int(h / 2))
@@ -331,7 +331,7 @@ while not finished:
     for amogus in amogus_list:
         if amogus.status:
             amogus.moveamogus(amogus.vx, amogus.vy, dt, leftborder, rightborder, topborder, bottomborder)
-            screen.blit(amogus.surface, (int(max_height * ratio), int(max_height / 2)))
+            screen.blit(amogus.surface, (amogus.x - int(max_height * ratio), amogus.y - int(max_height / 2)))
             amogus.timeleft -= 1
             if amogus.timeleft <= 0:
                 amogus.status = False
@@ -354,9 +354,17 @@ while not finished:
                         amogus.status = False
                         break
     if tickcount % TicksPerBall == 0:
-        tickcount = 0
-        new_ball(ball_list)
-
+        if tickcount % TicksPerAmogus == 0:
+            tickcount = 0
+        else:
+            new_ball(ball_list)
+    if tickcount % TicksPerAmogus == 0:
+        new = randint(0, chance - 1)
+        if new == 0:
+            new_amogus(amogus_list)
+        else:
+            if tickcount == 0:
+                new_ball(ball_list)
     pygame.display.update()
 
 pygame.quit()
