@@ -3,29 +3,31 @@ from pygame.draw import *
 from random import randint
 pygame.init()
 
-TPS = 60
-dt = float(1/TPS)
-TicksPerBall = 30
-TicksPerAmogus = 100
-chance = 3
-(screen_width, screen_height) = (1200, 750)
-screen = pygame.display.set_mode((screen_width, screen_height))
-score = 0
-score_for_ball = 1
-score_for_amogus = 10
-max_number_of_balls = 12
-max_number_of_amogus = 10
-amogus_lifetime = 8
-max_radius = 100
-max_speed = 320
-min_radius = 10
-max_height = 200
-min_height = 50
-min_amogus_speed = 240
-max_amogus_speed = 480
-ratio = 19 / 50
-gap = 25
+TPS = 60  # количество кадров в секунду
+TicksPerBall = 30  # количество кадров, через которое появляется шарик
+TicksPerAmogus = 100  # количество кадров, через которое может появиться мишень
+chance = 3  # 1:chance - шанс появления мишени
+(screen_width, screen_height) = (1200, 750)  # размеры экрана
+score_for_ball = 1  # количество очков за клик по шарику
+score_for_amogus = 10  # количество очков за клик по мишени
+max_number_of_balls = 12  # максимальное количество шариков на экране, по достижении которого они начинают исчезать
+max_number_of_amogus = 10  # максимальное количество мишеней на экране, по достижении которого они начинают исчезать
+amogus_lifetime = 8  # время жизни мишени
+max_radius = 100  # максимальный радиус шарика
+max_speed = 320  # максимальная скорость шарика (в проекции на горизонтальную или вертикальную ось)
+min_radius = 20  # минимальный радиус шарика
+max_height = 200  # максимальная высота мишени
+min_height = 50  # минимальная высота мишени
+min_amogus_speed = 240  # максимальная скорость мишени (в проекции на горизонтальную или вертикальную ось)
+max_amogus_speed = 480  # минимальная скорость мишени (в проекции на горизонтальную или вертикальную ось)
+gap = 25  # отступ от края окошка до границы игрового поля
+
+ratio = 19 / 50  # отношение роловины ширины мишени к её высоте
+dt = float(1/TPS)  # время в секундах, которое проходит за 1 кадр
+# объявление границ игрового поля
 (leftborder, rightborder, topborder, bottomborder) = (gap, screen_width - gap, gap, screen_height - gap)
+screen = pygame.display.set_mode((screen_width, screen_height))
+score = 0  # набранные очки
 
 
 class Ball:
@@ -135,6 +137,7 @@ class Amogus:
             self.y += vely * time
 
 
+# объявление цветов шариков
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
@@ -145,11 +148,9 @@ VIOLET = (170, 0, 170)
 CYAN = (0, 255, 255)
 ORANGE = (255, 128, 0)
 BLACK = (0, 0, 0)
-transparent = (200, 200, 200, 0)
-background = (0, 50, 80)
-border = (0, 20, 40)
 COLORS = [RED, BLUE, YELLOW, LIME, GREEN, MAGENTA, CYAN, ORANGE, VIOLET]
 
+# объявление цветов мишеней
 amogus_red = ((255, 0, 0), (170, 0, 0))
 amogus_blue = ((0, 0, 255), (0, 0, 170))
 amogus_white = (255, 255, 255)
@@ -160,16 +161,22 @@ amogus_orange = ((255, 128, 0), (170, 85, 0))
 AMOGUS_COLORS = [amogus_red, amogus_blue, (amogus_white, amogus_gray), amogus_green, amogus_yellow, amogus_orange]
 (amogus_light, amogus_dark) = ((104, 226, 227), (40, 128, 129))
 
+# объявление остальных цветов
+transparent = (200, 200, 200, 0)
+background = (0, 50, 80)
+border = (0, 20, 40)
+
+# объявление поверхностей рисования и их списков
 ball_list = []
 surface_list = []
-for i in range(0, max_number_of_balls + 1, 1):
+for i in range(0, max_number_of_balls, 1):
     surface_list.append(pygame.Surface((2 * max_radius, 2 * max_radius), pygame.SRCALPHA))
     surface_list[-1].fill(transparent)
     ball_list.append(Ball(False, True, 0, 0, 0, 0, 0, BLACK, surface_list[i]))
 
 amogus_list = []
 amogus_surface_list = []
-for i in range(0, max_number_of_amogus + 1, 1):
+for i in range(0, max_number_of_amogus, 1):
     amogus_surface_list.append(pygame.Surface((2 * max_height, 2 * max_height), pygame.SRCALPHA))
     amogus_surface_list[-1].fill(transparent)
     amogus_list.append(Amogus(False, True, True, 0, 0, 0, 0, 0, amogus_red, amogus_surface_list[i], 0))
@@ -216,17 +223,17 @@ def draw_amogus(surface, lightcolor, darkcolor):
     surface3.fill(transparent)
     ellipse(surface3, BLACK, (0, 0, 280, 240), 15)
 
-    rect(surface, lightcolor, (50, 153, 315, 100), 0, -1, -1, 40, -1, 40)
+    rect(surface, lightcolor, (50, 153, 315, 100), 0, -1, 0, 40, 0, 40)
     ellipse(surface, darkcolor, (180, 195, 240, 268))
     rect(surface, transparent, (0, 376, 380, 124))
     rect(surface, transparent, (365, 340, 15, 40))
-    rect(surface, BLACK, (50, 153, 330, 238), 15, 40, -1, 40, -1, 40)
+    rect(surface, BLACK, (50, 153, 330, 238), 15, 40, 0, 40, 0, 40)
     ellipse(surface, lightcolor, (30, 0, 280, 240))
-    ellipse(surface, darkcolor, (191, 360, 119, 140))
-    rect(surface, BLACK, (191, 300, 119, 130))
+    ellipse(surface, darkcolor, (190, 360, 120, 140))
+    rect(surface, BLACK, (190, 300, 120, 130))
     rect(surface, BLACK, (30, 350, 114, 64))
     rect(surface, BLACK, (30, 120, 280, 273))
-    ellipse(surface, BLACK, (191, 360, 119, 140), 15)
+    ellipse(surface, BLACK, (190, 360, 120, 140), 15)
     rect(surface, darkcolor, (206, 363, 89, 67))
     ellipse(surface, darkcolor, (30, 334, 114, 160))
     ellipse(surface, BLACK, (30, 334, 114, 160), 15)
@@ -335,17 +342,30 @@ def inside_ellipse(position, x, y, half_w, half_h):
                     (half_w * half_h) ** 2) else False
 
 
-def inside_amogus(amogus):
+def inside_amogus(position, target):
     """
-    Проверяет попадание курсора внутрь данной мишени
+    Проверяет попадание точки с координатами position (кортеж из двух координат по x и y) внутрь данной мишени target
     """
-    return False
+    x = target.x - int(target.r * ratio)
+    y = target.y - int(target.r / 2)
+    scale = target.r / 500
+
+    a1 = inside_ellipse(position, x + scale * 30, y, scale * 140, scale * 120)
+    a2 = inside_ellipse(position, x, y + scale * 83, scale * 115, scale * 75)
+    a3 = inside_rounded_rect(position, x + scale * 50, y + scale * 153, scale * 330, scale * 238, scale * 40)
+    a4 = inside_ellipse(position, x + scale * 190, y + scale * 360, scale * 60, scale * 70)
+    a5 = inside_ellipse(position, x + scale * 30, y + scale * 334, scale * 57, scale * 80)
+    a6 = inside_rect(position, x + scale * 191, y + scale * 300, scale * 119, scale * 130)
+    a7 = inside_rect(position, x + scale * 30, y + scale * 350, scale * 114, scale * 64)
+    a8 = inside_rect(position, x + scale * 30, y + scale * 120, scale * 280, scale * 273)
+    a9 = inside_rect(position, x + scale * 45, y + scale * 363, scale * 250, scale * 50)
+    return True if a1 or a2 or a3 or a4 or a5 or a6 or a7 or a8 or a9 else False
 
 
 pygame.display.update()
 clock = pygame.time.Clock()
 finished = False
-tickcount = 0
+tickcount = 0  # отсчёт количества кадров с момента запуска игры
 
 while not finished:
     clock.tick(TPS)
@@ -367,20 +387,23 @@ while not finished:
         if event.type == pygame.QUIT:
             finished = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            for ball in reversed(ball_list):
-                is_inside = inside_circle(event.pos, ball.x, ball.y, ball.r)
-                if is_inside:
-                    if ball.status:
-                        score += score_for_ball
-                        ball.status = False
-                        break
+            captured = False
             for amogus in reversed(amogus_list):
-                is_inside = inside_amogus(amogus)
+                is_inside = inside_amogus(event.pos, amogus)
                 if is_inside:
                     if amogus.status:
                         score += score_for_amogus
                         amogus.status = False
+                        captured = True
                         break
+            if not captured:
+                for ball in reversed(ball_list):
+                    is_inside = inside_circle(event.pos, ball.x, ball.y, ball.r)
+                    if is_inside:
+                        if ball.status:
+                            score += score_for_ball
+                            ball.status = False
+                            break
     if tickcount % TicksPerBall == 0:
         if tickcount % TicksPerAmogus == 0:
             tickcount = 0
