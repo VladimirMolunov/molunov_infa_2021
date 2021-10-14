@@ -5,8 +5,8 @@ pygame.init()
 
 # настраиваемые параметры
 names = ('TPS', 'TicksPerBall', 'TicksPerAmogus', 'chance', 'screen_width', 'screen_height', 'score_for_ball',
-         'score_for_amogus', 'max_number_of_balls', 'max_number_of_amogus', 'amogus_lifetime', 'max_radius',
-         'max_speed', 'min_radius', 'max_height', 'min_height', 'min_amogus_speed', 'max_amogus_speed', 'gap')
+         'score_for_amogus', 'max_number_of_balls', 'max_number_of_amogus', 'timeout', 'amogus_lifetime', 'max_radius',
+         'max_speed', 'min_radius', 'max_height', 'min_height', 'min_amogus_speed', 'max_amogus_speed', 'gap', 'ratio')
 
 # files.reset_custom()  # функция, позволяющая сбросить пользовательские настройки
 
@@ -17,8 +17,8 @@ for j in names:
     exec(j + ' = files.' + j)
 
 # неизменяемые параметры
-ratio = 19 / 50  # отношение роловины ширины мишени к её высоте
-dt = float(1/TPS)  # время в секундах, которое проходит за 1 кадр
+ratio = ratio / 2  # отношение половины ширины мишени к её высоте
+dt = float(1/TPS)  # время в секундах, которое проходит за 1 обновление экрана
 # объявление границ игрового поля
 (leftborder, rightborder, topborder, bottomborder) = (gap, screen_width - gap, gap, screen_height - gap)
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -107,7 +107,7 @@ def inside_amogus(position, target):
 pygame.display.update()
 clock = pygame.time.Clock()
 finished = False
-tickcount = 0  # отсчёт количества кадров с момента запуска игры
+tickcount = - timeout - 1  # отсчёт количества кадров с момента запуска игры
 
 while not finished:
     clock.tick(TPS)
@@ -146,18 +146,19 @@ while not finished:
                             score += score_for_ball
                             ball.status = False
                             break
-    if tickcount % TicksPerBall == 0:
-        if tickcount % TicksPerAmogus == 0:
-            tickcount = 0
-        else:
-            new_ball(ball_list)
-    if tickcount % TicksPerAmogus == 0:
-        new = randint(0, chance - 1)
-        if new == 0:
-            new_amogus(amogus_list)
-        else:
-            if tickcount == 0:
+    if tickcount >= 0:
+        if tickcount % TicksPerBall == 0:
+            if tickcount % TicksPerAmogus == 0:
+                tickcount = 0
+            else:
                 new_ball(ball_list)
+        if tickcount % TicksPerAmogus == 0:
+            new = randint(0, chance - 1)
+            if new == 0:
+                new_amogus(amogus_list)
+            else:
+                if tickcount == 0:
+                    new_ball(ball_list)
     pygame.display.update()
 
 pygame.quit()

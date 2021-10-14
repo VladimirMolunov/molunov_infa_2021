@@ -4,7 +4,6 @@ from pathlib import Path
 custom_path = Path('custom_parameters.txt')
 playerdata_path = Path('mymodules', 'playerdata.txt')
 default_path = Path('mymodules', 'default')
-playerdata = open(playerdata_path, 'r')
 
 names = ('TPS', 'max_radius')
 numbers = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '0', ',', '.')
@@ -64,10 +63,4 @@ def reset_custom():
                 print(j, file=custom_parameters, end='')
 
 
-data = playerdata.readlines()
 getdefault(names)
-playerdata.close()
-playerdata = open('playerdata.txt', 'w')
-
-for i in data:
-    print(i, file=playerdata, end='')

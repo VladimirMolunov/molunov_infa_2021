@@ -27,7 +27,7 @@ def inside_circle(position, x, y, r):
     return True if ((position[0] - x) ** 2 + (position[1] - y)**2 <= r ** 2) else False
 
 
-def inside_rounded_rect(position, x, y, w, h, r):
+def inside_rounded_rect(position, x, y, w, h, rx, ry):
     """
     Проверяет попадание курсора в момент клика внутрь скругленного прямоугольника
     :param position: координаты курсора в момент клика (кортеж из 2 элементов - координаты по x и y)
@@ -35,15 +35,16 @@ def inside_rounded_rect(position, x, y, w, h, r):
     :param y: верхняя координата скругленного прямоугольника по вертикали
     :param w: ширина скругленного прямоугольника
     :param h: высота скругленного прямоугольника
-    :param r: радиус скругления
+    :param rx: радиус скругления по горизонтали
+    :param ry: радиус скругления по вертикали
     :return: True, если точка клика попадает в скругленный прямоугольник, False иначе
     """
-    return True if ((x + r <= position[0] <= x + w - 2 * r) and (y <= position[1] <= y + h))\
-                   or ((x <= position[0] <= x + w) and (y + r <= position[1] <= y + h - 2 * r))\
-                   or (inside_circle(position, x + r, y + r, r)) \
-                   or (inside_circle(position, x + w - r, y + r, r)) \
-                   or (inside_circle(position, x + r, y + h - r, r)) \
-                   or (inside_circle(position, x + w - r, y + h - r, r)) else False
+    return True if ((x + rx <= position[0] <= x + w - rx) and (y <= position[1] <= y + h))\
+                   or ((x <= position[0] <= x + w) and (y + ry <= position[1] <= y + h - ry))\
+                   or (inside_ellipse(position, x, y, rx, ry)) \
+                   or (inside_ellipse(position, x + w - 2 * rx, y, rx, ry)) \
+                   or (inside_ellipse(position, x, y + h - 2 * ry, rx, ry)) \
+                   or (inside_ellipse(position, x + w - 2 * rx, y + h - 2 * ry, rx, ry)) else False
 
 
 def inside_ellipse(position, x, y, half_w, half_h):
@@ -70,15 +71,29 @@ def inside_amogus(position, target, ratio):
     """
     x = target.x - int(target.r * ratio)
     y = target.y - int(target.r / 2)
-    scale = target.r / 500
-
-    a1 = inside_ellipse(position, x + scale * 30, y, scale * 140, scale * 120)
-    a2 = inside_ellipse(position, x, y + scale * 83, scale * 115, scale * 75)
-    a3 = inside_rounded_rect(position, x + scale * 50, y + scale * 153, scale * 330, scale * 238, scale * 40)
-    a4 = inside_ellipse(position, x + scale * 190, y + scale * 360, scale * 60, scale * 70)
-    a5 = inside_ellipse(position, x + scale * 30, y + scale * 334, scale * 57, scale * 80)
-    a6 = inside_rect(position, x + scale * 191, y + scale * 300, scale * 119, scale * 130)
-    a7 = inside_rect(position, x + scale * 30, y + scale * 350, scale * 114, scale * 64)
-    a8 = inside_rect(position, x + scale * 30, y + scale * 120, scale * 280, scale * 273)
-    a9 = inside_rect(position, x + scale * 45, y + scale * 363, scale * 250, scale * 50)
-    return True if a1 or a2 or a3 or a4 or a5 or a6 or a7 or a8 or a9 else False
+    xscale = target.r / 190 * ratio
+    yscale = target.r / 500
+    if target.faces_right:
+        a1 = inside_ellipse(position, x + xscale * 210, y, xscale * 140, yscale * 120)
+        a2 = inside_ellipse(position, x + 265 * xscale, y + yscale * 83, xscale * 115, yscale * 75)
+        a3 = inside_rounded_rect(position, x + xscale * 0, y + yscale * 153, xscale * 330, yscale * 238, xscale * 40,
+                                 yscale * 40)
+        a4 = inside_ellipse(position, x + xscale * 130, y + yscale * 360, xscale * 60, yscale * 70)
+        a5 = inside_ellipse(position, x + xscale * 293, y + yscale * 334, xscale * 57, yscale * 80)
+        a6 = inside_rect(position, x + xscale * 70, y + yscale * 300, xscale * 119, yscale * 130)
+        a7 = inside_rect(position, x + xscale * 236, y + yscale * 350, xscale * 114, yscale * 64)
+        a8 = inside_rect(position, x + xscale * 70, y + yscale * 120, xscale * 280, yscale * 273)
+        a9 = inside_rect(position, x + xscale * 85, y + yscale * 363, xscale * 250, yscale * 50)
+        return True if a1 or a2 or a3 or a4 or a5 or a6 or a7 or a8 or a9 else False
+    else:
+        a1 = inside_ellipse(position, x + xscale * 30, y, xscale * 140, yscale * 120)
+        a2 = inside_ellipse(position, x, y + yscale * 83, xscale * 115, yscale * 75)
+        a3 = inside_rounded_rect(position, x + xscale * 50, y + yscale * 153, xscale * 330, yscale * 238, xscale * 40,
+                                 yscale * 40)
+        a4 = inside_ellipse(position, x + xscale * 190, y + yscale * 360, xscale * 60, yscale * 70)
+        a5 = inside_ellipse(position, x + xscale * 30, y + yscale * 334, xscale * 57, yscale * 80)
+        a6 = inside_rect(position, x + xscale * 191, y + yscale * 300, xscale * 119, yscale * 130)
+        a7 = inside_rect(position, x + xscale * 30, y + yscale * 350, xscale * 114, yscale * 64)
+        a8 = inside_rect(position, x + xscale * 30, y + yscale * 120, xscale * 280, yscale * 273)
+        a9 = inside_rect(position, x + xscale * 45, y + yscale * 363, xscale * 250, yscale * 50)
+        return True if a1 or a2 or a3 or a4 or a5 or a6 or a7 or a8 or a9 else False
