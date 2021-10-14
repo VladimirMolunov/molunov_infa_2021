@@ -6,6 +6,14 @@ amogus_surface_list = []
 
 
 def defsurfacelist(max_number_of_amogus, max_height, transparent, amogus_list, amogus, amogus_red):
+    """
+    :param max_number_of_amogus: максимальное заданное количество мишеней на экране, длина генерируемого списка
+    :param max_height: максимальная высота мишени
+    :param transparent: прозрачный цвет
+    :param amogus_list: список объектов мишеней
+    :param amogus: класс мишеней
+    :param amogus_red: базовый цвет мишени (кортеж из 2 цветов)
+    """
     global amogus_surface_list
     for i in range(0, max_number_of_amogus, 1):
         amogus_surface_list.append(pygame.Surface((2 * max_height, 2 * max_height), pygame.SRCALPHA))
@@ -46,14 +54,14 @@ class Amogus:
 
     def moveamogus(self, velx, vely, time, left_border, right_border, top_border, bottom_border, ratio):
         """
-        Двигает мишень в соответствии с заданной скоростью
-        velx - скорость по x в секунду
-        vely - скорость по y в секунду
-        time - время одного обновления экрана
-        При необходимости осуществляет отражение мишени от стенок с координатами:
-        left_border (координата x левой границы), right_border (координата x правой границы),
-        top_border (координата y верхней границы), bottom_border (координата y нижней границы)
-        ratio - отношение высоты мишени к половине её ширины
+        :param velx: скорость по x в секунду
+        :param vely: скорость по y в секунду
+        :param time: время одного обновления экрана
+        :param left_border: координата левой стенки по горизонтали
+        :param right_border: координата правой стенки по горизонтали
+        :param top_border: координата верхней стенки по вертикали
+        :param bottom_border: координата нижней стенки по вертикали
+        :param ratio: отношение высоты мишени к половине её ширины
         """
         if right_border - int(self.r * ratio) > (self.x + velx * time) > left_border + int(self.r * ratio):
             self.x += velx * time
@@ -78,6 +86,11 @@ def draw_amogus(surface, lightcolor, darkcolor, transparent, black, amogus_dark,
     :param surface: поерхность для рисования мишени размера 380x500 пикселей
     :param lightcolor: основной цвет
     :param darkcolor: цвет тени
+    :param transparent: прозрачный цвет
+    :param black: чёрный цвет (цвет контура мишени)
+    :param amogus_dark: тёмный цвет (тень стекла шлема)
+    :param amogus_light: светлый цвет (средний цвет стекла шлема)
+    :param amogus_white: белый цвет (блик стекла шлема)
     """
     surface1 = pygame.Surface((280, 398), pygame.SRCALPHA)
     surface2 = pygame.Surface((500, 900), pygame.SRCALPHA)
@@ -125,6 +138,12 @@ def drawamogus(surface, color, height, right_orientation, ratio, transparent, bl
     :param color: кортеж цветов мишени
     :param height: высота мишени
     :param right_orientation: ориентация по горизонтали: вправо - True, влево - False
+    :param ratio: отношение высоты мишени к половине её ширины
+    :param transparent: прозрачный цвет
+    :param black: чёрный цвет (цвет контура мишени)
+    :param amogus_dark: тёмный цвет (тень стекла шлема)
+    :param amogus_light: светлый цвет (средний цвет стекла шлема)
+    :param amogus_white: белый цвет (блик стекла шлема)
     """
     draw_amogus(surface, color[0], color[1], transparent, black, amogus_dark, amogus_light, amogus_white)
     if right_orientation:
@@ -139,6 +158,24 @@ def new_amogus(amoguslist, min_height, max_height, leftborder, rightborder, topb
     """
     Рисует новую мишень со случайными координатами и высотой
     Добавляет его параметры в список amoguslist
+    :param amoguslist: список мишеней
+    :param min_height: минимальная высота мишени
+    :param max_height: максимальная высота мишени
+    :param leftborder: координата левой стенки по горизонтали
+    :param rightborder: координата правой стенки по горизонтали
+    :param topborder: координата верхней стенки по вертикали
+    :param bottomborder: координата нижней стенки по вертикали
+    :param ratio: отношение высоты мишени к половине её ширины
+    :param min_amogus_speed: минимальная скорость мишени (в проекции на горизонтальную или вертикальную ось)
+    :param max_amogus_speed: максимальная скорость мишени (в проекции на горизонтальную или вертикальную ось)
+    :param amogus_colors: список цветов мишени (кортежей из 2 цветов)
+    :param amogus_lifetime: время, в течение которого мишень видима на экране
+    :param tps: частота обновления экрана (в кадрах в секунду)
+    :param transparent: прозрачный цвет
+    :param black: чёрный цвет (цвет контура мишени)
+    :param amogus_dark: тёмный цвет (тень стекла шлема)
+    :param amogus_light: светлый цвет (средний цвет стекла шлема)
+    :param amogus_white: белый цвет (блик стекла шлема)
     """
     global amogus_surface_list
     h = randint(min_height, max_height)

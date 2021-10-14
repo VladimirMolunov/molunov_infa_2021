@@ -76,7 +76,7 @@ Amogus = amogusmod.Amogus
 
 # объявление поверхностей рисования и их списков
 ball_list = []
-ballmod.defsurfacelist(max_number_of_balls, max_radius, transparent, ball_list, BLACK)
+ballmod.defsurfacelist(max_number_of_balls, max_radius, transparent, ball_list)
 amogus_list = []
 amogusmod.defsurfacelist(max_number_of_amogus, max_height, transparent, amogus_list, Amogus, amogus_red)
 

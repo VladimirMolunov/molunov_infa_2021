@@ -5,12 +5,19 @@ pygame.init()
 surface_list = []
 
 
-def defsurfacelist(max_number_of_balls, max_radius, transparent, ball_list, black):
+def defsurfacelist(max_number_of_balls, max_radius, transparent, ball_list):
+    """
+    Создаёт список поверхностей для рисования шариков нужного размера
+    :param max_number_of_balls: максимальное заданное количество шариков на экране
+    :param max_radius: максимальный радиус шарика
+    :param transparent: прозрачный цвет
+    :param ball_list: список шариков
+    """
     global surface_list
     for i in range(0, max_number_of_balls, 1):
         surface_list.append(pygame.Surface((2 * max_radius, 2 * max_radius), pygame.SRCALPHA))
         surface_list[-1].fill(transparent)
-        ball_list.append(Ball(False, True, 0, 0, 0, 0, 0, black, surface_list[i]))
+        ball_list.append(Ball(False, True, 0, 0, 0, 0, 0, (0, 0, 0), surface_list[i]))
 
 
 class Ball:
@@ -40,12 +47,13 @@ class Ball:
     def moveball(self, velx, vely, time, left_border, right_border, top_border, bottom_border):
         """
         Двигает шарик в соответствии с заданной скоростью
-        velx - скорость по x в секунду
-        vely - скорость по y в секунду
-        time - время одного обновления экрана
-        При необходимости осуществляет отражение шарика от стенок с координатами:
-        left_border (координата x левой границы), right_border (координата x правой границы),
-        top_border (координата y верхней границы), bottom_border (координата y нижней границы).
+        :param velx: скорость по x в секунду
+        :param vely: скорость по y в секунду
+        :param time: время одного обновления экрана в секундах
+        :param left_border: координата левой стенки по горизонтали
+        :param right_border: координата правой стенки по горизонтали
+        :param top_border: координата верхней стенки по вертикали
+        :param bottom_border: координата нижней стенки по вертикали
         """
         if right_border - self.r > (self.x + velx * time) > left_border + self.r:
             self.x += velx * time
@@ -67,12 +75,16 @@ def new_ball(balllist, min_radius, max_radius, leftborder, rightborder, topborde
     """
     Рисует новый шарик со случайными координатами и радиусом
     Добавляет его параметры в список balllist
-    min_radius - минимальный радиус шарика
-    max_radius - максимальный радиус шарика
-    leftborder, rightborder, topborder, bottomborder - координаты стенок
-    max_speed - максимальная скорость шарика
-    colors - кортеж возможных цветов шарика
-    transparent - прозрачный цвет
+    :param balllist: список шариков
+    :param min_radius: минимальный радиус шарика
+    :param max_radius: максимальный радиус шарика
+    :param leftborder: координата левой стенки по горизонтали
+    :param rightborder: координата правой стенки по горизонтали
+    :param topborder: координата верхней стенки по вертикали
+    :param bottomborder: координата нижней стенки по вертикали
+    :param max_speed: максимальная скорость шарика
+    :param colors: список возможных цветов шарика
+    :param transparent: прозрачный цвет
     """
     global surface_list
     r = randint(min_radius, max_radius)
