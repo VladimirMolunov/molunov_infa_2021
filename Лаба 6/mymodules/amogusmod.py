@@ -5,21 +5,19 @@ pygame.init()
 amogus_surface_list = []
 
 
-def defsurfacelist(max_number_of_amogus, max_height, transparent, amogus_list, amogus, amogus_red):
+def defsurfacelist(max_number_of_amogus, max_height, transparent, amogus_list):
     """
     Создаёт список поверхностей для рисования мишеней нужного размера
     :param max_number_of_amogus: максимальное заданное количество мишеней на экране, длина генерируемого списка
     :param max_height: максимальная высота мишени
     :param transparent: прозрачный цвет
     :param amogus_list: список объектов мишеней
-    :param amogus: класс мишеней
-    :param amogus_red: базовый цвет мишени (кортеж из 2 цветов)
     """
     global amogus_surface_list
     for i in range(0, max_number_of_amogus, 1):
         amogus_surface_list.append(pygame.Surface((2 * max_height, 2 * max_height), pygame.SRCALPHA))
         amogus_surface_list[-1].fill(transparent)
-        amogus_list.append(amogus(False, True, True, 0, 0, 0, 0, 0, amogus_red, amogus_surface_list[i], 0))
+        amogus_list.append(Amogus(False, True, True, 0, 0, 0, 0, 0, ((0, 0, 0), (0, 0, 0)), amogus_surface_list[i], 0))
 
 
 class Amogus:

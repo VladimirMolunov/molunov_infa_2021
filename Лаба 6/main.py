@@ -16,13 +16,12 @@ if files.custom_path.exists():
 for j in names:
     exec(j + ' = files.' + j)
 
-# неизменяемые параметры
 ratio = ratio / 2  # отношение половины ширины мишени к её высоте
 dt = float(1/TPS)  # время в секундах, которое проходит за 1 обновление экрана
+score = 0  # набранные очки
+screen = pygame.display.set_mode((screen_width, screen_height))  # окно, в котором происходит игра
 # объявление границ игрового поля
 (leftborder, rightborder, topborder, bottomborder) = (gap, screen_width - gap, gap, screen_height - gap)
-screen = pygame.display.set_mode((screen_width, screen_height))
-score = 0  # набранные очки
 
 # объявление цветов шариков
 RED = (255, 0, 0)
@@ -35,13 +34,13 @@ PURPLE = (105, 0, 128)
 CYAN = (0, 255, 255)
 ORANGE = (255, 128, 0)
 BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 COLORS = [RED, BLUE, YELLOW, LIME, GREEN, MAGENTA, CYAN, ORANGE, PURPLE]
 
 # объявление цветов мишеней
 amogus_red = (RED, (170, 0, 0))
 amogus_blue = (BLUE, (0, 0, 170))
-amogus_white = (255, 255, 255)
-amogus_gray = (170, 170, 170)
+amogus_white = (WHITE, (170, 170, 170))
 amogus_green = (GREEN, (20, 82, 20))
 amogus_yellow = (YELLOW, (170, 170, 0))
 amogus_orange = (ORANGE, (170, 85, 0))
@@ -51,25 +50,20 @@ amogus_pink = ((255, 105, 192), (170, 70, 128))
 amogus_purple = (PURPLE, (70, 0, 85))
 amogus_brown = ((139, 69, 19), (93, 46, 13))
 amogus_lime = (LIME, (0, 170, 0))
-
-AMOGUS_COLORS = [amogus_red, amogus_blue, (amogus_white, amogus_gray), amogus_green, amogus_yellow, amogus_orange,
+AMOGUS_COLORS = [amogus_red, amogus_blue, amogus_white, amogus_green, amogus_yellow, amogus_orange,
                  amogus_cyan, amogus_pink, amogus_purple, amogus_brown, amogus_lime, amogus_black]
 (amogus_light, amogus_dark) = ((104, 226, 227), (40, 128, 129))
 
 # объявление остальных цветов
-transparent = (200, 200, 200, 0)
-background = (0, 50, 80)
-border = (0, 20, 40)
-
-# переобозначение классов для простоты
-Ball = ballmod.Ball
-Amogus = amogusmod.Amogus
+transparent = (200, 200, 200, 0)  # прозрачный цвет
+background = (0, 50, 80)  # цвет фона
+border = (0, 20, 40)  # цвет границы
 
 # объявление поверхностей рисования и их списков
 ball_list = []
 ballmod.defsurfacelist(max_number_of_balls, max_radius, transparent, ball_list)
 amogus_list = []
-amogusmod.defsurfacelist(max_number_of_amogus, max_height, transparent, amogus_list, Amogus, amogus_red)
+amogusmod.defsurfacelist(max_number_of_amogus, max_height, transparent, amogus_list)
 
 
 # определение функций, извлечнных из соответствующих модулей, для заданных переменных
@@ -91,7 +85,7 @@ def new_amogus(amoguslist):
     """
     amogusmod.new_amogus(amoguslist, min_height, max_height, leftborder, rightborder, topborder, bottomborder, ratio,
                          min_amogus_speed, max_amogus_speed, AMOGUS_COLORS, amogus_lifetime, TPS, transparent, BLACK,
-                         amogus_dark, amogus_light, amogus_white)
+                         amogus_dark, amogus_light, WHITE)
 
 
 def inside_amogus(position, target):
@@ -106,7 +100,7 @@ def inside_amogus(position, target):
 
 pygame.display.update()
 clock = pygame.time.Clock()
-finished = False
+finished = False  # определяет, закончена ли игра
 tickcount = - timeout - 1  # отсчёт количества кадров с момента запуска игры
 
 while not finished:

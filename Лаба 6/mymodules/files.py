@@ -1,4 +1,3 @@
-import pathlib
 from pathlib import Path
 
 custom_path = Path('custom_parameters.txt')
@@ -35,28 +34,31 @@ def getparameter(string, param_names, param_numbers):
 
 
 def getdefault(varnames):
+    """
+    Считывание переменных из файла default.txt
+    :param varnames: кортеж названий переменных
+    """
     with open(default_path, 'r') as file:
-        """
-        Считывание переменных из файла default.txt
-        :param varnames: кортеж названий переменных
-        """
         var = file.readlines()
         for j in var:
             getparameter(j, varnames, numbers)
 
 
 def getcustom(varnames):
+    """
+    Считывание переменных из файла custom_parameters.txt
+    :param varnames: кортеж названий переменных
+    """
     with open(custom_path, 'r') as file:
-        """
-        Считывание переменных из файла custom_parameters.txt
-        :param varnames: кортеж названий переменных
-        """
         var = file.readlines()
         for j in var:
             getparameter(j, varnames, numbers)
 
 
 def reset_custom():
+    """
+    Сбрасывает пользовательские настройки изменяемых переменных до стандартных значений
+    """
     with open(custom_path, 'w') as custom_parameters:
         with open(default_path, 'r') as default_parameters:
             for j in default_parameters.readlines():
