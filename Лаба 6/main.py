@@ -1,28 +1,20 @@
 import pygame
-from pygame.draw import *
 from random import randint
-from mymodules import ballmod, amogusmod, inside
+from mymodules import ballmod, amogusmod, inside, files
 pygame.init()
 
 # настраиваемые параметры
-TPS = 60  # количество кадров в секунду
-TicksPerBall = 30  # количество кадров, через которое появляется шарик
-TicksPerAmogus = 30  # количество кадров, через которое может появиться мишень
-chance = 8  # 1:chance - шанс появления мишени
-(screen_width, screen_height) = (1200, 750)  # размеры экрана
-score_for_ball = 1  # количество очков за клик по шарику
-score_for_amogus = 10  # количество очков за клик по мишени
-max_number_of_balls = 10  # максимальное количество шариков на экране, по достижении которого они начинают исчезать
-max_number_of_amogus = 10  # максимальное количество мишеней на экране, по достижении которого они начинают исчезать
-amogus_lifetime = 8  # время жизни мишени
-max_radius = 100  # максимальный радиус шарика
-max_speed = 320  # максимальная скорость шарика (в проекции на горизонтальную или вертикальную ось)
-min_radius = 20  # минимальный радиус шарика
-max_height = 200  # максимальная высота мишени
-min_height = 50  # минимальная высота мишени
-min_amogus_speed = 240  # максимальная скорость мишени (в проекции на горизонтальную или вертикальную ось)
-max_amogus_speed = 480  # минимальная скорость мишени (в проекции на горизонтальную или вертикальную ось)
-gap = 25  # отступ от края окошка до границы игрового поля
+names = ('TPS', 'TicksPerBall', 'TicksPerAmogus', 'chance', 'screen_width', 'screen_height', 'score_for_ball',
+         'score_for_amogus', 'max_number_of_balls', 'max_number_of_amogus', 'amogus_lifetime', 'max_radius',
+         'max_speed', 'min_radius', 'max_height', 'min_height', 'min_amogus_speed', 'max_amogus_speed', 'gap')
+
+# files.reset_custom()  # функция, позволяющая сбросить пользовательские настройки
+
+files.getdefault(names)
+if files.custom_path.exists():
+    files.getcustom(names)
+for j in names:
+    exec(j + ' = files.' + j)
 
 # неизменяемые параметры
 ratio = 19 / 50  # отношение роловины ширины мишени к её высоте
@@ -121,7 +113,7 @@ while not finished:
     clock.tick(TPS)
     tickcount += 1
     screen.fill(border)
-    rect(screen, background, (gap, gap, screen_width - 2 * gap, screen_height - 2 * gap))
+    pygame.draw.rect(screen, background, (gap, gap, screen_width - 2 * gap, screen_height - 2 * gap))
     for ball in ball_list:
         if ball.status:
             ball.moveball(ball.vx, ball.vy, dt, leftborder, rightborder, topborder, bottomborder)
