@@ -73,7 +73,6 @@ border = (0, 20, 40)
 Ball = ballmod.Ball
 Amogus = amogusmod.Amogus
 
-
 # объявление поверхностей рисования и их списков
 ball_list = []
 ballmod.defsurfacelist(max_number_of_balls, max_radius, transparent, ball_list)
@@ -86,6 +85,7 @@ def new_ball(balllist):
     """
     Рисует новый шарик со случайными координатами и радиусом
     Добавляет его параметры в список balllist
+    :param balllist: список шариков
     """
     ballmod.new_ball(balllist, min_radius, max_radius, leftborder, rightborder, topborder, bottomborder, max_speed,
                      COLORS, transparent)
@@ -95,6 +95,7 @@ def new_amogus(amoguslist):
     """
     Рисует новую мишень со случайными координатами и высотой
     Добавляет его параметры в список amoguslist
+    :param amoguslist: список мишеней
     """
     amogusmod.new_amogus(amoguslist, min_height, max_height, leftborder, rightborder, topborder, bottomborder, ratio,
                          min_amogus_speed, max_amogus_speed, AMOGUS_COLORS, amogus_lifetime, TPS, transparent, BLACK,
@@ -103,7 +104,10 @@ def new_amogus(amoguslist):
 
 def inside_amogus(position, target):
     """
-    Проверяет попадание точки с координатами position (кортеж из двух координат по x и y) внутрь данной мишени target
+    Проверяет попадание курсора в момент клика внутрь данной мишени
+    :param position: позиция курсора в момент клика (кортеж из двух координат - по x и y)
+    :param target: мишень (объект класса Amogus)
+    :return: True, если точка клика попадает в мишень, False иначе
     """
     return inside.inside_amogus(position, target, ratio)
 

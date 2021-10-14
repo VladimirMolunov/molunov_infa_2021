@@ -7,6 +7,7 @@ amogus_surface_list = []
 
 def defsurfacelist(max_number_of_amogus, max_height, transparent, amogus_list, amogus, amogus_red):
     """
+    Создаёт список поверхностей для рисования мишеней нужного размера
     :param max_number_of_amogus: максимальное заданное количество мишеней на экране, длина генерируемого списка
     :param max_height: максимальная высота мишени
     :param transparent: прозрачный цвет
@@ -54,6 +55,7 @@ class Amogus:
 
     def moveamogus(self, velx, vely, time, left_border, right_border, top_border, bottom_border, ratio):
         """
+        Двигает мишень в соответствии с заданной скоростью
         :param velx: скорость по x в секунду
         :param vely: скорость по y в секунду
         :param time: время одного обновления экрана
