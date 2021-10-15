@@ -3,18 +3,12 @@ from random import randint
 from mymodules import ballmod, amogusmod, inside, files
 pygame.init()
 
-# настраиваемые параметры
-names = ('TPS', 'TicksPerBall', 'TicksPerAmogus', 'chance', 'screen_width', 'screen_height', 'score_for_ball',
-         'score_for_amogus', 'max_number_of_balls', 'max_number_of_amogus', 'timeout', 'amogus_lifetime', 'max_radius',
-         'max_speed', 'min_radius', 'max_height', 'min_height', 'min_amogus_speed', 'max_amogus_speed', 'gap', 'ratio')
+files.reset_custom()  # функция, позволяющая сбросить пользовательские настройки
 
-# files.reset_custom()  # функция, позволяющая сбросить пользовательские настройки
-
-files.getdefault(names)
-if files.custom_path.exists():
-    files.getcustom(names)
-for j in names:
-    exec(j + ' = files.' + j)
+# получение значений изменяемых переменных
+varlist = files.get()
+for var in varlist:
+    exec(var.name + ' = ' + str(var.value))
 
 ratio = ratio / 2  # отношение половины ширины мишени к её высоте
 dt = float(1/TPS)  # время в секундах, которое проходит за 1 обновление экрана
@@ -156,4 +150,6 @@ while not finished:
     pygame.display.update()
 
 pygame.quit()
+if int(score) == score:
+    score = int(score)
 print("Well done, your score is", score)
