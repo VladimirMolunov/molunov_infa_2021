@@ -1,8 +1,7 @@
 from pathlib import Path
 
 custom_path = Path('custom_parameters.txt')
-playerdata_path = Path('mymodules', 'playerdata.txt')
-vars = Path('mymodules', 'vars')
+vars_path = Path('mymodules', 'vars')
 default_path = Path('mymodules', 'default')
 
 numbers = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '0', ',', '.')
@@ -35,7 +34,7 @@ def getvars():
     Считывает названия переменных и их типы из файла vars
     """
     varlist = []
-    with open(vars, 'r') as file:
+    with open(vars_path, 'r') as file:
         lines = file.readlines()
         for i in lines:
             templist = i.split('; ')

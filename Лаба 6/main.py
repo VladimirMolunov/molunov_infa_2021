@@ -1,9 +1,9 @@
 import pygame
 from random import randint
-from mymodules import ballmod, amogusmod, inside, files
+from mymodules import ballmod, amogusmod, inside, files, scoremod
 pygame.init()
 
-files.reset_custom()  # функция, позволяющая сбросить пользовательские настройки
+# files.reset_custom()  # функция, позволяющая сбросить пользовательские настройки
 
 # получение значений изменяемых переменных
 varlist = files.get()
@@ -152,4 +152,13 @@ while not finished:
 pygame.quit()
 if int(score) == score:
     score = int(score)
-print("Well done, your score is", score)
+(backup_count, current_name, top_count, top_names, records, score_count, player_count,
+ regular_names, scores) = scoremod.getdata()
+if score != 0:
+    print('\n', "Well done, your score is", score, '\n\n',
+          'Please enter your name or leave the space blank if you want to stay as', current_name, 'and press enter')
+    name = input()
+    if name == '':
+        name = current_name
+    scoremod.new(name, score)
+scoremod.renew()
