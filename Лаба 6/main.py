@@ -148,8 +148,11 @@ while not finished:
                 if tickcount == 0:
                     new_ball(ball_list)
     pygame.display.update()
-
 pygame.quit()
+
+# функция, позволяющая сбросить таблицу лидеров:
+# scoremod.reset_leaders(top_count, score_count, default_top_count, default_score_count)
+
 if int(score) == score:
     score = int(score)
 (backup_count, current_name, topcount, top_names, records, scorecount, player_count,
@@ -162,4 +165,4 @@ if score != 0:
     if name == '':
         name = current_name
     scoremod.new(name, score)
-scoremod.renew(top_count, score_count)
+scoremod.renew(topcount, scorecount)

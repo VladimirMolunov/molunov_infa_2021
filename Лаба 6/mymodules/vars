@@ -19,5 +19,7 @@ min_amogus_speed; 1; 1
 max_amogus_speed; 1; \min_amogus_speed, 1
 gap; 1; 1
 ratio; 0; 1
+default_top_count; 1; \top_count, 1
+default_score_count; 1; \score_count, 1
 top_count; 1; 1
 score_count; 1; 1

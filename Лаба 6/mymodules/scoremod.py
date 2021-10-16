@@ -162,3 +162,42 @@ def renew(top_count, score_count):
             for j in range(0, score_count, 1):
                 if scores[i][j] > 0:
                     print(j + 1, ': ', scores[i][j], file=file, sep='')
+
+
+def reset_leaders(top_count, score_count, def_top_count, def_score_count):
+    """
+    Сбрасывает таблицы лучших результатов, добавляет резервную копию таблицы в папку backups
+    :param top_count: новое количество призовых мест, отображающееся в таблице лучших результатов
+    :param score_count: новое количество лучших результатов, отображающееся в таблице личных рекордов
+    :param def_top_count: новое количество лучших результатов, хранимое в памяти
+    :param def_score_count: новое количество личных рекордов, хранимое в памяти
+    """
+    (backup_count, current, topCount, topnames, records, scoreCount, player_count, regularnames, scores) = getdata()
+    topcount = min(topCount, top_count)
+    scorecount = min(scoreCount, score_count)
+    top_count = max(def_top_count, top_count)
+    score_count = max(def_score_count, score_count)
+    if records[0] != 0:
+        backup_count += 1
+        namestr = 'leaderboar_backup_' + str(backup_count) + '.txt'
+        with open(Path('backups', namestr), 'w') as file:
+            print('Топ лучших игроков:', '\n', file=file, sep='')
+            for i in range(0, topcount, 1):
+                if records[i] > 0:
+                    print(i + 1, ': ', topnames[i], ' - ', records[i], ' очков', '\n', file=file, sep='')
+            print('\n', file=file, end='')
+            print('Личные рекорды:', '\n', file=file, sep='', end='')
+            for i in range(0, player_count, 1):
+                print('\n', regularnames[i], ':', file=file, sep='')
+                for j in range(0, scorecount, 1):
+                    if scores[i][j] > 0:
+                        print(j + 1, ': ', scores[i][j], file=file, sep='')
+    with open(playerdata_path, 'w') as file:
+        print(backup_count, file=file)
+        print(current, file=file)
+        print(top_count, file=file)
+        for i in range(0, top_count, 1):
+            print('\\empty', file=file)
+            print(0, file=file)
+        print(score_count, file=file)
+        print(0, file=file)
