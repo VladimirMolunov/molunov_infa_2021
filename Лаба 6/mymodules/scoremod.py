@@ -141,11 +141,15 @@ def new(new_name, new_score):
                 print(scores[i][j], file=file)
 
 
-def renew():
+def renew(top_count, score_count):
     """
     Обновляет файл leaderboard.txt с таблицей лучших результатов
+    :param top_count: количество призовых мест, отображающееся в таблице лучших результатов
+    :param score_count: количество лучших результатов, отображающееся в таблице личных рекордов
     """
-    (backup_count, current, top_count, topnames, records, score_count, player_count, regularnames, scores) = getdata()
+    (backup_count, current, topcount, topnames, records, scorecount, player_count, regularnames, scores) = getdata()
+    top_count = min(topcount, top_count)
+    score_count = min(scorecount, score_count)
     with open(leaderboard_path, 'w') as file:
         print('Топ лучших игроков:', '\n', file=file, sep='')
         for i in range(0, top_count, 1):

@@ -152,13 +152,14 @@ while not finished:
 pygame.quit()
 if int(score) == score:
     score = int(score)
-(backup_count, current_name, top_count, top_names, records, score_count, player_count,
+(backup_count, current_name, topcount, top_names, records, scorecount, player_count,
  regular_names, scores) = scoremod.getdata()
 if score != 0:
-    print('\n', "Well done, your score is", score, '\n\n',
-          'Please enter your name or leave the space blank if you want to stay as', current_name, 'and press enter')
+    print('\n', "Well done, your score is ", score, '\n\n',
+          'Please enter your name or leave the space blank if you want to stay as ',
+          current_name, ' and press enter', sep='')
     name = input()
     if name == '':
         name = current_name
     scoremod.new(name, score)
-scoremod.renew()
+scoremod.renew(top_count, score_count)
