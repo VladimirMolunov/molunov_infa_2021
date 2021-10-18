@@ -17,7 +17,8 @@ def defsurfacelist(max_number_of_amogus, max_height, transparent, amogus_list):
     for i in range(0, max_number_of_amogus, 1):
         amogus_surface_list.append(pygame.Surface((2 * max_height, 2 * max_height), pygame.SRCALPHA))
         amogus_surface_list[-1].fill(transparent)
-        amogus_list.append(Amogus(False, True, True, 0, 0, 0, 0, 0, ((0, 0, 0), (0, 0, 0)), amogus_surface_list[i], 0))
+        amogus_list.append(Amogus(False, True, False, 1, True, 0, 0, 0, 0, 0, ((0, 0, 0), (0, 0, 0)),
+                                  amogus_surface_list[i], 0))
 
 
 class Amogus:
@@ -25,6 +26,8 @@ class Amogus:
     Другой тип мишеней
     :param initialised: определяет, создана ли уже эта мишень (True) или объект является "пустышкой" (False)
     :param status: определяет, должна ли мишень быть видима на экране
+    :param collapsing: определяет, схлопывается ли мишень
+    :param scale: относительный размер схлопывающейся мишени
     :param faces_right: определяет ориентацию мишени по горизонтали: вправо - True, влево - False
     :param x: координата центра мишени по горизонтали
     :param y: координата центра мишени по вертикали
@@ -35,9 +38,10 @@ class Amogus:
     :param surface: поверхность, на которой нарисована мишень
     :param timeleft: оставшееся время жизни мишени (в кадрах)
     """
-    def __init__(self, initialised, status, faces_right, x, y, r, vx, vy, color, surface, timeleft):
+    def __init__(self, initialised, status, collapsing, scale, faces_right, x, y, r, vx, vy, color, surface, timeleft):
         self.initialised = initialised
         self.status = status
+        self.collapsing = collapsing
         self.faces_right = faces_right
         self.x = x
         self.y = y
@@ -193,7 +197,7 @@ def new_amogus(amoguslist, min_height, max_height, leftborder, rightborder, topb
     color = amogus_colors[randint(0, len(amogus_colors)) - 1]
     amogus_surface_list.pop(0)
     amogus_surface_list.append(pygame.Surface((380, 500), pygame.SRCALPHA))
-    amoguslist.append(Amogus(True, True, orientated_right, x, y, h, vx, vy, color, amogus_surface_list[-1],
+    amoguslist.append(Amogus(True, True, False, 1, orientated_right, x, y, h, vx, vy, color, amogus_surface_list[-1],
                              amogus_lifetime * tps))
     amoguslist.pop(0)
     newamogus = amoguslist[-1]

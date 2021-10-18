@@ -10,6 +10,7 @@ varlist = files.get()
 for var in varlist:
     exec(var.name + ' = ' + str(var.value))
 
+speed = 1
 ratio = ratio / 2  # отношение половины ширины мишени к её высоте
 dt = float(1/TPS)  # время в секундах, которое проходит за 1 обновление экрана
 score = 0  # набранные очки
@@ -58,6 +59,8 @@ ball_list = []
 ballmod.defsurfacelist(max_number_of_balls, max_radius, transparent, ball_list)
 amogus_list = []
 amogusmod.defsurfacelist(max_number_of_amogus, max_height, transparent, amogus_list)
+amogus_collapsing_list = []
+ball_collapsing_list = []
 
 
 # определение функций, извлечнных из соответствующих модулей, для заданных переменных
@@ -102,6 +105,21 @@ while not finished:
     tickcount += 1
     screen.fill(border)
     pygame.draw.rect(screen, background, (gap, gap, screen_width - 2 * gap, screen_height - 2 * gap))
+    for ball in ball_collapsing_list:
+        ball.scale -= speed * dt
+        if ball.scale <= 0:
+            ball_collapsing_list.pop()
+        else:
+            surface = pygame.transform.scale(ball.surface, (int(ball.r * ball.scale), int(ball.r * ball.scale)))
+            screen.blit(surface, (ball.x - int(ball.r * ball.scale), ball.y - int(ball.r * ball.scale)))
+    for amogus in amogus_collapsing_list:
+        amogus.scale -= speed * dt
+        if amogus.scale <= 0:
+            amogus_collapsing_list.pop()
+        else:
+            surface = pygame.transform.scale(amogus.surface, (int(amogus.r * 2 * ratio * amogus.scale),
+                                                              int(amogus.r * amogus.scale)))
+            screen.blit(surface, (amogus.x - int(amogus.r * amogus.scale), amogus.y - int(amogus.r * amogus.scale)))
     for ball in ball_list:
         if ball.status:
             ball.moveball(ball.vx, ball.vy, dt, leftborder, rightborder, topborder, bottomborder)
@@ -124,6 +142,8 @@ while not finished:
                     if amogus.status:
                         score += score_for_amogus
                         amogus.status = False
+                        amogus.collapsing = True
+                        amogus_collapsing_list.append(amogus)
                         captured = True
                         break
             if not captured:
@@ -133,6 +153,8 @@ while not finished:
                         if ball.status:
                             score += score_for_ball
                             ball.status = False
+                            ball.collapsing = True
+                            ball_collapsing_list.append(ball)
                             break
     if tickcount >= 0:
         if tickcount % TicksPerBall == 0:
