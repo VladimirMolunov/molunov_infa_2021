@@ -3,7 +3,7 @@ from random import randint
 from mymodules import ballmod, amogusmod, inside, files, scoremod
 pygame.init()
 
-# files.reset_custom()  # функция, позволяющая сбросить пользовательские настройки
+files.reset_custom()  # функция, позволяющая сбросить пользовательские настройки
 
 # получение значений изменяемых переменных
 varlist = files.get()
@@ -58,6 +58,8 @@ ball_list = []
 ballmod.defsurfacelist(max_number_of_balls, max_radius, transparent, ball_list)
 amogus_list = []
 amogusmod.defsurfacelist(max_number_of_amogus, max_height, transparent, amogus_list)
+ball_collapsing = []
+amogus_collapsing = []
 
 
 # определение функций, извлечнных из соответствующих модулей, для заданных переменных
@@ -102,6 +104,23 @@ while not finished:
     tickcount += 1
     screen.fill(border)
     pygame.draw.rect(screen, background, (gap, gap, screen_width - 2 * gap, screen_height - 2 * gap))
+    for ball in ball_collapsing:
+        ball.scale -= ball_collapse_speed * dt
+        if ball.scale > 0:
+            surface = pygame.transform.scale(ball.surface, (int(2 * max_radius * ball.scale),
+                                                            int(2 * max_radius * ball.scale)))
+            screen.blit(surface, (ball.x - int(max_radius * ball.scale), ball.y - int(max_radius * ball.scale)))
+        else:
+            ball_collapsing.pop()
+    for amogus in amogus_collapsing:
+        amogus.scale -= amogus_collapse_speed * dt
+        if amogus.scale > 0:
+            surface = pygame.transform.scale(amogus.surface, (int(amogus.r * ratio * 2 * amogus.scale),
+                                                              int(amogus.r * amogus.scale)))
+            screen.blit(surface, (amogus.x - int(amogus.r * ratio * amogus.scale),
+                                  amogus.y - int(amogus.r / 2 * amogus.scale)))
+        else:
+            amogus_collapsing.pop()
     for ball in ball_list:
         if ball.status:
             ball.moveball(ball.vx, ball.vy, dt, leftborder, rightborder, topborder, bottomborder)
@@ -124,6 +143,8 @@ while not finished:
                     if amogus.status:
                         score += score_for_amogus
                         amogus.status = False
+                        amogus.collapsing = True
+                        amogus_collapsing.append(amogus)
                         captured = True
                         break
             if not captured:
@@ -133,6 +154,8 @@ while not finished:
                         if ball.status:
                             score += score_for_ball
                             ball.status = False
+                            ball.collapsing = True
+                            ball_collapsing.append(ball)
                             break
     if tickcount >= 0:
         if tickcount % TicksPerBall == 0:

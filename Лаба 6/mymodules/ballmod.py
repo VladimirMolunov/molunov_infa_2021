@@ -17,7 +17,7 @@ def defsurfacelist(max_number_of_balls, max_radius, transparent, ball_list):
     for i in range(0, max_number_of_balls, 1):
         surface_list.append(pygame.Surface((2 * max_radius, 2 * max_radius), pygame.SRCALPHA))
         surface_list[-1].fill(transparent)
-        ball_list.append(Ball(False, True, 0, 0, 0, 0, 0, (0, 0, 0), surface_list[i]))
+        ball_list.append(Ball(False, True, False, 1, 0, 0, 0, 0, 0, (0, 0, 0), surface_list[i]))
 
 
 class Ball:
@@ -25,6 +25,8 @@ class Ball:
     Класс шариков
     :param initialised: определяет, создан ли уже этот шарик (True) или объект является "пустышкой" (False)
     :param status: определяет, должен ли шарик быть видим на экране
+    :param collapsing: определяет, схлопывается ли шарик
+    :param scale: относительный размер схлопывающегося шарика
     :param x: координата центра шарика по горизонтали
     :param y: координата центра шарика по вертикали
     :param r: радиус шарика
@@ -33,9 +35,11 @@ class Ball:
     :param color: цвет шарика
     :param surface: поверхность, на которой нарисован шарик
     """
-    def __init__(self, initialised, status, x, y, r, vx, vy, color, surface):
+    def __init__(self, initialised, status, collapsing, scale, x, y, r, vx, vy, color, surface):
         self.initialised = initialised
         self.status = status
+        self.collapsing = collapsing
+        self.scale = scale
         self.x = x
         self.y = y
         self.r = r
@@ -95,7 +99,7 @@ def new_ball(balllist, min_radius, max_radius, leftborder, rightborder, topborde
     color = colors[randint(0, len(colors)) - 1]
     surface_list.pop(0)
     surface_list.append(pygame.Surface((2 * max_radius, 2 * max_radius), pygame.SRCALPHA))
-    balllist.append(Ball(True, True, x, y, r, vx, vy, color, surface_list[-1]))
+    balllist.append(Ball(True, True, False, 1, x, y, r, vx, vy, color, surface_list[-1]))
     balllist.pop(0)
     newball = balllist[-1]
     newball.surface.fill(transparent)
