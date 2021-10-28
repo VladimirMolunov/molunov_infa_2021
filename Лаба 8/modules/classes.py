@@ -24,6 +24,10 @@ gun_y = 450
 gun_width = 20
 gun_height = 10
 gun_default_power = 500
+max_target_x_speed = 300
+max_target_y_speed = 300
+border = 450
+target_count = 2
 score_for_catch = 1
 
 
@@ -250,8 +254,8 @@ class Target(Drawable):
         Drawable.__init__(self)
         self.x = randint(min_x, max_x)
         self.y = randint(min_y, max_y)
-        self.vx = 0
-        self.vy = 0
+        self.vx = randint(-1 * max_target_x_speed, max_target_x_speed)
+        self.vy = randint(-1 * max_target_y_speed, max_target_y_speed)
         self.r = randint(min_radius, max_radius)
         self.color = color
         self.health = health
@@ -275,7 +279,7 @@ class Target(Drawable):
         """
         Перемещает мишень по прошествии единицы времени, учитывая отражение от стенок
         """
-        if self.r < self.x + self.vx / self.fps < self.screen_width - self.r:
+        if self.r + border < self.x + self.vx / self.fps < self.screen_width - self.r:
             self.x += self.vx / self.fps
         else:
             self.vx = - self.vx
@@ -302,7 +306,8 @@ class Game(Drawable):
         ball_list = []
         clock = pygame.time.Clock()
         gun = Gun(self.gun_color, self.gun_charged_color)
-        target_list.append(Target(self.target_color))
+        for i in range(target_count):
+            target_list.append(Target(self.target_color))
         finished = False
 
         while not finished:
@@ -325,6 +330,8 @@ class Game(Drawable):
                 elif event.type == pygame.MOUSEMOTION:
                     gun.targetting(event)
 
+            for target in target_list:
+                target.move()
             for ball in ball_list:
                 ball.move()
                 for target in target_list:
