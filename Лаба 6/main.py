@@ -104,15 +104,15 @@ while not finished:
     tickcount += 1
     screen.fill(border)
     pygame.draw.rect(screen, background, (gap, gap, screen_width - 2 * gap, screen_height - 2 * gap))
-    for ball in ball_collapsing:
+    for ball in reversed(ball_collapsing):
         ball.scale -= ball_collapse_speed * dt
         if ball.scale > 0:
             surface = pygame.transform.scale(ball.surface, (int(2 * max_radius * ball.scale),
                                                             int(2 * max_radius * ball.scale)))
             screen.blit(surface, (ball.x - int(max_radius * ball.scale), ball.y - int(max_radius * ball.scale)))
         else:
-            ball_collapsing.pop()
-    for amogus in amogus_collapsing:
+            ball_collapsing.pop(0)
+    for amogus in reversed(amogus_collapsing):
         amogus.scale -= amogus_collapse_speed * dt
         if amogus.scale > 0:
             surface = pygame.transform.scale(amogus.surface, (int(amogus.r * ratio * 2 * amogus.scale),
@@ -120,7 +120,7 @@ while not finished:
             screen.blit(surface, (amogus.x - int(amogus.r * ratio * amogus.scale),
                                   amogus.y - int(amogus.r / 2 * amogus.scale)))
         else:
-            amogus_collapsing.pop()
+            amogus_collapsing.pop(0)
     for ball in ball_list:
         if ball.status:
             ball.moveball(ball.vx, ball.vy, dt, leftborder, rightborder, topborder, bottomborder)
