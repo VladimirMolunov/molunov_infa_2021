@@ -1,11 +1,34 @@
 import math
 import pygame
 from random import randint, choice
+
 FPS = 60
+width = 800
+height = 600
+charge_per_second = 500
+max_power = 2000
+min_radius = 20
+max_radius = 50
+min_x = 600
+max_x = 780
+min_y = 300
+max_y = 550
+health = 1
+lifetime = 10
+r = 10
+alpha = 0.1
+beta = 0.0005
+g = 200
+gun_x = 20
+gun_y = 450
+gun_width = 20
+gun_height = 10
+gun_default_power = 500
+score_for_catch = 1
 
 
 class Drawable:
-    def __init__(self, width=800, height=600, fps=FPS):
+    def __init__(self, width=width, height=height, fps=FPS):
         """
         Конструктор класса объектов, изображаемых на экране
         :param width: ширина экрана
@@ -19,7 +42,7 @@ class Drawable:
 
 
 class Ball(Drawable):
-    def __init__(self, colors: list, lifetime=10, r=10, alpha=0.05, beta=0.05, g=200, x=40, y=450):
+    def __init__(self, colors: list, lifetime=lifetime, r=r, alpha=alpha, beta=beta, g=g, x=0, y=0):
         """
          Конструктор класса мячей, которыми стреляет пушка
         :param colors: список возможных цветов мяча
@@ -87,7 +110,8 @@ class Ball(Drawable):
 
 
 class Gun(Drawable):
-    def __init__(self, gun_color, charged_color, x=20, y=450, width=20, height=10, default_power=500):
+    def __init__(self, gun_color, charged_color, x=gun_x, y=gun_y, width=gun_width, height=gun_height,
+                 default_power=gun_default_power):
         """
         Конструктор класса пушек
         :param gun_color: цвет пушки
@@ -117,7 +141,7 @@ class Gun(Drawable):
         """
         self.is_active = True
 
-    def fire(self, event, colors, lifetime=10, r=10, alpha=0.1, beta=0.0005, g=200):
+    def fire(self, event, colors, lifetime=lifetime, r=r, alpha=alpha, beta=beta, g=g):
         """
         Производит выстрел
         :param event: событие отпускания кнопки мыши
@@ -197,7 +221,7 @@ class Gun(Drawable):
         y4 = self.y - height * c + width * s
         pygame.draw.polygon(self.screen, self.color, ((x1, y1), (x2, y2), (x3, y3), (x4, y4)))
 
-    def power_up(self, charge_per_second=500, max_power=2000):
+    def power_up(self, charge_per_second=charge_per_second, max_power=max_power):
         """
         Добавляет определённое значение к заряду пушки, если она уже заряжена и её заряд меньше максимально допустимого
         Необходимое значение рассчитывается для одного кадра
@@ -210,7 +234,8 @@ class Gun(Drawable):
 
 
 class Target(Drawable):
-    def __init__(self, color, min_radius=20, max_radius=50, min_x=600, max_x=780, min_y=300, max_y=550, health=1):
+    def __init__(self, color, min_radius=min_radius, max_radius=max_radius, min_x=min_x, max_x=max_x, min_y=min_y,
+                 max_y=max_y, health=health):
         """
         Конструктор класса мишеней
         :param color: цвет мишени
@@ -260,3 +285,57 @@ class Target(Drawable):
         else:
             self.vy = - self.vy
             self.y += self.vy / self.fps
+
+
+class Game(Drawable):
+    def __init__(self, target_color, background_color, gun_color, gun_charged_color, colors):
+        Drawable.__init__(self)
+        self.target_color = target_color
+        self.background_color = background_color
+        self.ball_colors = colors
+        self.gun_color = gun_color
+        self.gun_charged_color = gun_charged_color
+
+    def main(self):
+        score = 0
+        target_list = []
+        ball_list = []
+        clock = pygame.time.Clock()
+        gun = Gun(self.gun_color, self.gun_charged_color)
+        target_list.append(Target(self.target_color))
+        finished = False
+
+        while not finished:
+            self.screen.fill(self.background_color)
+            gun.draw()
+            for target_obj in target_list:
+                target_obj.draw()
+            for ball in ball_list:
+                ball.draw()
+            pygame.display.update()
+
+            clock.tick(self.fps)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    finished = True
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    gun.charge()
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    ball_list.append(gun.fire(event, self.ball_colors))
+                elif event.type == pygame.MOUSEMOTION:
+                    gun.targetting(event)
+
+            for ball in ball_list:
+                ball.move()
+                for target in target_list:
+                    if ball.is_hit(target) and target.health > 0:
+                        target.hit()
+                        if target.health == 0:
+                            target.__init__(self.target_color)
+                            score += score_for_catch
+                ball.remove_life()
+                if ball.live <= 0:
+                    ball_list.pop(0)
+            gun.power_up()
+        pygame.quit()
+        return score
