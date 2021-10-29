@@ -1,4 +1,4 @@
-from modules import classes
+from modules import game
 import pygame
 
 red = (255, 0, 0)
@@ -15,9 +15,9 @@ ball_colors = [red, blue, yellow, green, magenta, cyan]
 
 
 def main():
-    game = classes.Game(target_red, white, grey, gun_red, ball_colors)
+    mygame = game.Game(target_red, white, grey, gun_red, ball_colors)
     pygame.init()
-    score = game.main()
+    score = mygame.main()
     print('Well done, your score is ', score, '.', sep='')
 
 
