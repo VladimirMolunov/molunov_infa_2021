@@ -9,15 +9,15 @@ charge_per_second = 500
 max_power = 2000
 min_radius = 20
 max_radius = 50
-min_x = 600
-max_x = 780
+min_x = 500
+max_x = 750
 min_y = 300
 max_y = 550
 health = 1
-lifetime = 10
+ball_lifetime = 10
 r = 10
-alpha = 0.1
-beta = 0.0005
+ball_alpha = 0.1
+ball_beta = 0.0005
 g = 200
 gun_x = 20
 gun_y = 450
@@ -45,31 +45,78 @@ class Drawable:
         self.screen_height = height
 
 
-class Ball(Drawable):
-    def __init__(self, colors: list, lifetime=lifetime, r=r, alpha=alpha, beta=beta, g=g, x=0, y=0):
+class Bullet(Drawable):
+    def __init__(self, lifetime=ball_lifetime, alpha=ball_alpha, beta=ball_beta, g=g):
         """
-         Конструктор класса мячей, которыми стреляет пушка
-        :param colors: список возможных цветов мяча
-        :param lifetime: время жизни мяча в секундах
-        :param r: радиус мяча
+        Конструктор класса снарядов
+        :param lifetime: время жизни снаряда в секундах
         :param alpha: параметр a в формуле силы трения F = -av - bv^2
         :param beta: параметр b в формуле силы трения F = -av - bv^2
         :param g: ускорение свободного падения
+        """
+        Drawable.__init__(self)
+        self.g = g
+        self.alpha = alpha
+        self.beta = beta
+        self.live = lifetime * self.fps
+
+    def remove_life(self):
+        """
+        Уменьшает время жизни мяча на 1
+        """
+        self.live -= 1
+
+
+class Weapon(Drawable):
+    def __init__(self, x=gun_x, y=gun_y):
+        """
+        Конструктор класса стреляющих орудий
+        :param x: координата центра вращения орудия по горизонтали
+        :param y: координата центра вращения орудия по вертикали
+        """
+        Drawable.__init__(self)
+        self.x = x
+        self.y = y
+        self.is_active = False
+        self.angle = 1
+
+    def charge(self):
+        """
+        Заряжает орудие
+        """
+        self.is_active = True
+
+
+class Target(Drawable):
+    def __init__(self, health):
+        """
+        Конструктор класса мишеней
+        :param health: количество очков здоровья мишени
+        """
+        Drawable.__init__(self)
+        self.health = health
+
+
+
+class Ball(Bullet):
+    def __init__(self, color, lifetime=ball_lifetime, r=r, x=0, y=0):
+        """
+         Конструктор класса мячей, которыми стреляет пушка
+        :param color: цвет мяча
+        :param lifetime: время жизни мяча в секундах
+        :param r: радиус мяча
         :param x: начальная координата мяча по горизонтали
         :param y: начальная координата мяча по вертикали
         """
-        Drawable.__init__(self)
+        Bullet.__init__(self)
         self.x = x
         self.y = y
         self.r = r
         self.vx = 0
         self.vy = 0
         self.ax = 0
-        self.ay = g
-        self.g = g
-        self.alpha = alpha
-        self.beta = beta
-        self.color = choice(colors)
+        self.ay = self.g
+        self.color = color
         self.live = lifetime * self.fps
 
     def move(self):
@@ -92,12 +139,6 @@ class Ball(Drawable):
             self.vy = - self.vy
             self.y += self.vy / self.fps
 
-    def remove_life(self):
-        """
-        Уменьшает время жизни мяча на 1
-        """
-        self.live -= 1
-
     def draw(self):
         """
         Рисует мяч на экране
@@ -113,71 +154,53 @@ class Ball(Drawable):
         return True if (self.x - target.x) ** 2 + (self.y - target.y) ** 2 < (self.r + target.r) ** 2 else False
 
 
-class Gun(Drawable):
-    def __init__(self, gun_color, charged_color, x=gun_x, y=gun_y, width=gun_width, height=gun_height,
+class Gun(Weapon):
+    def __init__(self, gun_color, charged_color, width=gun_width, height=gun_height,
                  default_power=gun_default_power):
         """
         Конструктор класса пушек
         :param gun_color: цвет пушки
         :param charged_color: цвет заряженной пушки
-        :param x: координата центра вращения пушки по горизонтали
-        :param y: координата центра вращения пушки по вертикали
         :param width: ширина пушки
         :param height: высота пушки
-        :param power: скорость мяча, только что вылетевшего из пушки
+        :param default_power: скорость мяча, только что вылетевшего из пушки
         """
-        Drawable.__init__(self)
+        Weapon.__init__(self)
         self.power = default_power
-        self.is_active = False
-        self.angle = 1
         self.color = gun_color
         self.gun_color = gun_color
         self.charged_color = charged_color
-        self.x = x
-        self.y = y
         self.width = width
         self.height = height
         self.default_power = default_power
 
-    def charge(self):
-        """
-        Заряжает пушку
-        """
-        self.is_active = True
-
-    def fire(self, event, colors, lifetime=lifetime, r=r, alpha=alpha, beta=beta, g=g):
+    def fire_ball(self, event, colors, lifetime=ball_lifetime, r=r):
         """
         Производит выстрел
         :param event: событие отпускания кнопки мыши
         :param colors: возможные цвета мяча
         :param lifetime: время жизни мяча в секундах
         :param r: радиус мяча
-        :param alpha: параметр a в формуле силы трения F = -av - bv^2
-        :param beta: параметр b в формуле силы трения F = -av - bv^2
-        :param g: ускорение свободного падения
         :return: новый объект мяча
         """
-        ball = self.new_ball(event, colors, lifetime, r, alpha, beta, g,
+        ball = self.new_ball(event, choice(colors), lifetime, r,
                              self.x + self.width * math.cos(self.angle), self.y + self.height * math.sin(self.angle))
         self.is_active = False
         self.power = self.default_power
         return ball
 
-    def new_ball(self, event, colors, lifetime, r, alpha, beta, g, x, y):
+    def new_ball(self, event, color, lifetime, r, x, y):
         """
         Создаёт новый мяч после выстрела
         :param event: событие отпускания кнопки мыши
-        :param colors: возможные цвета мяча
+        :param color: цвет мяча
         :param lifetime: время жизни мяча в секундах
         :param r: радиус мяча
-        :param alpha: параметр a в формуле силы трения F = -av - bv^2
-        :param beta: параметр b в формуле силы трения F = -av - bv^2
-        :param g: ускорение свободного падения
         :param x: начальная координата мяча по горизонтали
         :param y: начальная координата мяча по вертикали
         :return: новый объект мяча
         """
-        new_ball = Ball(colors, lifetime, r, alpha, beta, g, x, y)
+        new_ball = Ball(color, lifetime, r, x, y)
         self.angle = math.atan2((event.pos[1] - new_ball.y), (event.pos[0] - new_ball.x))
         new_ball.vx = self.power * math.cos(self.angle)
         new_ball.vy = self.power * math.sin(self.angle)
@@ -237,7 +260,7 @@ class Gun(Drawable):
         self.define_color()
 
 
-class Target(Drawable):
+class BallTarget(Target):
     def __init__(self, color, min_radius=min_radius, max_radius=max_radius, min_x=min_x, max_x=max_x, min_y=min_y,
                  max_y=max_y, health=health):
         """
@@ -251,7 +274,7 @@ class Target(Drawable):
         :param max_y: максимальная координата мишени по вертикали
         :param health: количество очков здоровья мишени
         """
-        Drawable.__init__(self)
+        Target.__init__(self, health)
         self.x = randint(min_x, max_x)
         self.y = randint(min_y, max_y)
         self.vx = randint(-1 * max_target_x_speed, max_target_x_speed)
@@ -307,7 +330,7 @@ class Game(Drawable):
         clock = pygame.time.Clock()
         gun = Gun(self.gun_color, self.gun_charged_color)
         for i in range(target_count):
-            target_list.append(Target(self.target_color))
+            target_list.append(BallTarget(self.target_color))
         finished = False
 
         while not finished:
@@ -326,7 +349,7 @@ class Game(Drawable):
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     gun.charge()
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    ball_list.append(gun.fire(event, self.ball_colors))
+                    ball_list.append(gun.fire_ball(event, self.ball_colors))
                 elif event.type == pygame.MOUSEMOTION:
                     gun.targetting(event)
 
