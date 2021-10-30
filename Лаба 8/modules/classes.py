@@ -48,6 +48,40 @@ class Showable:
         self.screen_height = height
 
 
+class Background(Showable):
+    def __init__(self):
+        """
+        Конструктор класса фона
+        """
+        Showable.__init__(self)
+        self.image = pygame.Surface((0, 0))
+        self.pos = (0, 0)
+        self.config_image()
+
+    def config_image(self):
+        """
+        Получает фоновое изображение
+        """
+        self.image = pygame.image.load(bg)
+        w = self.image.get_width() / self.screen_width
+        h = self.image.get_height() / self.screen_height
+        if w < h:
+            h = int(h * self.screen_height / w)
+            w = self.screen_width
+            self.pos = (0, (self.screen_height - h) / 2)
+        else:
+            w = int(w * self.screen_width / h)
+            h = self.screen_height
+            self.pos = ((self.screen_width - w) / 2, 0)
+        self.image = pygame.transform.scale(self.image, (w, h))
+
+    def blit(self):
+        """
+        Рисует фон
+        """
+        self.screen.blit(self.image, self.pos)
+
+
 class Drawable(Showable):
     def __init__(self, x=0, y=0):
         """
@@ -59,14 +93,6 @@ class Drawable(Showable):
         self.x = x
         self.y = y
         self.sprite = Sprite()
-        self.mask = pygame.mask.Mask((0, 0))
-
-    def get_mask(self):
-        """
-        Получение маски спрайта
-        :return: объект маски
-        """
-        return pygame.mask.from_surface(self.sprite.image)
 
     def draw(self):
         """
@@ -80,7 +106,6 @@ class Drawable(Showable):
         Создаёт спрайт с данным объектом и получает его маску
         """
         self.sprite.image = self.draw()
-        self.mask = self.get_mask()
         self.sprite.rect = self.sprite.image.get_rect(center=(self.x, self.y))
 
     def move_object(self):
@@ -123,11 +148,11 @@ class Bullet(Drawable):
 
     def is_hit(self, target):
         """
-        Проверяет, сталкивалкивается ли мяч с мишенью
+        Проверяет, сталкивалкивается ли снаряд с мишенью
         :param target: Мишень, с которой проверяется столкновение
-        :return: True, если мяч сталкивается с мишенью, False иначе
+        :return: True, если снаряд сталкивается с мишенью, False иначе
         """
-        return True if (self.x - target.x) ** 2 + (self.y - target.y) ** 2 < (self.r + target.r) ** 2 else False
+        return True if pygame.sprite.collide_mask(self.sprite, target.sprite) else False
 
 
 class Weapon(Drawable):
@@ -150,13 +175,15 @@ class Weapon(Drawable):
 
 
 class Target(Drawable):
-    def __init__(self, health, x=0, y=0):
+    def __init__(self, health, border, x=0, y=0):
         """
         Конструктор класса мишеней
         :param health: количество очков здоровья мишени
+        :param border: граница области по горизонтали, которую не может пересекать снаряд
         :param x: начальная координата центра мишени по горизонтали
         :param y: начальная координата центра мишени по вертикали
         """
         Drawable.__init__(self, x, y)
         self.health = health
         target_group.add(self.sprite)
+        self.border = border

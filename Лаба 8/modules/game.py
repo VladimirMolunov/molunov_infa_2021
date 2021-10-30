@@ -9,10 +9,9 @@ score_for_catch = 1
 
 
 class Game(Showable):
-    def __init__(self, target_color, background_color, gun_color, gun_charged_color, gun_fully_charged_color, colors):
+    def __init__(self, target_color, gun_color, gun_charged_color, gun_fully_charged_color, colors):
         Drawable.__init__(self)
         self.target_color = target_color
-        self.background_color = background_color
         self.ball_colors = colors
         self.gun_color = gun_color
         self.gun_charged_color = gun_charged_color
@@ -29,10 +28,11 @@ class Game(Showable):
         gun = weapons.SimpleCannon(self.gun_color, self.gun_charged_color, self.gun_fully_charged_color)
         for i in range(target_count):
             target_list.append(targets.BallTarget(self.target_color))
+        bg = Background()
         finished = False
 
         while not finished:
-            self.screen.fill(self.background_color)
+            bg.blit()
             for group in group_list:
                 group.draw(self.screen)
             pygame.display.update()

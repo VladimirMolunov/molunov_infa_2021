@@ -7,7 +7,7 @@ from random import randint, choice
 
 x = 20
 y = 450
-charge_per_second = 500
+charge_per_second = 750
 max_power = 2000
 gun_x = 20
 gun_y = 450

@@ -18,7 +18,7 @@ border = 450
 
 class BallTarget(Target):
     def __init__(self, color, min_radius=min_radius, max_radius=max_radius, min_x=min_x, max_x=max_x, min_y=min_y,
-                 max_y=max_y, health=health):
+                 max_y=max_y, health=health, border=border):
         """
         Конструктор класса мишеней
         :param color: цвет мишени
@@ -30,7 +30,7 @@ class BallTarget(Target):
         :param max_y: максимальная координата мишени по вертикали
         :param health: количество очков здоровья мишени
         """
-        Target.__init__(self, health)
+        Target.__init__(self, health, border)
         self.x = randint(min_x, max_x)
         self.y = randint(min_y, max_y)
         self.vx = randint(-1 * ball_max_x_speed, ball_max_x_speed)
@@ -61,7 +61,7 @@ class BallTarget(Target):
         """
         Перемещает мишень по прошествии единицы времени, учитывая отражение от стенок
         """
-        if self.r + border < self.x + self.vx / self.fps < self.screen_width - self.r:
+        if self.r + self.border < self.x + self.vx / self.fps < self.screen_width - self.r:
             self.x += self.vx / self.fps
         else:
             self.vx = - self.vx
