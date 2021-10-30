@@ -10,6 +10,14 @@ score_for_catch = 1
 
 class Game(Showable):
     def __init__(self, target_color, gun_color, gun_charged_color, gun_fully_charged_color, colors):
+        """
+        Создаёт окно с игрой
+        :param target_color: цвет мишени
+        :param gun_color: цвет орудия
+        :param gun_charged_color: цвет заряженного орудия
+        :param gun_fully_charged_color: цвет полностью заряженного орудия
+        :param colors: список возможных цветов снарядов
+        """
         Drawable.__init__(self)
         self.target_color = target_color
         self.ball_colors = colors

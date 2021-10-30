@@ -27,6 +27,9 @@ class DrawablesList(list):
 
 class Sprite(pygame.sprite.Sprite):
     def __init__(self):
+        """
+        Конструктор класса спрайтов
+        """
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((0, 0))
         self.rect = self.image.get_rect(center=(0, 0))
