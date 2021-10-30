@@ -1,8 +1,9 @@
 import math
 import pygame
-from modules import classes
 from modules import bullets
-from modules.classes import *
+from modules.bullets import *
+from modules.groups import transparent, weapon_group
+from modules.classes import Drawable
 from random import randint, choice
 
 x = 20
@@ -16,31 +17,24 @@ gun_height = 20
 gun_default_power = 500
 
 
-class SimpleCannon(Weapon):
-    def __init__(self, gun_color, charged_color, fully_charged_color, width=gun_width, height=gun_height,
-                 default_power=gun_default_power, max_power=max_power, charge_per_second=charge_per_second):
+class Weapon(Drawable):
+    def __init__(self, power, x=0, y=0):
         """
-        Конструктор класса пушек
-        :param gun_color: цвет пушки
-        :param charged_color: цвет заряженной пушки
-        :param fully_charged_color: цвет полностью заряженной пушки
-        :param width: ширина пушки
-        :param height: высота пушки
-        :param default_power: скорость мяча, только что вылетевшего из пушки
-        :param max_power: максимально допустимый заряд пушки
-        :param charge_per_second: заряд, который пушка получает за секунду
+        Конструктор класса стреляющих орудий
+        :param x: начальная координата центра орудия по горизонтали
+        :param y: начальная координата центра орудия по вертикали
         """
-        Weapon.__init__(self, gun_x, gun_y)
-        self.power = default_power
-        self.color = gun_color
-        self.gun_color = gun_color
-        self.charged_color = charged_color
-        self.fully_charged_color = fully_charged_color
-        self.width = width
-        self.height = height
-        self.default_power = default_power
-        self.max_power = max_power
-        self.charge_per_second = charge_per_second
+        Drawable.__init__(self, x, y)
+        self.is_active = False
+        self.power = power
+        self.angle = 1
+        weapon_group.add(self.sprite)
+
+    def charge(self):
+        """
+        Заряжает орудие
+        """
+        self.is_active = True
 
     def fire_ball(self, event, colors, lifetime=bullets.ball_lifetime, r=bullets.ball_r):
         """
@@ -73,6 +67,32 @@ class SimpleCannon(Weapon):
         ball.vx = self.power * math.cos(self.angle)
         ball.vy = self.power * math.sin(self.angle)
         return ball
+
+
+class SimpleCannon(Weapon):
+    def __init__(self, gun_color, charged_color, fully_charged_color, width=gun_width, height=gun_height,
+                 default_power=gun_default_power, max_power=max_power, charge_per_second=charge_per_second):
+        """
+        Конструктор класса пушек
+        :param gun_color: цвет пушки
+        :param charged_color: цвет заряженной пушки
+        :param fully_charged_color: цвет полностью заряженной пушки
+        :param width: ширина пушки
+        :param height: высота пушки
+        :param default_power: скорость мяча, только что вылетевшего из пушки
+        :param max_power: максимально допустимый заряд пушки
+        :param charge_per_second: заряд, который пушка получает за секунду
+        """
+        Weapon.__init__(self, default_power, gun_x, gun_y)
+        self.color = gun_color
+        self.gun_color = gun_color
+        self.charged_color = charged_color
+        self.fully_charged_color = fully_charged_color
+        self.width = width
+        self.height = height
+        self.default_power = default_power
+        self.max_power = max_power
+        self.charge_per_second = charge_per_second
 
     def targetting(self, event: pygame.event.Event):
         """

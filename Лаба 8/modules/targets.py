@@ -1,7 +1,7 @@
 import math
 import pygame
-from modules import classes
-from modules.classes import *
+from modules.classes import Target
+from modules.groups import transparent
 from random import randint, choice
 
 min_radius = 20

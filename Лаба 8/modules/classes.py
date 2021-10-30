@@ -1,14 +1,12 @@
 import math
 import pygame
-from modules import groups
-from modules.groups import *
+from modules.groups import bg, bullet_group, target_group
 from random import randint, choice
 
 FPS = 60
 width = 800
 height = 600
 g = 200
-transparent = (255, 255, 255, 0)
 
 
 class DrawablesList(list):
@@ -153,25 +151,6 @@ class Bullet(Drawable):
         :return: True, если снаряд сталкивается с мишенью, False иначе
         """
         return True if pygame.sprite.collide_mask(self.sprite, target.sprite) else False
-
-
-class Weapon(Drawable):
-    def __init__(self, x=0, y=0):
-        """
-        Конструктор класса стреляющих орудий
-        :param x: начальная координата центра орудия по горизонтали
-        :param y: начальная координата центра орудия по вертикали
-        """
-        Drawable.__init__(self, x, y)
-        self.is_active = False
-        self.angle = 1
-        weapon_group.add(self.sprite)
-
-    def charge(self):
-        """
-        Заряжает орудие
-        """
-        self.is_active = True
 
 
 class Target(Drawable):
