@@ -52,9 +52,12 @@ class BallTarget(Target):
         """
         Рисует мишень
         """
-        pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.r)
+        surface = pygame.Surface((2 * self.r, 2 * self.r), pygame.SRCALPHA)
+        surface.fill(transparent)
+        pygame.draw.circle(surface, self.color, (self.r, self.r), self.r)
+        return surface
 
-    def move(self):
+    def move_object(self):
         """
         Перемещает мишень по прошествии единицы времени, учитывая отражение от стенок
         """

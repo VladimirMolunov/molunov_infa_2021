@@ -5,34 +5,42 @@ from modules import bullets
 from modules.classes import *
 from random import randint, choice
 
+x = 20
+y = 450
 charge_per_second = 500
 max_power = 2000
 gun_x = 20
 gun_y = 450
-gun_width = 20
-gun_height = 10
+gun_width = 30
+gun_height = 20
 gun_default_power = 500
 
 
-class Gun(Weapon):
-    def __init__(self, gun_color, charged_color, width=gun_width, height=gun_height,
-                 default_power=gun_default_power):
+class SimpleCannon(Weapon):
+    def __init__(self, gun_color, charged_color, fully_charged_color, width=gun_width, height=gun_height,
+                 default_power=gun_default_power, max_power=max_power, charge_per_second=charge_per_second):
         """
         Конструктор класса пушек
         :param gun_color: цвет пушки
         :param charged_color: цвет заряженной пушки
+        :param fully_charged_color: цвет полностью заряженной пушки
         :param width: ширина пушки
         :param height: высота пушки
         :param default_power: скорость мяча, только что вылетевшего из пушки
+        :param max_power: максимально допустимый заряд пушки
+        :param charge_per_second: заряд, который пушка получает за секунду
         """
         Weapon.__init__(self, gun_x, gun_y)
         self.power = default_power
         self.color = gun_color
         self.gun_color = gun_color
         self.charged_color = charged_color
+        self.fully_charged_color = fully_charged_color
         self.width = width
         self.height = height
         self.default_power = default_power
+        self.max_power = max_power
+        self.charge_per_second = charge_per_second
 
     def fire_ball(self, event, colors, lifetime=bullets.ball_lifetime, r=bullets.ball_r):
         """
@@ -83,10 +91,15 @@ class Gun(Weapon):
 
     def define_color(self):
         """
-        Переопределяет цвет пушки в зависимости от того, заряжена ли она
+        Переопределяет цвет пушки в зависимости от того, насколько она заряжена (и заряжена ли вообще)
         """
         if self.is_active:
-            self.color = self.charged_color
+            p = (self.power - self.default_power) / (self.max_power - self.default_power)
+            rgb = []
+            for i in range(3):
+                rgb.append(min(max(int((self.charged_color[i] * (1 - p) + self.fully_charged_color[i] * p) *
+                                       (2.3 * p - 2.3 * p ** 2 + 1)), 0), 255))
+            self.color = (rgb[0], rgb[1], rgb[2])
         else:
             self.color = self.gun_color
 
@@ -94,27 +107,21 @@ class Gun(Weapon):
         """
         Рисует пушку
         """
-        height = self.height / 2
-        width = self.width
-        s = math.sin(self.angle)
-        c = math.cos(self.angle)
-        x1 = self.x + height * s
-        x2 = self.x - height * s
-        x3 = self.x - height * s + width * c
-        x4 = self.x + height * s + width * c
-        y1 = self.y - height * c
-        y2 = self.y + height * c
-        y3 = self.y + height * c + width * s
-        y4 = self.y - height * c + width * s
-        pygame.draw.polygon(self.screen, self.color, ((x1, y1), (x2, y2), (x3, y3), (x4, y4)))
+        r = max(self.width, self.height)
+        w = self.width
+        h = self.height
+        surface = pygame.Surface((2 * r, 2 * r), pygame.SRCALPHA)
+        surface.fill(transparent)
+        pygame.draw.rect(surface, self.color, (r - w, r - h, 2 * w, 2 * h))
+        surface = pygame.transform.scale(surface, (r, r))
+        surface = pygame.transform.rotate(surface, -1 * self.angle * 180 / math.pi)
+        return surface
 
-    def power_up(self, charge_per_second=charge_per_second, max_power=max_power):
+    def power_up(self):
         """
         Добавляет определённое значение к заряду пушки, если она уже заряжена и её заряд меньше максимально допустимого
         Необходимое значение рассчитывается для одного кадра
-        :param max_power: максимально допустимый заряд пушки
-        :param charge_per_second: заряд, который пушка получает за секунду
         """
-        if self.is_active and self.power < max_power:
-            self.power += charge_per_second / self.fps
+        if self.is_active and self.power < self.max_power:
+            self.power += self.charge_per_second / self.fps
         self.define_color()

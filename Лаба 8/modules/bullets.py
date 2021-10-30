@@ -31,7 +31,7 @@ class Ball(Bullet):
         self.color = color
         self.live = lifetime * self.fps
 
-    def move(self):
+    def move_object(self):
         """
         Перемещает мяч по прошествии единицы времени, учитывая отражение от стенок
         Переопределяет его скорость в соответствии с силами, действующими на него
@@ -53,6 +53,9 @@ class Ball(Bullet):
 
     def draw(self):
         """
-        Рисует мяч на экране
+        Рисует мяч, возвращает поверхность с ним
         """
-        pygame.draw.circle(self.screen, self.color, (self.x, self.y), self.r)
+        surface = pygame.Surface((2 * self.r, 2 * self.r), pygame.SRCALPHA)
+        surface.fill(transparent)
+        pygame.draw.circle(surface, self.color, (self.r, self.r), self.r)
+        return surface

@@ -11,15 +11,21 @@ class Sprite(pygame.sprite.Sprite):
 
 fps = 60
 spr = Sprite(200, 200, 300, 500)
+llist = [spr]
 screen = pygame.display.set_mode((800, 800))
 group = pygame.sprite.Group()
-group.add(spr)
-group.draw(screen)
+group.add(llist[0])
 pygame.display.update()
 finished = False
 clock = pygame.time.Clock()
 while not finished:
     clock.tick(fps)
+    screen.fill((255, 255, 255))
+    group.update()
+    group.draw(screen)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finished = True
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            llist.pop()
+    pygame.display.update()

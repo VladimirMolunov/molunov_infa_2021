@@ -10,12 +10,13 @@ cyan = (0, 255, 204)
 white = (255, 255, 255)
 grey = (102, 102, 102)
 target_red = (228, 0, 0)
-gun_red = (204, 0, 0)
+gun_red = (255, 0, 0)
+gun_green = (0, 255, 0)
 ball_colors = [red, blue, yellow, green, magenta, cyan]
 
 
 def main():
-    mygame = game.Game(target_red, white, grey, gun_red, ball_colors)
+    mygame = game.Game(target_red, white, grey, gun_green, gun_red, ball_colors)
     pygame.init()
     score = mygame.main()
     print('Well done, your score is ', score, '.', sep='')
