@@ -2,8 +2,7 @@ from math import cos, sin, atan2, pi
 import pygame
 from random import choice
 
-from modules import bullets
-from modules.bullets import *
+from modules.bullets import ball_lifetime, ball_r, Ball
 from modules.groups import transparent, weapon_group
 from modules.classes import Drawable
 
@@ -37,7 +36,7 @@ class Weapon(Drawable):
         """
         self.is_active = True
 
-    def fire_ball(self, event, colors, lifetime=bullets.ball_lifetime, r=bullets.ball_r):
+    def fire_ball(self, event, colors, lifetime=ball_lifetime, r=ball_r):
         """
         Производит выстрел
         :param event: событие отпускания кнопки мыши
@@ -63,7 +62,7 @@ class Weapon(Drawable):
         :param y: начальная координата мяча по вертикали
         :return: новый объект мяча
         """
-        ball = bullets.Ball(color, lifetime, r, x, y)
+        ball = Ball(color, lifetime, r, x, y)
         self.angle = atan2((event.pos[1] - ball.y), (event.pos[0] - ball.x))
         ball.vx = self.power * cos(self.angle)
         ball.vy = self.power * sin(self.angle)
