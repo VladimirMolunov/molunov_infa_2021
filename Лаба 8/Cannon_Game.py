@@ -1,5 +1,6 @@
-from modules import game
 import pygame
+
+from modules import game
 
 red = (255, 0, 0)
 yellow = (255, 255, 0)

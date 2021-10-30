@@ -1,8 +1,9 @@
 import math
 import pygame
+from random import randint
+
 from modules.classes import Target
 from modules.groups import transparent
-from random import randint, choice
 
 min_radius = 20
 max_radius = 50

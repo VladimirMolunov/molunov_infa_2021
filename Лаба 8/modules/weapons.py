@@ -1,10 +1,11 @@
-import math
+from math import cos, sin, atan2, pi
 import pygame
+from random import choice
+
 from modules import bullets
 from modules.bullets import *
 from modules.groups import transparent, weapon_group
 from modules.classes import Drawable
-from random import randint, choice
 
 x = 20
 y = 450
@@ -46,7 +47,7 @@ class Weapon(Drawable):
         :return: новый объект мяча
         """
         ball = self.new_ball(event, choice(colors), lifetime, r,
-                             self.x + self.width * math.cos(self.angle), self.y + self.height * math.sin(self.angle))
+                             self.x + self.width * cos(self.angle), self.y + self.height * sin(self.angle))
         self.is_active = False
         self.power = self.default_power
         return ball
@@ -63,9 +64,9 @@ class Weapon(Drawable):
         :return: новый объект мяча
         """
         ball = bullets.Ball(color, lifetime, r, x, y)
-        self.angle = math.atan2((event.pos[1] - ball.y), (event.pos[0] - ball.x))
-        ball.vx = self.power * math.cos(self.angle)
-        ball.vy = self.power * math.sin(self.angle)
+        self.angle = atan2((event.pos[1] - ball.y), (event.pos[0] - ball.x))
+        ball.vx = self.power * cos(self.angle)
+        ball.vy = self.power * sin(self.angle)
         return ball
 
 
@@ -100,13 +101,7 @@ class SimpleCannon(Weapon):
         :param event: событие перемещения мыши
         """
         if event.type == pygame.MOUSEMOTION:
-            if event.pos[0] == self.x:
-                if event.pos[1] > self.y:
-                    self.angle = math.pi / 2
-                else:
-                    self.angle = - math.pi / 2
-            else:
-                self.angle = math.atan((event.pos[1] - self.y) / (event.pos[0] - self.x))
+            self.angle = atan2((event.pos[1] - self.y), (event.pos[0] - self.x))
         self.define_color()
 
     def define_color(self):
@@ -134,7 +129,7 @@ class SimpleCannon(Weapon):
         surface.fill(transparent)
         pygame.draw.rect(surface, self.color, (r - w, r - h, 2 * w, 2 * h))
         surface = pygame.transform.scale(surface, (r, r))
-        surface = pygame.transform.rotate(surface, -1 * self.angle * 180 / math.pi)
+        surface = pygame.transform.rotate(surface, -1 * self.angle * 180 / pi)
         return surface
 
     def power_up(self):

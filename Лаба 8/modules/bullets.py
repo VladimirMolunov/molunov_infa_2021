@@ -1,8 +1,7 @@
-import math
 import pygame
+
 from modules.classes import Bullet
 from modules.groups import transparent
-from random import randint, choice
 
 ball_lifetime = 10
 ball_r = 10

@@ -1,7 +1,6 @@
-import math
 import pygame
+
 from modules.groups import bg, bullet_group, target_group
-from random import randint, choice
 
 FPS = 60
 width = 800
@@ -52,7 +51,7 @@ class Showable:
 class Background(Showable):
     def __init__(self):
         """
-        Конструктор класса фона
+        Конструктор класса фоновых изображений
         """
         Showable.__init__(self)
         self.image = pygame.Surface((0, 0))

@@ -1,8 +1,8 @@
 import math
 import pygame
+
 from modules import classes, bullets, weapons, targets, groups
 from modules.classes import *
-from random import randint, choice
 
 target_count = 2
 score_for_catch = 1
