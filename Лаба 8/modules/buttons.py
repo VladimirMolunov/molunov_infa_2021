@@ -248,6 +248,7 @@ class Menu(Showable):
         self.link_array = link_array
         self.back = back
         self.text_surface = self.get_text()
+        self.game = None
 
     def get_text(self):
         """
@@ -305,3 +306,14 @@ class Menu(Showable):
         elif num > 0:
             index = self.link_array[num - 1]
         return index
+
+
+class GameMenu(Menu):
+    def __init__(self, grid: ButtonGrid, link_array: list, text, color, bg_filename, back=0, x=-1, y=-1, gap=30,
+                 game=None):
+        """
+        Конструктор класса игровых меню
+        :param game: название игры, происходящей в меню
+        """
+        Menu.__init__(self, grid, link_array, text, color, bg_filename, back, x, y, gap)
+        self.game = game

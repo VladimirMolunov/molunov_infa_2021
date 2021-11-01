@@ -18,8 +18,7 @@ ball_colors = [red, blue, yellow, green, magenta, cyan]
 
 def main():
     mygame = game.Game(target_red, grey, gun_green, gun_red, ball_colors)
-    mygame.main()
-    score = 0
+    score = mygame.main()
     print('Well done, your score is ', score, '.', sep='')
 
 

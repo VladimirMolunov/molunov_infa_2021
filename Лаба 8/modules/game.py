@@ -29,33 +29,36 @@ class Game(Showable):
         self.gun_charged_color = gun_charged_color
         self.gun_fully_charged_color = gun_fully_charged_color
         self.clock = pygame.time.Clock()
+        self.finished = False
+        self.score = 0
+        self.game_finished = False
 
-    def gun_game(self):
-        score = 0
+    def cannon_game(self):
+        menu = menu_list[8]
         bullet_list = DrawablesList()
         target_list = DrawablesList()
         gun = weapons.SimpleCannon(self.gun_color, self.gun_charged_color, self.gun_fully_charged_color)
         for i in range(target_count):
             target_list.append(targets.BallTarget(self.target_color))
-        bg = Background(Path('modules', 'bg.jpg').resolve())
-        finished = False
 
-        while not finished:
-            bg.blit()
+        while not self.finished and not self.game_finished:
+            menu.bg.blit()
             for group in group_list:
                 group.draw(self.screen)
             pygame.display.update()
-
-            clock.tick(self.fps)
+            self.clock.tick(self.fps)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    finished = True
+                    self.finished = True
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     gun.charge()
                 elif event.type == pygame.MOUSEBUTTONUP:
                     bullet_list.append(gun.fire_ball(event, self.ball_colors))
                 elif event.type == pygame.MOUSEMOTION:
                     gun.targetting(event)
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.game_finished = True
 
             gun.config_sprite()
             for target in target_list:
@@ -68,32 +71,41 @@ class Game(Showable):
                         if target.health == 0:
                             target.sprite.kill()
                             target.__init__(self.target_color)
-                            score += score_for_catch
+                            self.score += score_for_catch
                 ball.remove_life()
                 if ball.live <= 0:
                     bullet_list.smart_pop(0)
             gun.power_up()
-        pygame.quit()
-        return score
+        for group in group_list:
+            group.empty()
+        return self.score
 
     def main(self):
         pygame.init()
         screen = pygame.display.set_mode((800, 600))
         pygame.draw.rect(screen, (255, 255, 0), (100, 100, 200, 100))
         menu_number = 0  # номер текущего меню
-        finished = False
-        while not finished:
+        while not self.finished:
+            game = None
             current_menu = menu_list[menu_number]
             current_menu.blit()
             pygame.display.update()
             self.clock.tick(self.fps)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    finished = True
+                    self.finished = True
                 else:
                     if event.type in (pygame.MOUSEMOTION, pygame.MOUSEBUTTONUP, pygame.MOUSEBUTTONDOWN):
                         i = current_menu.goto(event)
                         if i >= 0:
                             menu_number = i
                             current_menu = menu_list[menu_number]
+                            if current_menu.game == 'Cannon':
+                                game = 'Cannon'
+                                break
+            if game == 'Cannon':
+                self.score = self.cannon_game()
+                menu_number = 0
+            self.game_finished = False
         pygame.quit()
+        return self.score
