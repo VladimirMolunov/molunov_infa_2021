@@ -3,7 +3,7 @@ from random import randint
 from mymodules import ballmod, amogusmod, inside, files, scoremod
 pygame.init()
 
-files.reset_custom()  # функция, позволяющая сбросить пользовательские настройки
+# files.reset_custom()  # функция, позволяющая сбросить пользовательские настройки
 
 # получение значений изменяемых переменных
 varlist = files.get()
