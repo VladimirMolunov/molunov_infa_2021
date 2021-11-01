@@ -1,7 +1,10 @@
 import math
 import pygame
+from pathlib import Path
 
 from modules import bullets, weapons, targets
+from modules.buttons import Menu
+from modules.menus import menu_list
 from modules.groups import group_list
 from modules.classes import Showable, DrawablesList, Background
 
@@ -25,16 +28,16 @@ class Game(Showable):
         self.gun_color = gun_color
         self.gun_charged_color = gun_charged_color
         self.gun_fully_charged_color = gun_fully_charged_color
+        self.clock = pygame.time.Clock()
 
-    def main(self):
+    def gun_game(self):
         score = 0
         bullet_list = DrawablesList()
         target_list = DrawablesList()
-        clock = pygame.time.Clock()
         gun = weapons.SimpleCannon(self.gun_color, self.gun_charged_color, self.gun_fully_charged_color)
         for i in range(target_count):
             target_list.append(targets.BallTarget(self.target_color))
-        bg = Background()
+        bg = Background(Path('modules', 'bg.jpg').resolve())
         finished = False
 
         while not finished:
@@ -72,3 +75,25 @@ class Game(Showable):
             gun.power_up()
         pygame.quit()
         return score
+
+    def main(self):
+        pygame.init()
+        screen = pygame.display.set_mode((800, 600))
+        pygame.draw.rect(screen, (255, 255, 0), (100, 100, 200, 100))
+        menu_number = 0  # номер текущего меню
+        finished = False
+        while not finished:
+            current_menu = menu_list[menu_number]
+            current_menu.blit()
+            pygame.display.update()
+            self.clock.tick(self.fps)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    finished = True
+                else:
+                    if event.type in (pygame.MOUSEMOTION, pygame.MOUSEBUTTONUP, pygame.MOUSEBUTTONDOWN):
+                        i = current_menu.goto(event)
+                        if i >= 0:
+                            menu_number = i
+                            current_menu = menu_list[menu_number]
+        pygame.quit()

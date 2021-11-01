@@ -49,20 +49,22 @@ class Showable:
 
 
 class Background(Showable):
-    def __init__(self):
+    def __init__(self, image):
         """
         Конструктор класса фоновых изображений
+        :param image: путь к фоновой картинке
         """
         Showable.__init__(self)
         self.image = pygame.Surface((0, 0))
         self.pos = (0, 0)
-        self.config_image()
+        self.config_image(image)
 
-    def config_image(self):
+    def config_image(self, image):
         """
         Получает фоновое изображение
+        :param image: путь к фоновой картинке
         """
-        self.image = pygame.image.load(bg)
+        self.image = pygame.image.load(image)
         w = self.image.get_width() / self.screen_width
         h = self.image.get_height() / self.screen_height
         if w < h:
