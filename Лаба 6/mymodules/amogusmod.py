@@ -198,7 +198,7 @@ def new_amogus(amoguslist, min_height, max_height, leftborder, rightborder, topb
     color = amogus_colors[randint(0, len(amogus_colors)) - 1]
     amogus_surface_list.pop(0)
     amogus_surface_list.append(pygame.Surface((380, 500), pygame.SRCALPHA))
-    amoguslist.append(Amogus(True, True, False, 1, orientated_right, x, y, h, vx, vy, color, amogus_surface_list[-1],
+    amoguslist.append(Amogus(True, True, orientated_right, False, 1, x, y, h, vx, vy, color, amogus_surface_list[-1],
                              amogus_lifetime * tps))
     amoguslist.pop(0)
     newamogus = amoguslist[-1]

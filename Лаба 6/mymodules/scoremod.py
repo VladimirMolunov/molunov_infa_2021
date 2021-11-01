@@ -1,6 +1,6 @@
 from pathlib import Path
 
-playerdata_path = Path('mymodules', 'playerdata')
+playerdata_path = Path('mymodules', 'playerdata.txt')
 leaderboard_path = Path('leaderboard.txt')
 
 

@@ -7,4 +7,6 @@ bullet_group = Group()
 weapon_group = Group()
 target_group = Group()
 
+group_list = [bullet_group, weapon_group, target_group]
+
 bg = Path('modules', 'bg.jpg').resolve()

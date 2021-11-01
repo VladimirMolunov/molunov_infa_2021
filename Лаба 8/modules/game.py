@@ -1,8 +1,9 @@
 import math
 import pygame
 
-from modules import classes, bullets, weapons, targets, groups
-from modules.classes import *
+from modules import bullets, weapons, targets
+from modules.groups import group_list
+from modules.classes import Showable, DrawablesList, Background
 
 target_count = 2
 score_for_catch = 1
@@ -18,7 +19,7 @@ class Game(Showable):
         :param gun_fully_charged_color: цвет полностью заряженного орудия
         :param colors: список возможных цветов снарядов
         """
-        Drawable.__init__(self)
+        Showable.__init__(self)
         self.target_color = target_color
         self.ball_colors = colors
         self.gun_color = gun_color
@@ -29,9 +30,6 @@ class Game(Showable):
         score = 0
         bullet_list = DrawablesList()
         target_list = DrawablesList()
-        group_list = []
-        for i in 'bullet', 'weapon', 'target':
-            exec('group_list.append(groups.' + i + '_group)')
         clock = pygame.time.Clock()
         gun = weapons.SimpleCannon(self.gun_color, self.gun_charged_color, self.gun_fully_charged_color)
         for i in range(target_count):

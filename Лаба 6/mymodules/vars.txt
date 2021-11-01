@@ -25,3 +25,7 @@ top_count; 1; 1
 score_count; 1; 1
 ball_collapse_speed; 0; 1
 amogus_collapse_speed; 0; 1
+min_golden_amogus_speed; 1; 1
+max_golden_amogus_speed; 1; 1
+score_for_golden_amogus; 0; 0
+golden_amogus_height; 1; 1

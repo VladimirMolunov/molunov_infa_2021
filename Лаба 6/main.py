@@ -112,15 +112,18 @@ while not finished:
             screen.blit(surface, (ball.x - int(max_radius * ball.scale), ball.y - int(max_radius * ball.scale)))
         else:
             ball_collapsing.pop(0)
-    for amogus in reversed(amogus_collapsing):
-        amogus.scale -= amogus_collapse_speed * dt
-        if amogus.scale > 0:
-            surface = pygame.transform.scale(amogus.surface, (int(amogus.r * ratio * 2 * amogus.scale),
-                                                              int(amogus.r * amogus.scale)))
-            screen.blit(surface, (amogus.x - int(amogus.r * ratio * amogus.scale),
-                                  amogus.y - int(amogus.r / 2 * amogus.scale)))
+    for i in range(0, len(amogus_collapsing), 1):
+        amogus_collapsing[i].scale -= amogus_collapse_speed * dt
+        if amogus_collapsing[i].scale > 0:
+            surface = pygame.transform.scale(amogus_collapsing[i].surface, (int(amogus_collapsing[i].r * ratio *
+                                                                                2 * amogus_collapsing[i].scale),
+                                                                            int(amogus_collapsing[i].r *
+                                                                                amogus_collapsing[i].scale)))
+            screen.blit(surface, (amogus_collapsing[i].x - int(amogus_collapsing[i].r * ratio *
+                                                               amogus_collapsing[i].scale), amogus_collapsing[i].y -
+                                  int(amogus_collapsing[i].r / 2 * amogus_collapsing[i].scale)))
         else:
-            amogus_collapsing.pop(0)
+            amogus_collapsing.pop(i)
     for ball in ball_list:
         if ball.status:
             ball.moveball(ball.vx, ball.vy, dt, leftborder, rightborder, topborder, bottomborder)

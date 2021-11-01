@@ -1,8 +1,8 @@
 from pathlib import Path
 
 custom_path = Path('custom_parameters.txt')
-vars_path = Path('mymodules', 'vars')
-default_path = Path('mymodules', 'default')
+vars_path = Path('mymodules', 'vars.txt')
+default_path = Path('mymodules', 'default.txt')
 
 numbers = ('1', '2', '3', '4', '5', '6', '7', '8', '9', '0', ',', '.')
 
