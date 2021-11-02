@@ -1,7 +1,10 @@
 from modules.buttons import ButtonGrid, Menu, GameMenu
 
 button_text_color = (25, 12, 199)
-finish_screen_color = (6, 40, 17)
+cannon_finish_screen_color = (6, 40, 17)
+war_finish_screen_color = (6, 40, 17)
+hunt_finish_screen_color = (6, 40, 17)
+minecraft_finish_screen_color = (6, 40, 17)
 menu_bg = 'menu_bg.jpg'
 cannon_bg = 'cannon_bg.jpg'
 cannon_finish_bg = 'cannon_finish_bg.jpg'
@@ -34,9 +37,9 @@ choose_mode_links = [4, 5, 6, 7]
 hotkeys_links = []
 settings_links = []
 cannon_links = [8]
-war_links = []
-hunt_links = []
-minecraft_links = []
+war_links = [10]
+hunt_links = [12]
+minecraft_links = [14]
 cannon_game_links = []
 cannon_score_links = []
 war_game_links = []
@@ -57,11 +60,11 @@ minecraft_menu_text = 'Yet to be done...'
 cannon_game_menu_text = ''
 cannon_score_menu_text = ''
 war_game_menu_text = ''
-war_score_menu_text = ''
+war_score_menu_text = 'Yet to be done...'
 hunt_game_menu_text = ''
-hunt_score_menu_text = ''
+hunt_score_menu_text = 'Yet to be done...'
 minecraft_game_menu_text = ''
-minecraft_score_menu_text = ''
+minecraft_score_menu_text = 'Yet to be done...'
 
 main_grid = ButtonGrid(button_text_color, 400, 200, main_texts)
 choose_mode_grid = ButtonGrid(button_text_color, 400, 100, choose_mode_texts, back=True)
