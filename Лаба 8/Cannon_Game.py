@@ -1,6 +1,4 @@
-import pygame
-
-from modules import game
+from modules.game import Game
 
 red = (255, 0, 0)
 yellow = (255, 255, 0)
@@ -17,7 +15,7 @@ ball_colors = [red, blue, yellow, green, magenta, cyan]
 
 
 def main():
-    mygame = game.Game(target_red, grey, gun_green, gun_red, ball_colors)
+    mygame = Game(target_red, grey, gun_green, gun_red, ball_colors)
     mygame.main()
 
 

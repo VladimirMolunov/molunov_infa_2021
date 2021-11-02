@@ -38,7 +38,7 @@ class Game(Showable):
         Проводит игру "Пушка", возвращает номер меню окончания игры с подсчитанными очками
         """
         self.score = 0
-        menu = menu_list[9]
+        menu = menu_list[8]
         bullet_list = DrawablesList()
         target_list = DrawablesList()
         cannon = weapons.SimpleCannon(self.cannon_color, self.cannon_charged_color, self.cannon_fully_charged_color)
@@ -83,8 +83,35 @@ class Game(Showable):
             cannon.power_up()
         for group in group_list:
             group.empty()
-        num = 8
+        num = 9
         menu_list[num].set_text('Your score is ' + str(self.score) + '!')
+        return num
+
+    def war_game(self):
+        """
+        Проводит игру "Война", возвращает номер меню окончания игры с подсчитанными очками
+        """
+        self.score = 0
+        menu = menu_list[10]
+        num = 11
+        return num
+
+    def hunt_game(self):
+        """
+        Проводит игру "Охота", возвращает номер меню окончания игры с подсчитанными очками
+        """
+        self.score = 0
+        menu = menu_list[12]
+        num = 13
+        return num
+
+    def minecraft_game(self):
+        """
+        Проводит игру "Minecraft", возвращает номер меню окончания игры с подсчитанными очками
+        """
+        self.score = 0
+        menu = menu_list[14]
+        num = 15
         return num
 
     def main(self):
@@ -110,8 +137,23 @@ class Game(Showable):
                             if current_menu.game == 'Cannon':
                                 game = 'Cannon'
                                 break
+                            elif current_menu.game == 'War':
+                                game = 'War'
+                                break
+                            elif current_menu.game == 'Hunt':
+                                game = 'Hunt'
+                                break
+                            elif current_menu.game == 'Minecraft':
+                                game = 'Minecraft'
+                                break
             if game == 'Cannon':
                 menu_number = self.cannon_game()
+            elif game == 'War':
+                menu_number = self.war_game()
+            elif game == 'Hunt':
+                menu_number = self.hunt_game()
+            elif game == 'Minecraft':
+                menu_number = self.minecraft_game()
             self.game_finished = False
         pygame.quit()
         return self.score
