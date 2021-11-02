@@ -6,9 +6,9 @@ from modules.classes import Drawable, Showable, Background
 pygame.init()
 make_transparent = (255, 255, 255)
 screen = pygame.display.set_mode((800, 600))
-def_image = pygame.image.load(Path('modules', 'def_button.png').resolve()).convert_alpha()
-image_pressed = pygame.image.load(Path('modules', 'pressed_button.png').resolve()).convert_alpha()
-image_pointed = pygame.image.load(Path('modules', 'pointed_button.png').resolve()).convert_alpha()
+def_image = pygame.image.load(Path('images', 'def_button.png').resolve()).convert_alpha()
+image_pressed = pygame.image.load(Path('images', 'pressed_button.png').resolve()).convert_alpha()
+image_pointed = pygame.image.load(Path('images', 'pointed_button.png').resolve()).convert_alpha()
 
 
 class Button:
@@ -242,7 +242,7 @@ class Menu(Showable):
         self.x = 0
         self.y = 0
         self.color = color
-        self.bg = Background(Path('modules', bg_filename).resolve())
+        self.bg = Background(Path('images', bg_filename).resolve())
         self.gap = gap
         self.link_array = link_array
         self.back = back

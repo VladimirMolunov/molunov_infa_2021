@@ -11,9 +11,22 @@ from modules.classes import Showable, DrawablesList, Background
 target_count = 2
 score_for_catch = 1
 
+red = (255, 0, 0)
+yellow = (255, 255, 0)
+blue = (0, 0, 255)
+green = (0, 255, 0)
+magenta = (255, 3, 184)
+cyan = (0, 255, 204)
+ball_target_red = (228, 0, 0)
+cannon_grey = (102, 102, 102)
+cannon_red = (255, 0, 0)
+cannon_green = (0, 255, 0)
+ball_colors = (red, blue, yellow, green, magenta, cyan)
+
 
 class Game(Showable):
-    def __init__(self, ball_target_color, cannon_color, cannon_charged_color, cannon_fully_charged_color, colors):
+    def __init__(self, ball_target_color=ball_target_red, cannon_color=cannon_grey, cannon_charged_color=cannon_green,
+                 cannon_fully_charged_color=cannon_red, colors=ball_colors):
         """
         Создаёт окно с игрой
         :param ball_target_color: цвет круглой мишени
@@ -57,7 +70,7 @@ class Game(Showable):
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     cannon.charge()
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    bullet_list.append(cannon.fire_ball(event, self.ball_colors))
+                    bullet_list.append(cannon.fire_ball(self.ball_colors))
                 elif event.type == pygame.MOUSEMOTION:
                     cannon.targetting(event)
                 elif event.type == pygame.KEYDOWN:
@@ -93,7 +106,50 @@ class Game(Showable):
         """
         self.score = 0
         menu = menu_list[10]
+        bullet_list = DrawablesList()
+        target_list = DrawablesList()
+        tank = weapons.Tank()
+        for i in range(target_count):
+            target_list.append(targets.BallTarget(self.ball_target_color))
+
+        while not self.finished and not self.game_finished:
+            menu.bg.blit()
+            for group in group_list:
+                group.draw(self.screen)
+            pygame.display.update()
+            self.clock.tick(self.fps)
+            print(tank.angle)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.finished = True
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    bullet_list.append(tank.fire_ball(self.ball_colors))
+                elif event.type == pygame.MOUSEMOTION:
+                    tank.targetting(event)
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.game_finished = True
+
+            tank.move()
+            for target in target_list:
+                target.move()
+            for ball in bullet_list:
+                ball.move()
+                for target in target_list:
+                    if ball.is_hit(target) and target.health > 0:
+                        target.hit()
+                        if target.health == 0:
+                            target.sprite.kill()
+                            target_list.pop(target_list.index(target))
+                            target_list.append(targets.BallTarget(self.ball_target_color))
+                            self.score += score_for_catch
+                ball.remove_life()
+                if ball.live <= 0:
+                    bullet_list.smart_pop(0)
+        for group in group_list:
+            group.empty()
         num = 11
+        menu_list[num].set_text('Your score is ' + str(self.score) + '!')
         return num
 
     def hunt_game(self):
@@ -134,17 +190,8 @@ class Game(Showable):
                         if i >= 0:
                             menu_number = i
                             current_menu = menu_list[menu_number]
-                            if current_menu.game == 'Cannon':
-                                game = 'Cannon'
-                                break
-                            elif current_menu.game == 'War':
-                                game = 'War'
-                                break
-                            elif current_menu.game == 'Hunt':
-                                game = 'Hunt'
-                                break
-                            elif current_menu.game == 'Minecraft':
-                                game = 'Minecraft'
+                            if current_menu.game in ('Cannon', 'War', 'Hunt', 'Minecraft'):
+                                game = current_menu.game
                                 break
             if game == 'Cannon':
                 menu_number = self.cannon_game()
