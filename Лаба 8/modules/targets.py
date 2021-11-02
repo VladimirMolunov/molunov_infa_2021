@@ -39,15 +39,6 @@ class BallTarget(Target):
         self.color = color
         self.health = health
 
-    def hit(self, damage=1):
-        """
-        Наносит цели урон
-        :param damage: количество нанесённого урона
-        """
-        self.health -= damage
-        if self.health < 0:
-            self.health = 0
-
     def draw(self):
         """
         Рисует мишень

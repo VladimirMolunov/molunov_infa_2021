@@ -1,6 +1,6 @@
 import pygame
 
-from modules.groups import bg, bullet_group, target_group
+from modules.groups import bullet_group, target_group
 
 FPS = 60
 width = 800
@@ -61,7 +61,7 @@ class Background(Showable):
 
     def config_image(self, image):
         """
-        Получает фоновое изображение
+        Получает фоновое изображение, оптимизирует его размер и центрирует его на экране
         :param image: путь к фоновой картинке
         """
         self.image = pygame.image.load(image)
@@ -79,7 +79,7 @@ class Background(Showable):
 
     def blit(self):
         """
-        Рисует фон
+        Выводит фон на экран
         """
         self.screen.blit(self.image, self.pos)
 
@@ -170,3 +170,12 @@ class Target(Drawable):
         self.health = health
         target_group.add(self.sprite)
         self.border = border
+
+    def hit(self, damage=1):
+        """
+        Наносит цели урон
+        :param damage: количество нанесённого урона
+        """
+        self.health -= damage
+        if self.health < 0:
+            self.health = 0

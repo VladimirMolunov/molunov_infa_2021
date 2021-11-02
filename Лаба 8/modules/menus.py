@@ -38,7 +38,7 @@ cannon_menu_text = ''
 war_menu_text = 'Yet to be done...'
 hunt_menu_text = 'Yet to be done...'
 minecraft_menu_text = 'Yet to be done...'
-score_menu_text = 'h'
+score_menu_text = ''
 cannon_game_menu_text = ''
 
 main_grid = ButtonGrid(button_text_color, 400, 200, main_texts)

@@ -13,32 +13,35 @@ score_for_catch = 1
 
 
 class Game(Showable):
-    def __init__(self, target_color, gun_color, gun_charged_color, gun_fully_charged_color, colors):
+    def __init__(self, target_color, cannon_color, cannon_charged_color, cannon_fully_charged_color, colors):
         """
         Создаёт окно с игрой
         :param target_color: цвет мишени
-        :param gun_color: цвет орудия
-        :param gun_charged_color: цвет заряженного орудия
-        :param gun_fully_charged_color: цвет полностью заряженного орудия
+        :param cannon_color: цвет орудия
+        :param cannon_charged_color: цвет заряженного орудия
+        :param cannon_fully_charged_color: цвет полностью заряженного орудия
         :param colors: список возможных цветов снарядов
         """
         Showable.__init__(self)
         self.target_color = target_color
         self.ball_colors = colors
-        self.gun_color = gun_color
-        self.gun_charged_color = gun_charged_color
-        self.gun_fully_charged_color = gun_fully_charged_color
+        self.cannon_color = cannon_color
+        self.cannon_charged_color = cannon_charged_color
+        self.cannon_fully_charged_color = cannon_fully_charged_color
         self.clock = pygame.time.Clock()
         self.finished = False
         self.score = 0
         self.game_finished = False
 
     def cannon_game(self):
+        """
+        Проводит игру "Пушка", возвращает номер меню окончания игры с подсчитанными очками
+        """
         self.score = 0
         menu = menu_list[9]
         bullet_list = DrawablesList()
         target_list = DrawablesList()
-        gun = weapons.SimpleCannon(self.gun_color, self.gun_charged_color, self.gun_fully_charged_color)
+        cannon = weapons.SimpleCannon(self.cannon_color, self.cannon_charged_color, self.cannon_fully_charged_color)
         for i in range(target_count):
             target_list.append(targets.BallTarget(self.target_color))
 
@@ -52,16 +55,16 @@ class Game(Showable):
                 if event.type == pygame.QUIT:
                     self.finished = True
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    gun.charge()
+                    cannon.charge()
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    bullet_list.append(gun.fire_ball(event, self.ball_colors))
+                    bullet_list.append(cannon.fire_ball(event, self.ball_colors))
                 elif event.type == pygame.MOUSEMOTION:
-                    gun.targetting(event)
+                    cannon.targetting(event)
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.game_finished = True
 
-            gun.config_sprite()
+            cannon.config_sprite()
             for target in target_list:
                 target.move()
             for ball in bullet_list:
@@ -76,7 +79,7 @@ class Game(Showable):
                 ball.remove_life()
                 if ball.live <= 0:
                     bullet_list.smart_pop(0)
-            gun.power_up()
+            cannon.power_up()
         for group in group_list:
             group.empty()
         num = 8

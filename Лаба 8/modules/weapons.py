@@ -10,11 +10,11 @@ x = 20
 y = 450
 charge_per_second = 750
 max_power = 2000
-gun_x = 20
-gun_y = 450
-gun_width = 30
-gun_height = 20
-gun_default_power = 500
+cannon_x = 20
+cannon_y = 450
+cannon_width = 30
+cannon_height = 20
+cannon_default_power = 500
 
 
 class Weapon(Drawable):
@@ -70,11 +70,11 @@ class Weapon(Drawable):
 
 
 class SimpleCannon(Weapon):
-    def __init__(self, gun_color, charged_color, fully_charged_color, width=gun_width, height=gun_height,
-                 default_power=gun_default_power, max_power=max_power, charge_per_second=charge_per_second):
+    def __init__(self, cannon_color, charged_color, fully_charged_color, width=cannon_width, height=cannon_height,
+                 default_power=cannon_default_power, max_power=max_power, charge_per_second=charge_per_second):
         """
         Конструктор класса пушек
-        :param gun_color: цвет пушки
+        :param cannon_color: цвет пушки
         :param charged_color: цвет заряженной пушки
         :param fully_charged_color: цвет полностью заряженной пушки
         :param width: ширина пушки
@@ -83,9 +83,9 @@ class SimpleCannon(Weapon):
         :param max_power: максимально допустимый заряд пушки
         :param charge_per_second: заряд, который пушка получает за секунду
         """
-        Weapon.__init__(self, default_power, gun_x, gun_y)
-        self.color = gun_color
-        self.gun_color = gun_color
+        Weapon.__init__(self, default_power, cannon_x, cannon_y)
+        self.color = cannon_color
+        self.cannon_color = cannon_color
         self.charged_color = charged_color
         self.fully_charged_color = fully_charged_color
         self.width = width
@@ -115,7 +115,7 @@ class SimpleCannon(Weapon):
                                        (2.3 * p - 2.3 * p ** 2 + 1)), 0), 255))
             self.color = (rgb[0], rgb[1], rgb[2])
         else:
-            self.color = self.gun_color
+            self.color = self.cannon_color
 
     def draw(self):
         """
