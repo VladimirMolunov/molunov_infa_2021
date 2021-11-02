@@ -34,7 +34,8 @@ class Game(Showable):
         self.game_finished = False
 
     def cannon_game(self):
-        menu = menu_list[8]
+        self.score = 0
+        menu = menu_list[9]
         bullet_list = DrawablesList()
         target_list = DrawablesList()
         gun = weapons.SimpleCannon(self.gun_color, self.gun_charged_color, self.gun_fully_charged_color)
@@ -78,7 +79,9 @@ class Game(Showable):
             gun.power_up()
         for group in group_list:
             group.empty()
-        return self.score
+        num = 8
+        menu_list[num].set_text('Your score is ' + str(self.score) + '!')
+        return num
 
     def main(self):
         pygame.init()
@@ -104,8 +107,7 @@ class Game(Showable):
                                 game = 'Cannon'
                                 break
             if game == 'Cannon':
-                self.score = self.cannon_game()
-                menu_number = 0
+                menu_number = self.cannon_game()
             self.game_finished = False
         pygame.quit()
         return self.score

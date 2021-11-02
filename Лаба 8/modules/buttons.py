@@ -224,7 +224,8 @@ class ButtonGrid(Showable):
 
 
 class Menu(Showable):
-    def __init__(self, grid: ButtonGrid, link_array: list, text, color, bg_filename, back=0, x=-1, y=-1, gap=30):
+    def __init__(self, grid: ButtonGrid, link_array: list, text, color, bg_filename, back=0, x=-1, y=-1, gap=30,
+                 size=40, font='arial'):
         """
         Конструктор класса меню
         :param grid: столбец кнопок
@@ -236,34 +237,46 @@ class Menu(Showable):
         :param x: координата центра текста по горизонтали
         :param y: координата центра текста по вертикали (если обе координаты не заданы, помещается под столбцом кнопок)
         :param gap: отступ от нижнего края столбца кнопок до текста
+        :param size: размер текста меню
+        :param font: шрифт текста меню
         """
         Showable.__init__(self)
         self.grid = grid
         self.text = text
+        self.x_inp = x
+        self.y_inp = y
+        self.x = 0
+        self.y = 0
         self.color = color
-        self.x = x
-        self.y = y
         self.bg = Background(Path('modules', bg_filename).resolve())
         self.gap = gap
         self.link_array = link_array
         self.back = back
+        self.font = font
+        self.size = size
         self.text_surface = self.get_text()
+        self.get_coords()
         self.game = None
 
-    def get_text(self):
+    def get_coords(self):
         """
-        Задаёт координаты текста меню на экране, возвращает поверхность с текстом
+        Задаёт координаты текста меню на экране
         """
-        font = pygame.font.SysFont('arial', 40)
-        text_surface = font.render(self.text, True, self.color)
-        w = text_surface.get_width()
-        h = text_surface.get_height()
-        if self.x == -1 and self.y == -1:
+        w = self.text_surface.get_width()
+        h = self.text_surface.get_height()
+        if self.x_inp == -1 and self.y_inp == -1:
             self.x = self.grid.center() - w / 2
             self.y = self.grid.bottom() + self.gap
         else:
-            self.x = self.x - w / 2
-            self.y = self.y - h / 2
+            self.x = self.x_inp - w / 2
+            self.y = self.y_inp - h / 2
+
+    def get_text(self):
+        """
+        Создаёт и возвращает поверхность с текстом
+        """
+        font = pygame.font.SysFont(self.font, self.size)
+        text_surface = font.render(self.text, True, self.color)
         return text_surface
 
     def put_text(self):
@@ -306,6 +319,14 @@ class Menu(Showable):
         elif num > 0:
             index = self.link_array[num - 1]
         return index
+
+    def set_text(self, new_text: str):
+        """
+        Задаёт новый текст для меню
+        """
+        self.text = new_text
+        self.text_surface = self.get_text()
+        self.get_coords()
 
 
 class GameMenu(Menu):
