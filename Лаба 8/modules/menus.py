@@ -1,5 +1,3 @@
-import pygame
-
 from modules.buttons import ButtonGrid, Menu, GameMenu
 
 button_text_color = (25, 12, 199)

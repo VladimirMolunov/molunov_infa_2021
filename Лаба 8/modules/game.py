@@ -13,17 +13,17 @@ score_for_catch = 1
 
 
 class Game(Showable):
-    def __init__(self, target_color, cannon_color, cannon_charged_color, cannon_fully_charged_color, colors):
+    def __init__(self, ball_target_color, cannon_color, cannon_charged_color, cannon_fully_charged_color, colors):
         """
         Создаёт окно с игрой
-        :param target_color: цвет мишени
-        :param cannon_color: цвет орудия
-        :param cannon_charged_color: цвет заряженного орудия
-        :param cannon_fully_charged_color: цвет полностью заряженного орудия
-        :param colors: список возможных цветов снарядов
+        :param ball_target_color: цвет круглой мишени
+        :param cannon_color: цвет пушки
+        :param cannon_charged_color: цвет заряженной пушки
+        :param cannon_fully_charged_color: цвет полностью заряженной пушки
+        :param colors: список возможных цветов мячей
         """
         Showable.__init__(self)
-        self.target_color = target_color
+        self.ball_target_color = ball_target_color
         self.ball_colors = colors
         self.cannon_color = cannon_color
         self.cannon_charged_color = cannon_charged_color
@@ -43,7 +43,7 @@ class Game(Showable):
         target_list = DrawablesList()
         cannon = weapons.SimpleCannon(self.cannon_color, self.cannon_charged_color, self.cannon_fully_charged_color)
         for i in range(target_count):
-            target_list.append(targets.BallTarget(self.target_color))
+            target_list.append(targets.BallTarget(self.ball_target_color))
 
         while not self.finished and not self.game_finished:
             menu.bg.blit()
@@ -74,7 +74,8 @@ class Game(Showable):
                         target.hit()
                         if target.health == 0:
                             target.sprite.kill()
-                            target.__init__(self.target_color)
+                            target_list.pop(target_list.index(target))
+                            target_list.append(targets.BallTarget(self.ball_target_color))
                             self.score += score_for_catch
                 ball.remove_life()
                 if ball.live <= 0:

@@ -36,6 +36,14 @@ class Weapon(Drawable):
         """
         self.is_active = True
 
+    def targetting(self, event: pygame.event.Event):
+        """
+        Изменение направления орудия в зависимости от положения курсора (прицеливание)
+        :param event: событие перемещения мыши
+        """
+        if event.type == pygame.MOUSEMOTION:
+            self.angle = atan2((event.pos[1] - self.y), (event.pos[0] - self.x))
+
     def fire_ball(self, event, colors, lifetime=ball_lifetime, r=ball_r):
         """
         Производит выстрел
@@ -93,15 +101,6 @@ class SimpleCannon(Weapon):
         self.default_power = default_power
         self.max_power = max_power
         self.charge_per_second = charge_per_second
-
-    def targetting(self, event: pygame.event.Event):
-        """
-        Направление пушки в зависимости от положения курсора (прицеливание)
-        :param event: событие перемещения мыши
-        """
-        if event.type == pygame.MOUSEMOTION:
-            self.angle = atan2((event.pos[1] - self.y), (event.pos[0] - self.x))
-        self.define_color()
 
     def define_color(self):
         """

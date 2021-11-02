@@ -216,12 +216,6 @@ class ButtonGrid(Showable):
                 add = - self.gap
         return self.y_top + len(self.button_array) * (self.gap + self.h) + add
 
-    def center(self):
-        """
-        Возвращает координату центра столбца по горизонтали
-        """
-        return self.x_center
-
 
 class Menu(Showable):
     def __init__(self, grid: ButtonGrid, link_array: list, text, color, bg_filename, back=0, x=-1, y=-1, gap=30,
@@ -265,7 +259,7 @@ class Menu(Showable):
         w = self.text_surface.get_width()
         h = self.text_surface.get_height()
         if self.x_inp == -1 and self.y_inp == -1:
-            self.x = self.grid.center() - w / 2
+            self.x = self.grid.x_center - w / 2
             self.y = self.grid.bottom() + self.gap
         else:
             self.x = self.x_inp - w / 2
