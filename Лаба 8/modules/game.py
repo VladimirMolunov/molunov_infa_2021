@@ -112,7 +112,7 @@ class Game(Showable):
         target_list = GameObjectsList()
         tank = weapons.Tank()
         for i in range(target_count):
-            target_list.append(targets.BallTarget(self.ball_target_color))
+            target_list.append(targets.BallTarget(self.ball_target_color, health=4, show_healthbar=True))
 
         while not self.finished and not self.game_finished:
             menu.bg.blit()
@@ -148,12 +148,14 @@ class Game(Showable):
                 ball.move()
                 for target in target_list:
                     if ball.is_hit(target) and target.health > 0:
+                        ball.live = 0
                         target.hit()
                         if target.health == 0:
                             target.kill()
                             target_list.pop(target_list.index(target))
-                            target_list.append(targets.BallTarget(self.ball_target_color))
+                            target_list.append(targets.BallTarget(self.ball_target_color, health=4, show_healthbar=True))
                             self.score += score_for_catch
+                        break
                 ball.remove_life()
                 if ball.live <= 0:
                     bullet_list.smart_pop(0)

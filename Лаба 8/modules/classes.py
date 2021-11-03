@@ -8,6 +8,7 @@ width = 800
 height = 600
 g = 200
 healthbar_image = pygame.image.load(Path('images', 'healthbar.png').resolve())
+healthbar_inside = pygame.image.load(Path('images', 'healthbar_inside.png').resolve())
 
 
 class GameObjectsList(list):
@@ -100,6 +101,7 @@ class GameObject(Showable):
         Showable.__init__(self)
         self.x = x
         self.y = y
+        self.max_health = health
         self.health = health
         self.show_healthbar = show_healthbar
         self.healthbar_x = x
@@ -123,9 +125,15 @@ class GameObject(Showable):
         :return: объект типа pygame.Surface
         """
         surface = healthbar_image.convert_alpha(self.screen)
-        surface.set_colorkey(transparent)
+        surface.set_colorkey((255, 255, 255))
+        surface2 = healthbar_inside.convert_alpha(self.screen)
+        surface2.set_colorkey((255, 255, 255))
         w = int(self.healthbar_size / surface.get_height() * surface.get_width())
-        surface = pygame.transform.smoothscale(surface, (w, self.healthbar_size))
+        x = int(self.healthbar_size / surface.get_height() * 10)
+        surface = pygame.transform.scale(surface, (w, self.healthbar_size)).convert_alpha()
+        surface2 = pygame.transform.scale(surface2, (w, self.healthbar_size)).convert_alpha()
+        surface3 = surface2.subsurface(x, 0, (w - 2 * x) * self.health / self.max_health, self.healthbar_size)
+        surface.blit(surface3, (x, 0))
         return surface
 
     def config_sprite(self):

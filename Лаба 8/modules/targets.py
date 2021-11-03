@@ -18,7 +18,7 @@ border = 450
 
 class BallTarget(Target):
     def __init__(self, color, min_radius=min_radius, max_radius=max_radius, min_x=min_x, max_x=max_x, min_y=min_y,
-                 max_y=max_y, health=health, border=border):
+                 max_y=max_y, health=health, border=border, show_healthbar=False):
         """
         Конструктор класса мишеней
         :param color: цвет мишени
@@ -37,7 +37,7 @@ class BallTarget(Target):
         self.vy = randint(-1 * ball_max_y_speed, ball_max_y_speed)
         self.r = randint(min_radius, max_radius)
         self.color = color
-        self.health = health
+        self.show_healthbar = show_healthbar
 
     def draw(self):
         """
