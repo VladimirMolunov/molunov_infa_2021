@@ -51,7 +51,7 @@ minecraft_score_links = []
 
 main_menu_text = ''
 choose_mode_menu_text = ''
-hotkeys_menu_text = 'ESC - выход из игры\nA, D или <-, -> - управление танком'
+hotkeys_menu_text = 'Управляйте игрой левой кнопкой мыши\n\nESC - выход из игры\nA, D или <-, -> - управление танком'
 settings_menu_text = 'Yet to be done...'
 cannon_menu_text = ''
 war_menu_text = 'Still in progress'
@@ -85,7 +85,7 @@ minecraft_score_grid = ButtonGrid(button_text_color, 400, 400, minecraft_score_t
 
 main_menu = Menu(main_grid, main_links, main_menu_text, button_text_color, menu_bg)
 choose_mode_menu = Menu(choose_mode_grid, choose_mode_links, choose_mode_menu_text, button_text_color, menu_bg, 0)
-hotkeys_menu = Menu(hotkeys_grid, hotkeys_links, hotkeys_menu_text, button_text_color, menu_bg, 0, x=400, y=230)
+hotkeys_menu = Menu(hotkeys_grid, hotkeys_links, hotkeys_menu_text, button_text_color, menu_bg, 0, x=400, y=180)
 settings_menu = Menu(settings_grid, settings_links, settings_menu_text, button_text_color, menu_bg, 0, x=400, y=230)
 cannon_menu = Menu(cannon_grid, cannon_links, cannon_menu_text, button_text_color, menu_bg, 1, x=400, y=230)
 war_menu = Menu(war_grid, war_links, war_menu_text, button_text_color, menu_bg, 1, x=400, y=230)

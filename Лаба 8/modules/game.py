@@ -68,9 +68,11 @@ class Game(Showable):
                 if event.type == pygame.QUIT:
                     self.finished = True
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    cannon.charge()
+                    if event.button == 1:
+                        cannon.charge()
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    bullet_list.append(cannon.fire_ball(self.ball_colors))
+                    if event.button == 1:
+                        bullet_list.append(cannon.fire_ball(self.ball_colors))
                 elif event.type == pygame.MOUSEMOTION:
                     cannon.targetting(event)
                 elif event.type == pygame.KEYDOWN:
@@ -122,7 +124,8 @@ class Game(Showable):
                 if event.type == pygame.QUIT:
                     self.finished = True
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    bullet_list.append(tank.fire_shell())
+                    if event.button == 1:
+                        bullet_list.append(tank.fire_shell())
                 elif event.type == pygame.MOUSEMOTION:
                     tank.targetting(event)
                 elif event.type == pygame.KEYDOWN:

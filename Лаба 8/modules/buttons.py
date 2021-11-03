@@ -45,12 +45,14 @@ class Button:
         checked = False
         if self.is_pointed:
             if event.type == pygame.MOUSEBUTTONUP:
-                if self.is_pressed:
-                    checked = True
+                if event.button == 1:
+                    if self.is_pressed:
+                        checked = True
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if (-1 * self.width / 2 < event.pos[0] - self.x < self.width / 2) and\
-                        (-1 * self.height / 2 < event.pos[1] - self.y < self.height / 2):
-                    self.is_pressed = True
+                if event.button == 1:
+                    if (-1 * self.width / 2 < event.pos[0] - self.x < self.width / 2)\
+                            and (-1 * self.height / 2 < event.pos[1] - self.y < self.height / 2):
+                        self.is_pressed = True
         else:
             self.is_pressed = False
         return checked
@@ -61,8 +63,8 @@ class Button:
         :param event: событие движения кнопки мыши
         """
         if event.type == pygame.MOUSEMOTION:
-            if (-1 * self.width / 2 < event.pos[0] - self.x < self.width / 2) and\
-                    (-1 * self.height / 2 < event.pos[1] - self.y < self.height / 2):
+            if (-1 * self.width / 2 < event.pos[0] - self.x < self.width / 2)\
+                    and (-1 * self.height / 2 < event.pos[1] - self.y < self.height / 2):
                 self.is_pointed = True
             else:
                 self.is_pointed = False
