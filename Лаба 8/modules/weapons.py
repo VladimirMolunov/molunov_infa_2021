@@ -18,6 +18,7 @@ tank_default_power = 2400
 tank_width = 244
 tank_height = 88
 tank_vx = 50
+tank_border = 300
 tank_image = pygame.image.load(Path('images', 'tank.png').resolve())
 tank_head_image = pygame.image.load(Path('images', 'tank_head.png').resolve())
 
@@ -177,13 +178,15 @@ class SimpleCannon(Weapon):
 
 
 class Tank(Weapon):
-    """
-    Конструктор класса танков
-    :param width: ширина танка
-    :param height: высота танка
-    :param default_power: скорость снаряда, только что вылетевшего из танка
-    """
-    def __init__(self, width=tank_width, height=tank_height, power=tank_default_power, vx=tank_vx):
+    def __init__(self, width=tank_width, height=tank_height, power=tank_default_power, vx=tank_vx, border=tank_border):
+        """
+        Конструктор класса танков
+        :param width: ширина танка
+        :param height: высота танка
+        :param default_power: скорость снаряда, только что вылетевшего из танка
+        :param vx: горизонтальная скорость танка
+        :param border: координата границы области, по которой может двигаться танк, по горизонтали
+        """
         Weapon.__init__(self, power, 80, 460)
         self.width = width
         self.height = height
@@ -192,6 +195,7 @@ class Tank(Weapon):
         self.visible_speed = 0
         self.orientated_right = True
         self.head_angle = self.angle
+        self.border = border
 
     def get_speed(self):
         """
@@ -210,6 +214,8 @@ class Tank(Weapon):
         """
         self.get_speed()
         self.x += self.visible_speed / self.fps
+        if self.x > self.border:
+            self.x = self.border
         self.get_head_coords()
 
     def draw(self):
