@@ -56,7 +56,7 @@ settings_menu_text = 'Yet to be done...'
 cannon_menu_text = ''
 war_menu_text = 'Still in progress'
 hunt_menu_text = 'Yet to be done...'
-minecraft_menu_text = 'Yet to be done...'
+minecraft_menu_text = 'Still in progress'
 cannon_game_menu_text = ''
 cannon_score_menu_text = ''
 war_game_menu_text = ''
@@ -64,7 +64,7 @@ war_score_menu_text = ''
 hunt_game_menu_text = ''
 hunt_score_menu_text = 'Yet to be done...'
 minecraft_game_menu_text = ''
-minecraft_score_menu_text = 'Yet to be done...'
+minecraft_score_menu_text = 'Still in progress'
 
 main_grid = ButtonGrid(button_text_color, 400, 200, main_texts)
 choose_mode_grid = ButtonGrid(button_text_color, 400, 100, choose_mode_texts, back=True)

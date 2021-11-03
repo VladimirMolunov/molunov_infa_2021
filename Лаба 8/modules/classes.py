@@ -1,7 +1,7 @@
 import pygame
 from pathlib import Path
 
-from modules.groups import bullet_group, target_group, healthbar_group, transparent
+from modules.groups import bullet_group, target_group, animated_group, healthbar_group, transparent
 
 FPS = 60
 width = 800
@@ -190,6 +190,35 @@ class GameObject(Showable):
         """
         self.sprite.kill()
         self.healthbar_sprite.kill()
+
+
+class Animated(GameObject):
+    def __init__(self, image_array, period, x=0, y=0, health=-1, show_healthbar=False, healthbar_size=20,
+                 healthbar_gap=0):
+        """
+        Конструктор класса анимированных объектов игры
+
+        :param image_array: список кадров анимации
+        :param period: период анимации в секундах
+        :param x: начальная координата центра объекта по горизонтали
+        :param y: начальная координата центра объекта по вертикали
+        :param health: здоровье объекта (-1 - нет здоровья, объект неуязвим)
+        :param show_healthbar: определяет, нужно ли отображать шкалу здоровья объекта
+        :param healthbar_size: высота шкалы здоровья
+        :param healthbar_gap: зазор между шкалой здоровья и верхним краем объекта
+        """
+        GameObject.__init__(self, x, y, health, show_healthbar, healthbar_size, healthbar_gap)
+        self.image_array = image_array
+        self.period = period
+        self.init_time = pygame.time.get_ticks()
+        animated_group.add(self.sprite)
+
+    def get_frame_number(self):
+        """
+        Определяет номер кадра, который должен показываться в данный момент
+        """
+        frame = int((((pygame.time.get_ticks() - self.init_time) / (1000 * self.period)) % 1) * len(self.image_array))
+        return frame
 
 
 class Bullet(GameObject):

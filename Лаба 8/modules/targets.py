@@ -1,7 +1,8 @@
 import pygame
 from random import randint
+from pathlib import Path
 
-from modules.classes import Target
+from modules.classes import Target, Animated
 from modules.groups import transparent
 
 min_radius = 20
@@ -10,15 +11,20 @@ min_x = 500
 max_x = 750
 min_y = 300
 max_y = 550
-health = 1
+ball_health = 1
 ball_max_x_speed = 300
 ball_max_y_speed = 300
 border = 450
 
+dragon_period = 2
+dragon_health = 100
+dragon_width = 250
+dragon_height = 250
+
 
 class BallTarget(Target):
     def __init__(self, color, min_radius=min_radius, max_radius=max_radius, min_x=min_x, max_x=max_x, min_y=min_y,
-                 max_y=max_y, health=health, border=border, show_healthbar=False):
+                 max_y=max_y, health=ball_health, border=border, show_healthbar=False):
         """
         Конструктор класса мишеней
         :param color: цвет мишени
@@ -41,7 +47,7 @@ class BallTarget(Target):
 
     def draw(self):
         """
-        Рисует мишень
+        Рисует мишень, возвращает поверхность с ней
         """
         surface = pygame.Surface((2 * self.r, 2 * self.r), pygame.SRCALPHA)
         surface.fill(transparent)
@@ -62,3 +68,40 @@ class BallTarget(Target):
         else:
             self.vy = - self.vy
             self.y += self.vy / self.fps
+
+
+class Dragon(Animated):
+    def __init__(self, width=dragon_width, height=dragon_height, period=dragon_period, health=dragon_health):
+        """
+        Конструктор класса драконов
+
+        :param width: ширина дракона
+        :param height: высота дракона
+        :param period: период анимации в секундах
+        :param health: здоровье дракона
+        """
+        Animated.__init__(self, self.get_array(), period, 600, 300, health, True)
+        self.width = width
+        self.height = height
+
+    @staticmethod
+    def get_array():
+        dragon_array = []
+        for i in range(1, 58, 1):
+            txt = 'frame (' + str(i) + ').gif'
+            dragon_array.append(pygame.image.load(Path('dragon', txt)))
+        return dragon_array
+
+    def draw(self):
+        """
+        Рисует дракона, возвращает поверхность с ним
+        """
+        surface = self.image_array[self.get_frame_number()]
+        surface = pygame.transform.scale(surface, (self.width, self.height)).convert_alpha()
+        return surface
+
+    def move_object(self):
+        """
+        Перемещает дракона по прошествии единицы времени
+        """
+        pass

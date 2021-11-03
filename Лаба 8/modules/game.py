@@ -181,6 +181,24 @@ class Game(Showable):
         """
         self.score = 0
         menu = menu_list[14]
+        dragon = targets.Dragon()
+
+        while not self.finished and not self.game_finished:
+            menu.bg.blit()
+            dragon.move()
+            for group in group_list:
+                group.draw(self.screen)
+            pygame.display.update()
+            self.clock.tick(self.fps)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.finished = True
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.game_finished = True
+
+        for group in group_list:
+            group.empty()
         num = 15
         return num
 
