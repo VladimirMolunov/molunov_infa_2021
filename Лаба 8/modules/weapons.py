@@ -3,9 +3,9 @@ import pygame
 from pathlib import Path
 from random import choice
 
-from modules.bullets import ball_lifetime, ball_r, Ball
+from modules.bullets import ball_lifetime, ball_r, Ball, TankShell, shell_lifetime, shell_h
 from modules.groups import transparent, weapon_group
-from modules.classes import Drawable
+from modules.classes import GameObject
 
 charge_per_second = 750
 max_power = 2000
@@ -22,14 +22,14 @@ tank_image = pygame.image.load(Path('images', 'tank.png').resolve())
 tank_head_image = pygame.image.load(Path('images', 'tank_head.png').resolve())
 
 
-class Weapon(Drawable):
+class Weapon(GameObject):
     def __init__(self, default_power, x=0, y=0):
         """
         Конструктор класса стреляющих орудий
         :param x: начальная координата центра орудия по горизонтали
         :param y: начальная координата центра орудия по вертикали
         """
-        Drawable.__init__(self, x, y)
+        GameObject.__init__(self, x, y)
         self.is_active = False
         self.power = default_power
         self.default_power = default_power
@@ -65,7 +65,7 @@ class Weapon(Drawable):
         :param r: радиус мяча
         :param x: начальная координата мяча по горизонтали
         :param y: начальная координата мяча по вертикали
-        :param angle: угол наклона начальной скорости шарика к горизонтальной оси, направленной вправо
+        :param angle: угол наклона начальной скорости мяча к горизонтальной оси, направленной вправо
         (против часовой стрелки)
         :return: новый объект мяча
         """
@@ -73,6 +73,34 @@ class Weapon(Drawable):
         ball.vx = self.power * cos(angle)
         ball.vy = self.power * sin(angle)
         return ball
+
+    def fire_shell(self, lifetime=shell_lifetime, h=shell_h):
+        """
+        Производит выстрел танковым снарядом
+        :param lifetime: время жизни снаряда в секундах
+        :param h: толщина снаряда
+        :return: новый объект снаряда
+        """
+        shell = self.new_tank_shell(lifetime, h, self.head_x, self.head_y, self.angle)
+        self.is_active = False
+        self.power = self.default_power
+        return shell
+
+    def new_tank_shell(self, lifetime, h, x, y, angle):
+        """
+        Создаёт новый танковый снаряд
+        :param lifetime: время жизни снаряда в секундах
+        :param h: толщина снаряда
+        :param x: начальная координата снаряда по горизонтали
+        :param y: начальная координата снаряда по вертикали
+        :param angle: угол наклона начальной скорости снаряда к горизонтальной оси, направленной вправо
+        (против часовой стрелки)
+        :return: новый объект снаряда
+        """
+        shell = TankShell(lifetime, h, x, y)
+        shell.vx = self.power * cos(angle)
+        shell.vy = self.power * sin(angle)
+        return shell
 
 
 class SimpleCannon(Weapon):

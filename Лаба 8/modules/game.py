@@ -6,7 +6,7 @@ from modules import bullets, weapons, targets
 from modules.buttons import Menu
 from modules.menus import menu_list
 from modules.groups import group_list
-from modules.classes import Showable, DrawablesList, Background
+from modules.classes import Showable, GameObjectsList, Background
 
 target_count = 2
 score_for_catch = 1
@@ -52,8 +52,8 @@ class Game(Showable):
         """
         self.score = 0
         menu = menu_list[8]
-        bullet_list = DrawablesList()
-        target_list = DrawablesList()
+        bullet_list = GameObjectsList()
+        target_list = GameObjectsList()
         cannon = weapons.SimpleCannon(self.cannon_color, self.cannon_charged_color, self.cannon_fully_charged_color)
         for i in range(target_count):
             target_list.append(targets.BallTarget(self.ball_target_color))
@@ -86,7 +86,7 @@ class Game(Showable):
                     if ball.is_hit(target) and target.health > 0:
                         target.hit()
                         if target.health == 0:
-                            target.sprite.kill()
+                            target.kill()
                             target_list.pop(target_list.index(target))
                             target_list.append(targets.BallTarget(self.ball_target_color))
                             self.score += score_for_catch
@@ -106,8 +106,8 @@ class Game(Showable):
         """
         self.score = 0
         menu = menu_list[10]
-        bullet_list = DrawablesList()
-        target_list = DrawablesList()
+        bullet_list = GameObjectsList()
+        target_list = GameObjectsList()
         tank = weapons.Tank()
         for i in range(target_count):
             target_list.append(targets.BallTarget(self.ball_target_color))
@@ -122,7 +122,7 @@ class Game(Showable):
                 if event.type == pygame.QUIT:
                     self.finished = True
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    bullet_list.append(tank.fire_ball(self.ball_colors))
+                    bullet_list.append(tank.fire_shell())
                 elif event.type == pygame.MOUSEMOTION:
                     tank.targetting(event)
                 elif event.type == pygame.KEYDOWN:
@@ -147,7 +147,7 @@ class Game(Showable):
                     if ball.is_hit(target) and target.health > 0:
                         target.hit()
                         if target.health == 0:
-                            target.sprite.kill()
+                            target.kill()
                             target_list.pop(target_list.index(target))
                             target_list.append(targets.BallTarget(self.ball_target_color))
                             self.score += score_for_catch

@@ -1,26 +1,28 @@
 import pygame
+from pathlib import Path
 
-from modules.groups import bullet_group, target_group
+from modules.groups import bullet_group, target_group, healthbar_group, transparent
 
 FPS = 60
 width = 800
 height = 600
 g = 200
+healthbar_image = pygame.image.load(Path('images', 'healthbar.png').resolve())
 
 
-class DrawablesList(list):
+class GameObjectsList(list):
     def __init__(self):
         """
-        Конструктор класса списков объектов типа Drawable
+        Конструктор класса списков объектов типа GameObject
         """
         list.__init__(self)
 
     def smart_pop(self, index=-1):
         """
-        Убирает объект класса Drawable из соответствующего списка и удаляет его спраайт из всех групп
+        Убирает объект класса GameObject из соответствующего списка и удаляет его спраайты из всех групп
         :param index: номер элемента, который необходимо убрать, в списке
         """
-        self[index].sprite.kill()
+        self[index].kill()
         self.pop(index)
 
 
@@ -84,17 +86,29 @@ class Background(Showable):
         self.screen.blit(self.image, self.pos)
 
 
-class Drawable(Showable):
-    def __init__(self, x=0, y=0):
+class GameObject(Showable):
+    def __init__(self, x=0, y=0, health=-1, show_healthbar=False, healthbar_size=20, healthbar_gap=0):
         """
         Конструктор класса объектов игры, изображаемых на экране
         :param x: начальная координата центра объекта по горизонтали
         :param y: начальная координата центра объекта по вертикали
+        :param health: здоровье объекта (-1 - нет здоровья, объект неуязвим)
+        :param show_healthbar: определяет, нужно ли отображать шкалу здоровья объекта
+        :param healthbar_size: высота шкалы здоровья
+        :param healthbar_gap: зазор между шкалой здоровья и верхним краем объекта
         """
         Showable.__init__(self)
         self.x = x
         self.y = y
+        self.health = health
+        self.show_healthbar = show_healthbar
+        self.healthbar_x = x
+        self.healthbar_gap = healthbar_gap
+        self.healthbar_y = y
+        self.healthbar_size = healthbar_size
         self.sprite = Sprite()
+        self.healthbar_sprite = Sprite()
+        healthbar_group.add(self.healthbar_sprite)
 
     def draw(self):
         """
@@ -103,12 +117,37 @@ class Drawable(Showable):
         """
         return pygame.Surface((0, 0))
 
+    def draw_healthbar(self):
+        """
+        Рисует шкалу здоровья на поверхности и возвращает эту поверхность
+        :return: объект типа pygame.Surface
+        """
+        surface = healthbar_image.convert_alpha(self.screen)
+        surface.set_colorkey(transparent)
+        w = int(self.healthbar_size / surface.get_height() * surface.get_width())
+        surface = pygame.transform.smoothscale(surface, (w, self.healthbar_size))
+        return surface
+
     def config_sprite(self):
         """
-        Создаёт спрайт с данным объектом и получает его маску
+        Создаёт спрайт с данным объектом
         """
         self.sprite.image = self.draw()
         self.sprite.rect = self.sprite.image.get_rect(center=(self.x, self.y))
+
+    def config_healthbar_coords(self):
+        """
+        Получает координаты шкалы здоровья объекта
+        """
+        self.healthbar_x = self.x
+        self.healthbar_y = self.y - self.draw().get_height() / 2 - self.healthbar_gap - self.healthbar_size / 2
+
+    def config_healthbar_sprite(self):
+        """
+        Создаёт спрайт со шкалой здоровья объекта
+        """
+        self.healthbar_sprite.image = self.draw_healthbar()
+        self.healthbar_sprite.rect = self.healthbar_sprite.image.get_rect(center=(self.healthbar_x, self.healthbar_y))
 
     def move_object(self):
         """
@@ -118,13 +157,34 @@ class Drawable(Showable):
 
     def move(self):
         """
-        Двигает объект и обновляет его спрайт
+        Двигает объект и обновляет его спрайты
         """
         self.move_object()
         self.config_sprite()
+        if self.show_healthbar and self.health >= 0:
+            self.config_healthbar_coords()
+            self.config_healthbar_sprite()
+
+    def hit(self, damage=1):
+        """
+        Наносит объекту урон
+        :param damage: количество нанесённого урона
+        """
+        if self.health > 0:
+            if self.health - damage <= 0:
+                self.health = 0
+            else:
+                self.health -= damage
+
+    def kill(self):
+        """
+        Уничтожает объект и удаляет его спрайты
+        """
+        self.sprite.kill()
+        self.healthbar_sprite.kill()
 
 
-class Bullet(Drawable):
+class Bullet(GameObject):
     def __init__(self, lifetime, alpha, beta, x=0, y=0, g=g):
         """
         Конструктор класса снарядов
@@ -135,10 +195,14 @@ class Bullet(Drawable):
         :param x: начальная координата центра снаряда по горизонтали
         :param y: начальная координата центра снаряда по вертикали
         """
-        Drawable.__init__(self, x, y)
+        GameObject.__init__(self, x, y)
         self.g = g
         self.alpha = alpha
         self.beta = beta
+        self.vx = 0
+        self.vy = 0
+        self.ax = 0
+        self.ay = self.g
         self.live = lifetime * self.fps
         bullet_group.add(self.sprite)
 
@@ -157,7 +221,7 @@ class Bullet(Drawable):
         return True if pygame.sprite.collide_mask(self.sprite, target.sprite) else False
 
 
-class Target(Drawable):
+class Target(GameObject):
     def __init__(self, health, border, x=0, y=0):
         """
         Конструктор класса мишеней
@@ -166,16 +230,6 @@ class Target(Drawable):
         :param x: начальная координата центра мишени по горизонтали
         :param y: начальная координата центра мишени по вертикали
         """
-        Drawable.__init__(self, x, y)
-        self.health = health
+        GameObject.__init__(self, x, y, health)
         target_group.add(self.sprite)
         self.border = border
-
-    def hit(self, damage=1):
-        """
-        Наносит цели урон
-        :param damage: количество нанесённого урона
-        """
-        self.health -= damage
-        if self.health < 0:
-            self.health = 0

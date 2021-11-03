@@ -1,7 +1,7 @@
 import pygame
 from pathlib import Path
 
-from modules.classes import Drawable, Showable, Background
+from modules.classes import Showable, Background
 
 pygame.init()
 make_transparent = (255, 255, 255)
