@@ -51,7 +51,7 @@ minecraft_score_links = []
 
 main_menu_text = ''
 choose_mode_menu_text = ''
-hotkeys_menu_text = 'ESC - выход из игры'
+hotkeys_menu_text = 'ESC - выход из игры\nA, D или <-, -> - управление танком'
 settings_menu_text = 'Yet to be done...'
 cannon_menu_text = ''
 war_menu_text = 'Still in progress'

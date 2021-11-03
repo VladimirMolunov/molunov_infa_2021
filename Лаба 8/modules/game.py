@@ -118,7 +118,6 @@ class Game(Showable):
                 group.draw(self.screen)
             pygame.display.update()
             self.clock.tick(self.fps)
-            print(tank.angle)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.finished = True
@@ -129,6 +128,15 @@ class Game(Showable):
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.game_finished = True
+                    if event.key in (pygame.K_LEFT, pygame.K_a):
+                        tank.add_left_speed()
+                    if event.key in (pygame.K_RIGHT, pygame.K_d):
+                        tank.add_right_speed()
+                elif event.type == pygame.KEYUP:
+                    if event.key in (pygame.K_LEFT, pygame.K_a):
+                        tank.add_right_speed()
+                    if event.key in (pygame.K_RIGHT, pygame.K_d):
+                        tank.add_left_speed()
 
             tank.move()
             for target in target_list:

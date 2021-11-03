@@ -14,9 +14,10 @@ cannon_y = 450
 cannon_width = 30
 cannon_height = 20
 cannon_default_power = 500
-tank_default_power = 1500
+tank_default_power = 2400
 tank_width = 244
 tank_height = 88
+tank_vx = 50
 tank_image = pygame.image.load(Path('images', 'tank.png').resolve())
 tank_head_image = pygame.image.load(Path('images', 'tank_head.png').resolve())
 
@@ -154,19 +155,33 @@ class Tank(Weapon):
     :param height: высота танка
     :param default_power: скорость снаряда, только что вылетевшего из танка
     """
-    def __init__(self, width=tank_width, height=tank_height, power=tank_default_power):
-        Weapon.__init__(self, power, 0, 300)
+    def __init__(self, width=tank_width, height=tank_height, power=tank_default_power, vx=tank_vx):
+        Weapon.__init__(self, power, 80, 460)
         self.width = width
         self.height = height
-        self.vx = 50
-        self.orientated_right = False
+        self.vx = vx
+        self.speed = 0
+        self.visible_speed = 0
+        self.orientated_right = True
         self.head_angle = self.angle
+
+    def get_speed(self):
+        """
+        Устанавливает скорость движения танка
+        """
+        if -self.vx <= self.speed <= self.vx:
+            self.visible_speed = self.speed
+        elif self.speed > self.vx:
+            self.visible_speed = self.vx
+        elif self.speed < -self.vx:
+            self.visible_speed = -self.vx
 
     def move_object(self):
         """
         Перемещает танк по прошествии единицы времени
         """
-        self.x += self.vx / self.fps
+        self.get_speed()
+        self.x += self.visible_speed / self.fps
         self.get_head_coords()
 
     def draw(self):
@@ -216,7 +231,7 @@ class Tank(Weapon):
                     self.head_angle = -pi / 24
                 if self.head_angle > pi / 12:
                     self.head_angle = pi / 12
-                self.angle = self.head_angle
+                self.angle = - self.head_angle
             else:
                 self.head_angle = - atan2((event.pos[1] - self.y), (self.x - event.pos[0])) / 6
                 if self.head_angle < -pi / 24:
@@ -236,3 +251,15 @@ class Tank(Weapon):
             self.head_x = self.x + z
         self.head_y = self.y - self.height * (27/110 + 3/110 *
                                               cos(self.head_angle)) - 386/610 * self.width * sin(self.head_angle)
+
+    def add_left_speed(self):
+        """
+        Добавляет скорость танка влево
+        """
+        self.speed -= self.vx
+
+    def add_right_speed(self):
+        """
+        Добавляет скорость танка вправо
+        """
+        self.speed += self.vx

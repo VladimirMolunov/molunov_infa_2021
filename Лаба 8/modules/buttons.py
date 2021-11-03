@@ -219,7 +219,7 @@ class ButtonGrid(Showable):
 
 class Menu(Showable):
     def __init__(self, grid: ButtonGrid, link_array: list, text, color, bg_filename, back=0, x=-1, y=-1, gap=30,
-                 size=40, font='arial'):
+                 line_gap=20, size=40, font='arial'):
         """
         Конструктор класса меню
         :param grid: столбец кнопок
@@ -231,6 +231,7 @@ class Menu(Showable):
         :param x: координата центра текста по горизонтали
         :param y: координата центра текста по вертикали (если обе координаты не заданы, помещается под столбцом кнопок)
         :param gap: отступ от нижнего края столбца кнопок до текста
+        :param line_gap: отступ между строками текста
         :param size: размер текста меню
         :param font: шрифт текста меню
         """
@@ -243,11 +244,12 @@ class Menu(Showable):
         self.y = 0
         self.color = color
         self.bg = Background(Path('images', bg_filename).resolve())
-        self.gap = gap
         self.link_array = link_array
         self.back = back
         self.font = font
         self.size = size
+        self.gap = gap
+        self.line_gap = line_gap - self.size * 17/40
         self.text_surface = self.get_text()
         self.get_coords()
         self.game = None
@@ -270,8 +272,26 @@ class Menu(Showable):
         Создаёт и возвращает поверхность с текстом
         """
         font = pygame.font.SysFont(self.font, self.size)
-        text_surface = font.render(self.text, True, self.color)
-        return text_surface
+        text_list = []
+        h = -self.line_gap
+        w = 0
+        txt = self.text.rsplit('\n')
+        for line in txt:
+            text_surface = font.render(line, True, self.color)
+            text_list.append(text_surface)
+            width = text_surface.get_width()
+            height = text_surface.get_height()
+            if width > w:
+                w = width
+            h += self.line_gap + height
+        surface = pygame.Surface((w, h), pygame.SRCALPHA)
+        h = 0
+        for surf in text_list:
+            width = surf.get_width()
+            height = surf.get_height()
+            surface.blit(surf, ((w - width) / 2, h))
+            h += height + self.line_gap
+        return surface
 
     def put_text(self):
         """
