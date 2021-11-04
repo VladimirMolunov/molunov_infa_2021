@@ -130,11 +130,11 @@ class Game(Showable):
             tank.move()
             for target in target_list:
                 target.move()
-            for ball in bullet_list:
-                ball.move()
+            for shell in bullet_list:
+                shell.move()
                 for target in target_list:
-                    if ball.is_hit(target) and target.health > 0:
-                        ball.live = 0
+                    if shell.is_hit(target) and target.health > 0:
+                        shell.live = 0
                         target.hit()
                         if target.health == 0:
                             target.kill()
@@ -143,8 +143,8 @@ class Game(Showable):
                                                                   show_healthbar=True))
                             self.score += score_for_catch
                         break
-                ball.remove_life()
-                if ball.live <= 0:
+                shell.remove_life()
+                if shell.live <= 0:
                     bullet_list.smart_pop(0)
         for group in group_list:
             group.empty()
@@ -221,12 +221,11 @@ class Game(Showable):
                     bullet_list.smart_pop(0)
         for group in group_list:
             group.empty()
-        num = 15
         if time == -1:
-            txt = 'You lost!'
+            num = 16
         else:
-            txt = 'Your time is ' + str(time) + ' s!'
-        menu_list[num].set_text(txt)
+            num = 15
+            menu_list[num].set_text('Your time is ' + str(time) + ' s!')
         return num
 
     def main(self):

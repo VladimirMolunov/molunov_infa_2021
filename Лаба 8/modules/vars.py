@@ -11,6 +11,7 @@ cannon_finish_screen_color = (6, 40, 17)
 war_finish_screen_color = (6, 40, 17)
 hunt_finish_screen_color = (6, 40, 17)
 minecraft_finish_screen_color = (6, 40, 17)
+minecraft_lost_color = (6, 40, 17)
 
 # game
 target_count = 2

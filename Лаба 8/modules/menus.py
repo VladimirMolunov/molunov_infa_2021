@@ -10,6 +10,7 @@ hunt_bg = 'hunt_bg.jpg'
 hunt_finish_bg = 'hunt_finish_bg.jpg'
 minecraft_bg = 'minecraft_bg.jpg'
 minecraft_finish_bg = 'minecraft_finish_bg.jpg'
+minecraft_lost_bg = 'minecraft_lost_bg.jpg'
 
 main_texts = ['Выбор режима', 'Горячие клавиши', 'Настройки']
 choose_mode_texts = ['Пушка', 'Война', 'Охота', 'Minecraft']
@@ -27,6 +28,7 @@ hunt_game_texts = []
 hunt_score_texts = []
 minecraft_game_texts = []
 minecraft_score_texts = []
+minecraft_lose_texts = []
 
 main_links = [1, 2, 3]
 choose_mode_links = [4, 5, 6, 7]
@@ -44,6 +46,7 @@ hunt_game_links = []
 hunt_score_links = []
 minecraft_game_links = []
 minecraft_score_links = []
+minecraft_lose_links = []
 
 main_menu_text = ''
 choose_mode_menu_text = ''
@@ -61,6 +64,7 @@ hunt_game_menu_text = ''
 hunt_score_menu_text = 'Yet to be done...'
 minecraft_game_menu_text = ''
 minecraft_score_menu_text = 'Still in progress'
+minecraft_lose_menu_text = 'You lost!'
 
 main_grid = ButtonGrid(button_text_color, 400, 200, main_texts)
 choose_mode_grid = ButtonGrid(button_text_color, 400, 100, choose_mode_texts, back=True)
@@ -78,6 +82,7 @@ hunt_game_grid = ButtonGrid(button_text_color, 250, -40, hunt_game_texts)
 hunt_score_grid = ButtonGrid(button_text_color, 400, 400, hunt_score_texts, main=True)
 minecraft_game_grid = ButtonGrid(button_text_color, 250, -40, minecraft_game_texts)
 minecraft_score_grid = ButtonGrid(button_text_color, 400, 400, minecraft_score_texts, main=True)
+minecraft_lose_grid = ButtonGrid(button_text_color, 400, 400, minecraft_lose_texts, main=True)
 
 main_menu = Menu(main_grid, main_links, main_menu_text, button_text_color, menu_bg)
 choose_mode_menu = Menu(choose_mode_grid, choose_mode_links, choose_mode_menu_text, button_text_color, menu_bg, 0)
@@ -103,7 +108,9 @@ minecraft_game_menu = GameMenu(minecraft_game_grid, minecraft_game_links, minecr
                                minecraft_bg, 4, game='Minecraft')
 minecraft_score_menu = Menu(minecraft_score_grid, minecraft_score_links, minecraft_score_menu_text,
                             minecraft_finish_screen_color, minecraft_finish_bg, x=400, y=200, size=80, font=None)
+minecraft_lose_menu = Menu(minecraft_lose_grid, minecraft_lose_links, minecraft_lose_menu_text,
+                           minecraft_lost_color, minecraft_lost_bg, x=400, y=200, size=80, font=None)
 
 menu_list = [main_menu, choose_mode_menu, hotkeys_menu, settings_menu, cannon_menu, war_menu, hunt_menu, minecraft_menu,
              cannon_game_menu, cannon_score_menu, war_game_menu, war_score_menu, hunt_game_menu, hunt_score_menu,
-             minecraft_game_menu, minecraft_score_menu]
+             minecraft_game_menu, minecraft_score_menu, minecraft_lose_menu]
