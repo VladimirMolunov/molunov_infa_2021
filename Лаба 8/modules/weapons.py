@@ -4,23 +4,9 @@ from pathlib import Path
 from random import choice
 
 from modules.bullets import ball_lifetime, ball_r, Ball, TankShell, shell_lifetime, shell_h
-from modules.groups import transparent, weapon_group
+from modules.groups import weapon_group
 from modules.classes import GameObject
-
-charge_per_second = 750
-max_power = 2000
-cannon_x = 20
-cannon_y = 450
-cannon_width = 30
-cannon_height = 20
-cannon_default_power = 500
-tank_default_power = 2400
-tank_width = 244
-tank_height = 88
-tank_vx = 50
-tank_border = 300
-tank_image = pygame.image.load(Path('images', 'tank.png').resolve())
-tank_head_image = pygame.image.load(Path('images', 'tank_head.png').resolve())
+from modules.vars import *
 
 
 class Weapon(GameObject):

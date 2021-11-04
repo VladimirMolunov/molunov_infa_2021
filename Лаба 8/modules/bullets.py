@@ -3,17 +3,7 @@ from pathlib import Path
 from math import atan2, pi
 
 from modules.classes import Bullet
-from modules.groups import transparent
-
-ball_lifetime = 10
-ball_r = 10
-ball_alpha = 0.1
-ball_beta = 0.0005
-shell_lifetime = 10
-shell_h = 10
-tank_shell = pygame.image.load(Path('images', 'tank_shell.png').resolve())
-shell_alpha = 0.01
-shell_beta = 0.0003
+from modules.vars import *
 
 
 class Ball(Bullet):

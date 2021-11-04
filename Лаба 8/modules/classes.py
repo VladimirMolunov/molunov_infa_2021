@@ -1,14 +1,8 @@
 import pygame
 from pathlib import Path
 
-from modules.groups import bullet_group, target_group, animated_group, healthbar_group, transparent
-
-FPS = 60
-width = 800
-height = 600
-g = 200
-healthbar_image = pygame.image.load(Path('images', 'healthbar.png').resolve())
-healthbar_inside = pygame.image.load(Path('images', 'healthbar_inside.png').resolve())
+from modules.groups import bullet_group, target_group, animated_group, healthbar_group
+from modules.vars import *
 
 
 class GameObjectsList(list):

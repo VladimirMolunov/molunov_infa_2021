@@ -2,13 +2,9 @@ import pygame
 from pathlib import Path
 
 from modules.classes import Showable, Background
+from modules.vars import *
 
 pygame.init()
-make_transparent = (255, 255, 255)
-screen = pygame.display.set_mode((800, 600))
-def_image = pygame.image.load(Path('images', 'def_button.png').resolve()).convert_alpha()
-image_pressed = pygame.image.load(Path('images', 'pressed_button.png').resolve()).convert_alpha()
-image_pointed = pygame.image.load(Path('images', 'pointed_button.png').resolve()).convert_alpha()
 
 
 class Button:

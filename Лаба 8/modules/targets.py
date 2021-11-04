@@ -3,24 +3,7 @@ from random import randint
 from pathlib import Path
 
 from modules.classes import Target, Animated
-from modules.groups import transparent
-
-min_radius = 20
-max_radius = 50
-min_x = 500
-max_x = 750
-min_y = 300
-max_y = 550
-ball_health = 1
-ball_max_x_speed = 300
-ball_max_y_speed = 300
-border = 450
-
-dragon_period = 2
-dragon_health = 100
-dragon_width = 250
-dragon_height = 250
-dragon_hittime = 1
+from modules.vars import *
 
 
 class BallTarget(Target):

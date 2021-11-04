@@ -7,21 +7,7 @@ from modules.buttons import Menu
 from modules.menus import menu_list
 from modules.groups import group_list
 from modules.classes import Showable, GameObjectsList, Background
-
-target_count = 2
-score_for_catch = 1
-
-red = (255, 0, 0)
-yellow = (255, 255, 0)
-blue = (0, 0, 255)
-green = (0, 255, 0)
-magenta = (255, 3, 184)
-cyan = (0, 255, 204)
-ball_target_red = (228, 0, 0)
-cannon_grey = (102, 102, 102)
-cannon_red = (255, 0, 0)
-cannon_green = (0, 255, 0)
-ball_colors = (red, blue, yellow, green, magenta, cyan)
+from modules.vars import *
 
 
 class Game(Showable):
@@ -277,3 +263,4 @@ class Game(Showable):
             self.game_finished = False
         pygame.quit()
         return self.score
+
