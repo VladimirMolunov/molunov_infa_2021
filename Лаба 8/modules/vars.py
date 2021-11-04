@@ -5,6 +5,13 @@ from pygame.display import set_mode
 # groups
 transparent = (255, 255, 255, 0)
 
+# menus
+button_text_color = (25, 12, 199)
+cannon_finish_screen_color = (6, 40, 17)
+war_finish_screen_color = (6, 40, 17)
+hunt_finish_screen_color = (6, 40, 17)
+minecraft_finish_screen_color = (6, 40, 17)
+
 # game
 target_count = 2
 score_for_catch = 1
@@ -64,6 +71,32 @@ dragon_health = 100
 dragon_width = 250
 dragon_height = 250
 dragon_hittime = 1
+
+
+def get_dragon_array():
+    """
+    Получает список кадров для анимации дракона
+    """
+    array = []
+    for i in range(1, 58, 1):
+        txt = 'frame (' + str(i) + ').gif'
+        array.append(load(Path('dragon', txt)))
+    return array
+
+
+def get_red_dragon_array():
+    """
+    Получает список кадров для анимации дракона, получившего урон
+    """
+    red_array = []
+    for i in range(1, 58, 1):
+        txt = 'red (' + str(i) + ').png'
+        red_array.append(load(Path('dragon_red', txt)))
+    return red_array
+
+
+dragon_array = get_dragon_array()
+red_dragon_array = get_red_dragon_array()
 
 # weapons
 charge_per_second = 750

@@ -64,32 +64,10 @@ class Dragon(Animated):
         :param period: период анимации в секундах
         :param health: здоровье дракона
         """
-        Animated.__init__(self, self.get_array(), period, self.get_red_array(), 600, 300, health, True,
+        Animated.__init__(self, dragon_array, period, red_dragon_array, 600, 300, health, show_healthbar=True,
                           hit_is_shown=True, hit_time=dragon_hittime)
         self.width = width
         self.height = height
-
-    @staticmethod
-    def get_array():
-        """
-        Получает список кадров для анимации дракона
-        """
-        dragon_array = []
-        for i in range(1, 58, 1):
-            txt = 'frame (' + str(i) + ').gif'
-            dragon_array.append(pygame.image.load(Path('dragon', txt)))
-        return dragon_array
-
-    @staticmethod
-    def get_red_array():
-        """
-        Получает список кадров для анимации дракона, получившего урон
-        """
-        red_dragon_array = []
-        for i in range(1, 58, 1):
-            txt = 'red (' + str(i) + ').png'
-            red_dragon_array.append(pygame.image.load(Path('dragon_red', txt)))
-        return red_dragon_array
 
     def draw(self):
         """

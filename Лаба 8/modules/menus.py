@@ -1,10 +1,6 @@
 from modules.buttons import ButtonGrid, Menu, GameMenu
+from modules.vars import *
 
-button_text_color = (25, 12, 199)
-cannon_finish_screen_color = (6, 40, 17)
-war_finish_screen_color = (6, 40, 17)
-hunt_finish_screen_color = (6, 40, 17)
-minecraft_finish_screen_color = (6, 40, 17)
 menu_bg = 'menu_bg.jpg'
 cannon_bg = 'cannon_bg.jpg'
 cannon_finish_bg = 'cannon_finish_bg.jpg'
