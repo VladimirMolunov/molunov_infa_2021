@@ -3,26 +3,20 @@ from math import atan2
 import pygame
 
 pygame.init()
-screen = pygame.display.set_mode((600, 600))
 drg = []
 for i in range(1, 58, 1):
     txt = 'frame (' + str(i) + ').gif'
-    drg.append(pygame.image.load(Path('dragon', txt)))
+    drg.append(pygame.image.load(Path('dragon', txt)).convert_alpha())
 
 
-finished = False
-clock = pygame.time.Clock()
-t = 0
-while not finished:
-    clock.tick(60)
-    t += 0.25
-    t = t % 57
-    print(int(t))
-    screen.fill((255, 0, 0))
-    screen.blit(drg[int(t)], (200, 200))
-    pygame.display.update()
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            finished = True
-
-pygame.quit()
+def sh(surface: pygame.Surface):
+    mask = pygame.mask.from_surface(surface)
+    w = surface.get_width()
+    h = surface.get_height()
+    s1 = pygame.Surface((w, h), pygame.SRCALPHA)
+    for i in range(w):
+        for j in range(h):
+            if mask.get_at((i, j)) == 1:
+                s1.set_at((i, j), (255, 0, 0, 128))
+    surface.blit(s1, (0, 0))
+    return surface

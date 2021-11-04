@@ -20,6 +20,7 @@ dragon_period = 2
 dragon_health = 100
 dragon_width = 250
 dragon_height = 250
+dragon_hittime = 1
 
 
 class BallTarget(Target):
@@ -80,23 +81,41 @@ class Dragon(Animated):
         :param period: период анимации в секундах
         :param health: здоровье дракона
         """
-        Animated.__init__(self, self.get_array(), period, 600, 300, health, True)
+        Animated.__init__(self, self.get_array(), period, self.get_red_array(), 600, 300, health, True,
+                          hit_is_shown=True, hit_time=dragon_hittime)
         self.width = width
         self.height = height
 
     @staticmethod
     def get_array():
+        """
+        Получает список кадров для анимации дракона
+        """
         dragon_array = []
         for i in range(1, 58, 1):
             txt = 'frame (' + str(i) + ').gif'
             dragon_array.append(pygame.image.load(Path('dragon', txt)))
         return dragon_array
 
+    @staticmethod
+    def get_red_array():
+        """
+        Получает список кадров для анимации дракона, получившего урон
+        """
+        red_dragon_array = []
+        for i in range(1, 58, 1):
+            txt = 'red (' + str(i) + ').png'
+            red_dragon_array.append(pygame.image.load(Path('dragon_red', txt)))
+        return red_dragon_array
+
     def draw(self):
         """
         Рисует дракона, возвращает поверхность с ним
         """
-        surface = self.image_array[self.get_frame_number()]
+        if self.hit_is_shown and self.hit_timeleft > 0:
+            surface = self.red_image_array[self.get_frame_number()]
+        else:
+            surface = self.image_array[self.get_frame_number()]
         surface = pygame.transform.scale(surface, (self.width, self.height)).convert_alpha()
         return surface
 

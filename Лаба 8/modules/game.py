@@ -181,11 +181,15 @@ class Game(Showable):
         """
         self.score = 0
         menu = menu_list[14]
-        dragon = targets.Dragon()
+        bullet_list = GameObjectsList()
+        target_list = GameObjectsList()
+        tank = weapons.Tank()
+        for i in range(1):
+            target_list.append(targets.Dragon())
+        time = pygame.time.get_ticks()
 
         while not self.finished and not self.game_finished:
             menu.bg.blit()
-            dragon.move()
             for group in group_list:
                 group.draw(self.screen)
             pygame.display.update()
@@ -193,13 +197,50 @@ class Game(Showable):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.finished = True
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if event.button == 1:
+                        bullet_list.append(tank.fire_shell())
+                elif event.type == pygame.MOUSEMOTION:
+                    tank.targetting(event)
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.game_finished = True
+                        time = -1
+                    if event.key in (pygame.K_LEFT, pygame.K_a):
+                        tank.add_left_speed()
+                    if event.key in (pygame.K_RIGHT, pygame.K_d):
+                        tank.add_right_speed()
+                elif event.type == pygame.KEYUP:
+                    if event.key in (pygame.K_LEFT, pygame.K_a):
+                        tank.add_right_speed()
+                    if event.key in (pygame.K_RIGHT, pygame.K_d):
+                        tank.add_left_speed()
 
+            tank.move()
+            for dragon in target_list:
+                dragon.move()
+            for shell in bullet_list:
+                shell.move()
+                for dragon in target_list:
+                    if shell.is_hit(dragon) and dragon.health > 0:
+                        shell.live = 0
+                        dragon.hit()
+                        if dragon.health == 0:
+                            dragon.kill()
+                            time = round((pygame.time.get_ticks() - time) / 100) / 10
+                            self.game_finished = True
+                        break
+                shell.remove_life()
+                if shell.live <= 0:
+                    bullet_list.smart_pop(0)
         for group in group_list:
             group.empty()
         num = 15
+        if time == -1:
+            txt = 'You lost!'
+        else:
+            txt = 'Your time is ' + str(time) + ' s!'
+        menu_list[num].set_text(txt)
         return num
 
     def main(self):

@@ -88,7 +88,8 @@ class Background(Showable):
 
 
 class GameObject(Showable):
-    def __init__(self, x=0, y=0, health=-1, show_healthbar=False, healthbar_size=20, healthbar_gap=0):
+    def __init__(self, x=0, y=0, health=-1, show_healthbar=False, healthbar_size=20, healthbar_gap=0,
+                 hit_is_shown=False, hit_time=1):
         """
         Конструктор класса объектов игры, изображаемых на экране
         :param x: начальная координата центра объекта по горизонтали
@@ -97,6 +98,8 @@ class GameObject(Showable):
         :param show_healthbar: определяет, нужно ли отображать шкалу здоровья объекта
         :param healthbar_size: высота шкалы здоровья
         :param healthbar_gap: зазор между шкалой здоровья и верхним краем объекта
+        :param hit_is_shown: определяет, становится ли объект красным при попадании снаряда
+        :param hit_time: время действия эффекта покраснения в секундах
         """
         Showable.__init__(self)
         self.x = x
@@ -108,6 +111,9 @@ class GameObject(Showable):
         self.healthbar_gap = healthbar_gap
         self.healthbar_y = y
         self.healthbar_size = healthbar_size
+        self.hit_timeleft = 0
+        self.hit_time = hit_time * self.fps
+        self.hit_is_shown = hit_is_shown
         self.sprite = Sprite()
         self.healthbar_sprite = Sprite()
         healthbar_group.add(self.healthbar_sprite)
@@ -140,8 +146,18 @@ class GameObject(Showable):
         """
         Создаёт спрайт с данным объектом
         """
+        self.check_hit()
         self.sprite.image = self.draw()
         self.sprite.rect = self.sprite.image.get_rect(center=(self.x, self.y))
+
+    def check_hit(self):
+        """
+        Проверяет необходимость сделать объект красным, уменьшает время действия этого эффекта на 1
+        """
+        if self.hit_timeleft > 0:
+            self.hit_timeleft -= 1
+            if self.hit_timeleft < 0:
+                self.hit_timeleft = 0
 
     def config_healthbar_coords(self):
         """
@@ -183,6 +199,8 @@ class GameObject(Showable):
                 self.health = 0
             else:
                 self.health -= damage
+        if self.hit_is_shown:
+            self.hit_timeleft = self.hit_time
 
     def kill(self):
         """
@@ -193,24 +211,28 @@ class GameObject(Showable):
 
 
 class Animated(GameObject):
-    def __init__(self, image_array, period, x=0, y=0, health=-1, show_healthbar=False, healthbar_size=20,
-                 healthbar_gap=0):
+    def __init__(self, image_array, period, red_image_array=None, x=0, y=0, health=-1, show_healthbar=False,
+                 healthbar_size=20, healthbar_gap=0, hit_is_shown=False, hit_time=1):
         """
         Конструктор класса анимированных объектов игры
 
         :param image_array: список кадров анимации
         :param period: период анимации в секундах
+        :param red_image_array: список кадров анимации с эффектом покраснения (применяются при получении объектом урона)
         :param x: начальная координата центра объекта по горизонтали
         :param y: начальная координата центра объекта по вертикали
         :param health: здоровье объекта (-1 - нет здоровья, объект неуязвим)
         :param show_healthbar: определяет, нужно ли отображать шкалу здоровья объекта
         :param healthbar_size: высота шкалы здоровья
         :param healthbar_gap: зазор между шкалой здоровья и верхним краем объекта
+        :param hit_is_shown: определяет, становится ли объект красным при попадании снаряда
+        :param hit_time: время действия эффекта покраснения в секундах
         """
-        GameObject.__init__(self, x, y, health, show_healthbar, healthbar_size, healthbar_gap)
+        GameObject.__init__(self, x, y, health, show_healthbar, healthbar_size, healthbar_gap, hit_is_shown, hit_time)
         self.image_array = image_array
         self.period = period
         self.init_time = pygame.time.get_ticks()
+        self.red_image_array = red_image_array
         animated_group.add(self.sprite)
 
     def get_frame_number(self):
