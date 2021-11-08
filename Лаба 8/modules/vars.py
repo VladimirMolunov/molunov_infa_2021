@@ -54,6 +54,12 @@ shell_h = 10
 tank_shell = load(Path('images', 'tank_shell.png').resolve())
 shell_alpha = 0.01
 shell_beta = 0.0003
+bomb_image = load(Path('images', 'bomb.png').resolve())
+bomb_lifetime = 10
+bomb_alpha = 0.1
+bomb_beta = 0.0003
+bomb_width = 60
+bomb_height = 17
 
 # targets
 min_radius = 20
@@ -121,3 +127,9 @@ gun_default_power = 2400
 gun_width = 200
 gun_height = 45
 gun_delta = 0.366
+plane_image = load(Path('images', 'plane.png').resolve())
+plane_width = 100
+plane_height = 35
+plane_health = 4
+plane_vx = 180
+plane_y = 60

@@ -55,7 +55,7 @@ class Ball(Bullet):
 class TankShell(Bullet):
     def __init__(self, lifetime=shell_lifetime, h=shell_h, x=0, y=0, alpha=shell_alpha, beta=shell_beta):
         """
-         Конструктор класса танковых снарядов, которыми стреляет танк
+        Конструктор класса снарядов, которыми стреляет танк
         :param lifetime: время жизни снаряда в секундах
         :param alpha: параметр a в формуле силы трения F = -av - bv^2
         :param beta: параметр b в формуле силы трения F = -av - bv^2
@@ -96,3 +96,45 @@ class TankShell(Bullet):
         surface = pygame.transform.smoothscale(tank_shell, (int(self.w), int(self.h)))
         surface = pygame.transform.rotate(surface, - atan2(self.vy, self.vx) * 180 / pi)
         return surface
+
+
+class Bomb(Bullet):
+    def __init__(self, x=0, y=0, vx=0, vy=0, lifetime=bomb_lifetime, width=bomb_width,
+                 height=bomb_height, alpha=bomb_alpha, beta=bomb_beta):
+        """
+         Конструктор класса бомб, которыми стреляет истребитель
+        :param lifetime: время жизни бомбы в секундах
+        :param alpha: параметр a в формуле силы трения F = -av - bv^2
+        :param beta: параметр b в формуле силы трения F = -av - bv^2
+        :param width: длина бомбы
+        :param height: толщина бомбы
+        :param x: начальная координата центра бомбы по горизонтали
+        :param y: начальная координата центра бомбы по вертикали
+        :param vx: начальная скорость бомбы по горизонтали
+        :param vy: начальная скорость бомбы по вертикали
+        """
+        Bullet.__init__(self, lifetime, alpha, beta, x, y, True)
+        self.width = width
+        self.height = height
+        self.vx = vx
+        self.vy = vy
+        self.angle = - atan2(self.vy, self.vx)
+
+    def draw(self):
+        """
+        Рисует бомбу, возвращает поверхность с ней
+        """
+        surface = pygame.transform.smoothscale(bomb_image, (int(self.w), int(self.h)))
+        surface = pygame.transform.rotate(surface, - self.angle * 180 / pi)
+        return surface
+
+    def move_object(self):
+        """
+        Перемещает бомбу по прошествии единицы времени
+        Переопределяет её скорость в соответствии с силами, действующими на неё
+        """
+        self.ax = - self.alpha * self.vx - self.beta * self.vx * abs(self.vx)
+        self.ay = self.g - self.alpha * self.vy - self.beta * self.vy * abs(self.vy)
+        self.vx += self.ax / self.fps
+        self.vy += self.ay / self.fps
+        self.angle = - atan2(self.vy, self.vx)

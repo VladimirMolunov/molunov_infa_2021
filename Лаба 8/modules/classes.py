@@ -1,7 +1,7 @@
 import pygame
 from pathlib import Path
 
-from modules.groups import bullet_group, target_group, animated_group, healthbar_group
+from modules.groups import bullet_group, target_group, animated_group, healthbar_group, enemy_bullet_group
 from modules.vars import *
 
 
@@ -238,7 +238,7 @@ class Animated(GameObject):
 
 
 class Bullet(GameObject):
-    def __init__(self, lifetime, alpha, beta, x=0, y=0, g=g):
+    def __init__(self, lifetime, alpha, beta, x=0, y=0, is_enemy=False, g=g):
         """
         Конструктор класса снарядов
         :param lifetime: время жизни снаряда в секундах
@@ -247,6 +247,7 @@ class Bullet(GameObject):
         :param g: ускорение свободного падения
         :param x: начальная координата центра снаряда по горизонтали
         :param y: начальная координата центра снаряда по вертикали
+        :param is_enemy: определяет, является ли снаряд вражеским (наносящим урон игроку)
         """
         GameObject.__init__(self, x, y)
         self.g = g
@@ -257,7 +258,10 @@ class Bullet(GameObject):
         self.ax = 0
         self.ay = self.g
         self.live = lifetime * self.fps
-        bullet_group.add(self.sprite)
+        if is_enemy:
+            enemy_bullet_group.add(self.sprite)
+        else:
+            bullet_group.add(self.sprite)
 
     def remove_life(self):
         """

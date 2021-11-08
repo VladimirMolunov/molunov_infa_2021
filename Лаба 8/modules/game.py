@@ -97,6 +97,7 @@ class Game(Showable):
         bullet_list = GameObjectsList()
         target_list = GameObjectsList()
         tank = weapons.Tank()
+        plane = targets.Plane()
         for i in range(target_count):
             target_list.append(targets.BallTarget(self.ball_target_color, health=6, show_healthbar=True))
 
@@ -128,6 +129,7 @@ class Game(Showable):
                         tank.add_left_speed()
 
             tank.move()
+            plane.move()
             for target in target_list:
                 target.move()
             for shell in bullet_list:

@@ -2,7 +2,9 @@ import pygame
 from random import randint
 from pathlib import Path
 
-from modules.classes import Target, Animated
+from modules.classes import Target, Animated, GameObject
+from modules.bullets import Bomb
+from modules.groups import target_group
 from modules.vars import *
 
 
@@ -85,3 +87,47 @@ class Dragon(Animated):
         Перемещает дракона по прошествии единицы времени
         """
         pass
+
+
+class Plane(GameObject):
+    def __init__(self, width=plane_width, height=plane_height, vx=plane_vx,
+                 x=None, y=plane_y, health=plane_health, show_healthbar=True):
+        """
+        Конструктор класса истребителей
+        :param width: ширина истребителя
+        :param height: высота истребителя
+        :param vx: скорость истребителя по горизонтали
+        :param x: координата центра истребителя по горизонтали
+        :param y: координата центра истребителя по верикали
+        :param health: здоровье истребителя
+        :param show_healthbar: определяет, показывается ли шкала здоровья
+        """
+        GameObject.__init__(self, x, y, health, show_healthbar)
+        if x is None:
+            self.x = self.screen_width + plane_width
+        self.width = width
+        self.height = height
+        self.vx = vx
+        target_group.add(self.sprite)
+
+    def move_object(self):
+        """
+        Перемещает истребитель по прошествии единицы времени
+        """
+        self.x -= self.vx / self.fps
+
+    def fire_bomb(self):
+        """
+        Осуществляет сбрасывание бомбы
+        """
+        pass
+
+    def draw(self):
+        """
+        Рисует истребитель, возвращает поверхность с ним
+        """
+        surface = plane_image.convert_alpha()
+        surface.set_colorkey(make_transparent)
+        surface = pygame.transform.smoothscale(surface, (self.width, self.height))
+        return surface
+
