@@ -74,8 +74,7 @@ class Game(Showable):
                     if ball.is_hit(target) and target.health > 0:
                         target.hit()
                         if target.health == 0:
-                            target.kill()
-                            target_list.pop(target_list.index(target))
+                            target_list.smart_pop(target_list.index(target))
                             target_list.append(targets.BallTarget(self.ball_target_color))
                             self.score += score_for_catch
                 ball.remove_life()
@@ -92,15 +91,14 @@ class Game(Showable):
         """
         Проводит игру "Война", возвращает номер меню окончания игры с подсчитанными очками
         """
-        won = True
+        won = False
         self.score = 0
         menu = menu_list[10]
         bullet_list = GameObjectsList()
         enemy_bullet_list = GameObjectsList()
         target_list = GameObjectsList()
+        plane_list = GameObjectsList()
         tank = weapons.Tank()
-        plane = targets.Plane()
-        target_list.append(plane)
         for i in range(target_count):
             target_list.append(targets.BallTarget(self.ball_target_color, health=6, show_healthbar=True))
 
@@ -132,9 +130,15 @@ class Game(Showable):
                         tank.add_left_speed()
 
             tank.move()
-            if 0 < (plane.x - tank.x) < 200:
-                if plane.check_charge():
-                    enemy_bullet_list.append(plane.fire_bomb())
+            if len(plane_list) < plane_count:
+                plane_list.append(targets.Plane())
+            for plane in plane_list:
+                plane.move()
+                if 0 < (plane.x - tank.x) < 200:
+                    if plane.check_charge():
+                        enemy_bullet_list.append(plane.fire_bomb())
+                if plane.x < -plane.width:
+                    plane_list.smart_pop(plane_list.index(plane))
             for target in target_list:
                 target.move()
             for bomb in enemy_bullet_list:
@@ -156,8 +160,17 @@ class Game(Showable):
                         shell.live = 0
                         target.hit()
                         if target.health == 0:
-                            target.kill()
-                            target_list.pop(target_list.index(target))
+                            target_list.smart_pop(target_list.index(target))
+                            target_list.append(targets.BallTarget(self.ball_target_color, health=6,
+                                                                  show_healthbar=True))
+                            self.score += score_for_catch
+                        break
+                for plane in plane_list:
+                    if shell.is_hit(plane) and plane.health > 0:
+                        shell.live = 0
+                        plane.hit()
+                        if plane.health == 0:
+                            target_list.smart_pop(target_list.index(plane))
                             target_list.append(targets.BallTarget(self.ball_target_color, health=6,
                                                                   show_healthbar=True))
                             self.score += score_for_catch
@@ -213,8 +226,7 @@ class Game(Showable):
                     if ball.is_hit(target) and target.health > 0:
                         target.hit()
                         if target.health == 0:
-                            target.kill()
-                            target_list.pop(target_list.index(target))
+                            target_list.smart_pop(target_list.index(target))
                             target_list.append(targets.BallTarget(self.ball_target_color))
                             self.score += score_for_catch
                 ball.remove_life()

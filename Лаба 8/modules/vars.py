@@ -16,6 +16,7 @@ minecraft_lost_color = (6, 40, 17)
 # game
 target_count = 2
 score_for_catch = 1
+plane_count = 2
 
 red = (255, 0, 0)
 yellow = (255, 255, 0)
