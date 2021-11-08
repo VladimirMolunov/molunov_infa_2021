@@ -158,7 +158,50 @@ class Game(Showable):
         """
         self.score = 0
         menu = menu_list[12]
+        bullet_list = GameObjectsList()
+        target_list = GameObjectsList()
+        gun = weapons.Gun()
+        for i in range(target_count):
+            target_list.append(targets.BallTarget(self.ball_target_color))
+
+        while not self.finished and not self.game_finished:
+            menu.bg.blit()
+            for group in group_list:
+                group.draw(self.screen)
+            pygame.display.update()
+            self.clock.tick(self.fps)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.finished = True
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if event.button == 1:
+                        bullet_list.append(gun.fire_ball(self.ball_colors))
+                elif event.type == pygame.MOUSEMOTION:
+                    gun.targetting(event)
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.game_finished = True
+
+            gun.move()
+            for target in target_list:
+                target.move()
+            for ball in bullet_list:
+                ball.move()
+                for target in target_list:
+                    if ball.is_hit(target) and target.health > 0:
+                        target.hit()
+                        if target.health == 0:
+                            target.kill()
+                            target_list.pop(target_list.index(target))
+                            target_list.append(targets.BallTarget(self.ball_target_color))
+                            self.score += score_for_catch
+                ball.remove_life()
+                if ball.live <= 0:
+                    bullet_list.smart_pop(0)
+        for group in group_list:
+            group.empty()
         num = 13
+        menu_list[num].set_text('Your score is ' + str(self.score) + '!')
         return num
 
     def minecraft_game(self):

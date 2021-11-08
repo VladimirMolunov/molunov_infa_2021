@@ -283,3 +283,51 @@ class Tank(Weapon):
         Добавляет скорость танка вправо
         """
         self.speed += self.vx
+
+
+class Gun(Weapon):
+    def __init__(self, x=gun_x, y=gun_y, default_power=gun_default_power, width=gun_width, height=gun_height):
+        """
+        Конструктор класса охотничьих ружей
+        :param x: начальная координата центра ружья по горизонтали
+        :param y: начальная координата центра ружья по вертикали
+        :param width: ширина ружья
+        :param height: высота ружья
+        :param default_power: скорость снаряда, только что вылетевшего из ружья
+        """
+        Weapon.__init__(self, default_power, - height / 2, y)
+        self.width = width
+        self.height = height
+        self.angle = 0
+        self.head_x = 0
+        self.head_y = 0
+
+    def targetting(self, event: pygame.event.Event):
+        """
+        Изменение направления ружья в зависимости от положения курсора (прицеливание)
+        :param event: событие перемещения мыши
+        """
+        if event.type == pygame.MOUSEMOTION:
+            self.angle = atan2((event.pos[1] - self.y), (event.pos[0] - self.x))
+
+    def draw(self):
+        """
+        Рисует ружьё, возвращает поверхность с ним
+        """
+        gun = gun_image.convert_alpha(self.screen)
+        gun.set_colorkey(make_transparent)
+        gun = pygame.transform.smoothscale(gun, (self.width, self.height))
+        surface = pygame.Surface((3 * self.width, 3 * self.height), pygame.SRCALPHA)
+        surface.fill(transparent)
+        surface.blit(gun, (self.width * 1.5, self.height))
+        surface = pygame.transform.rotate(surface, - self.angle * 180 / pi)
+        self.get_head_coords()
+        return surface
+
+    def get_head_coords(self):
+        c = cos(self.angle)
+        s = sin(self.angle)
+        w = self.width * 0.88
+        h = self.height
+        self.head_x = w * c - h * (gun_delta * abs(s) + 0.5)
+        self.head_y = self.y + w * s - h * gun_delta * c
