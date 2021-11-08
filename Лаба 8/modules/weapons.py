@@ -212,8 +212,8 @@ class Tank(Weapon):
         """
         Рисует танк, возвращает поверхность с ним
         """
-        tank = tank_image.convert_alpha(self.screen)
-        tank_head = tank_head_image.convert_alpha(self.screen)
+        tank = tank_image
+        tank_head = tank_head_image
         tank = pygame.transform.smoothscale(tank, (self.width, self.height))
         tank_head = pygame.transform.smoothscale(tank_head, (self.width, self.height))
         tank_head = pygame.transform.rotate(tank_head, - 180 / pi * self.head_angle)
@@ -318,7 +318,7 @@ class Gun(Weapon):
         """
         Рисует ружьё, возвращает поверхность с ним
         """
-        gun = gun_image.convert_alpha(self.screen)
+        gun = gun_image
         gun.set_colorkey(make_transparent)
         gun = pygame.transform.smoothscale(gun, (self.width, self.height))
         surface = pygame.Surface((3 * self.width, 3 * self.height), pygame.SRCALPHA)

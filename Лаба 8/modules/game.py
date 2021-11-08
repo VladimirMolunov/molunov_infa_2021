@@ -131,7 +131,6 @@ class Game(Showable):
                         tank.add_left_speed()
 
             tank.move()
-            plane.move()
             if 0 < (plane.x - tank.x) < 200:
                 if plane.check_charge():
                     enemy_bullet_list.append(plane.fire_bomb())

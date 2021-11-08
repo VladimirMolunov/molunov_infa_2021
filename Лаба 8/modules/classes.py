@@ -124,9 +124,9 @@ class GameObject(Showable):
         Рисует шкалу здоровья на поверхности и возвращает эту поверхность
         :return: объект типа pygame.Surface
         """
-        surface = healthbar_image.convert_alpha(self.screen)
+        surface = healthbar_image
         surface.set_colorkey((255, 255, 255))
-        surface2 = healthbar_inside.convert_alpha(self.screen)
+        surface2 = healthbar_inside
         surface2.set_colorkey((255, 255, 255))
         w = int(self.healthbar_size / surface.get_height() * surface.get_width())
         x = int(self.healthbar_size / surface.get_height() * 10)

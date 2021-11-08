@@ -110,7 +110,14 @@ class Plane(GameObject):
         self.height = height
         self.vx = vx
         self.charge = charge
+        self.image = self.config_image()
         target_group.add(self.sprite)
+
+    def config_image(self):
+        surface = plane_image
+        surface.set_colorkey(make_transparent)
+        surface = pygame.transform.smoothscale(surface, (self.width, self.height))
+        return surface
 
     def move_object(self):
         """
@@ -129,7 +136,7 @@ class Plane(GameObject):
         bomb = self.new_bomb(lifetime, width, height, self.x, self.y)
         self.charge -= 1
         return bomb
-    
+
     @staticmethod
     def new_bomb(lifetime, width, height, x, y, vx=bomb_vx, vy=bomb_vy):
         """
@@ -150,10 +157,7 @@ class Plane(GameObject):
         """
         Рисует истребитель, возвращает поверхность с ним
         """
-        surface = plane_image.convert_alpha()
-        surface.set_colorkey(make_transparent)
-        surface = pygame.transform.smoothscale(surface, (self.width, self.height))
-        return surface
+        return self.image
 
     def check_charge(self):
         return True if self.charge > 0 else False
