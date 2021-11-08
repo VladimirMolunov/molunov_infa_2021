@@ -164,7 +164,8 @@ class SimpleCannon(Weapon):
 
 
 class Tank(Weapon):
-    def __init__(self, width=tank_width, height=tank_height, power=tank_default_power, vx=tank_vx, border=tank_border):
+    def __init__(self, width=tank_width, height=tank_height, power=tank_default_power,
+                 vx=tank_vx, border=tank_border, health=tank_health):
         """
         Конструктор класса танков
         :param width: ширина танка
@@ -172,6 +173,7 @@ class Tank(Weapon):
         :param default_power: скорость снаряда, только что вылетевшего из танка
         :param vx: горизонтальная скорость танка
         :param border: координата границы области, по которой может двигаться танк, по горизонтали
+        :param health: здоровье танка
         """
         Weapon.__init__(self, power, 80, 460)
         self.width = width
@@ -182,6 +184,7 @@ class Tank(Weapon):
         self.orientated_right = True
         self.head_angle = self.angle
         self.border = border
+        self.health = health
 
     def get_speed(self):
         """

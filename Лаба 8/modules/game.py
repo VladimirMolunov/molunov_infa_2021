@@ -95,9 +95,11 @@ class Game(Showable):
         self.score = 0
         menu = menu_list[10]
         bullet_list = GameObjectsList()
+        enemy_bullet_list = GameObjectsList()
         target_list = GameObjectsList()
         tank = weapons.Tank()
         plane = targets.Plane()
+        target_list.append(plane)
         for i in range(target_count):
             target_list.append(targets.BallTarget(self.ball_target_color, health=6, show_healthbar=True))
 
@@ -130,8 +132,19 @@ class Game(Showable):
 
             tank.move()
             plane.move()
+            if 0 < (plane.x - tank.x) < 200:
+                if plane.check_charge():
+                    enemy_bullet_list.append(plane.fire_bomb())
             for target in target_list:
                 target.move()
+            for bomb in enemy_bullet_list:
+                bomb.move()
+                if bomb.is_hit(tank) and tank.health > 0:
+                    bomb.live = 0
+                    tank.hit()
+                    if tank.health == 0:
+                        tank.kill()
+
             for shell in bullet_list:
                 shell.move()
                 for target in target_list:

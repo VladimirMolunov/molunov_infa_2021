@@ -124,8 +124,8 @@ class Bomb(Bullet):
         """
         Рисует бомбу, возвращает поверхность с ней
         """
-        surface = pygame.transform.smoothscale(bomb_image, (int(self.w), int(self.h)))
-        surface = pygame.transform.rotate(surface, - self.angle * 180 / pi)
+        surface = pygame.transform.smoothscale(bomb_image, (self.width, self.height))
+        surface = pygame.transform.rotate(surface, 180 + self.angle * 180 / pi)
         return surface
 
     def move_object(self):
@@ -137,4 +137,6 @@ class Bomb(Bullet):
         self.ay = self.g - self.alpha * self.vy - self.beta * self.vy * abs(self.vy)
         self.vx += self.ax / self.fps
         self.vy += self.ay / self.fps
+        self.x += self.vx / self.fps
+        self.y += self.vy / self.fps
         self.angle = - atan2(self.vy, self.vx)

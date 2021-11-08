@@ -91,7 +91,7 @@ class Dragon(Animated):
 
 class Plane(GameObject):
     def __init__(self, width=plane_width, height=plane_height, vx=plane_vx,
-                 x=None, y=plane_y, health=plane_health, show_healthbar=True):
+                 x=None, y=plane_y, health=plane_health, charge=1, show_healthbar=True):
         """
         Конструктор класса истребителей
         :param width: ширина истребителя
@@ -100,6 +100,7 @@ class Plane(GameObject):
         :param x: координата центра истребителя по горизонтали
         :param y: координата центра истребителя по верикали
         :param health: здоровье истребителя
+        :param charge: количество бомб в запасе у истребителя
         :param show_healthbar: определяет, показывается ли шкала здоровья
         """
         GameObject.__init__(self, x, y, health, show_healthbar)
@@ -108,19 +109,41 @@ class Plane(GameObject):
         self.width = width
         self.height = height
         self.vx = vx
+        self.charge = charge
         target_group.add(self.sprite)
 
     def move_object(self):
         """
         Перемещает истребитель по прошествии единицы времени
         """
-        self.x -= self.vx / self.fps
+        self.x += self.vx / self.fps
 
-    def fire_bomb(self):
+    def fire_bomb(self, lifetime=bomb_lifetime, width=bomb_width, height=bomb_height):
         """
-        Осуществляет сбрасывание бомбы
+        Производит сбрасывание бомбы
+        :param lifetime: время жизни бомбы в секундах
+        :param width: длина бомбы
+        :param height: толщина бомбы
+        :return: новый объект бомбы
         """
-        pass
+        bomb = self.new_bomb(lifetime, width, height, self.x, self.y)
+        self.charge -= 1
+        return bomb
+
+    def new_bomb(self, lifetime, width, height, x, y, vx=bomb_vx, vy=bomb_vy):
+        """
+        Создаёт новую бомбу
+        :param lifetime: время жизни бомбы в секундах
+        :param width: длина бомбы
+        :param height: толщина бомбы
+        :param x: начальная координата бомбы по горизонтали
+        :param y: начальная координата бомбы по вертикали
+        :param vx: начальная скорость бомбы по горизонтали
+        :param vy: начальная скорость бомбы по вертикали
+        :return: новый объект бомбы
+        """
+        bomb = Bomb(x, y, vx, vy, lifetime, width, height)
+        return bomb
 
     def draw(self):
         """
@@ -131,3 +154,5 @@ class Plane(GameObject):
         surface = pygame.transform.smoothscale(surface, (self.width, self.height))
         return surface
 
+    def check_charge(self):
+        return True if self.charge > 0 else False
