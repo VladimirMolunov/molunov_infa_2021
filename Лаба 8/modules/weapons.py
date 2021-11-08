@@ -10,13 +10,15 @@ from modules.vars import *
 
 
 class Weapon(GameObject):
-    def __init__(self, default_power, x=0, y=0):
+    def __init__(self, default_power, x=0, y=0, health=-1, show_healthbar=False):
         """
         Конструктор класса стреляющих орудий
         :param x: начальная координата центра орудия по горизонтали
         :param y: начальная координата центра орудия по вертикали
+        :param health: здоровье орудия (-1 - нет здоровья, орудие неуязвимо)
+        :param show_healthbar: определяет, нужно ли отображать шкалу здоровья орудия
         """
-        GameObject.__init__(self, x, y)
+        GameObject.__init__(self, x, y, health, show_healthbar)
         self.is_active = False
         self.power = default_power
         self.default_power = default_power
@@ -175,7 +177,7 @@ class Tank(Weapon):
         :param border: координата границы области, по которой может двигаться танк, по горизонтали
         :param health: здоровье танка
         """
-        Weapon.__init__(self, power, 80, 460)
+        Weapon.__init__(self, power, 80, 460, health, True)
         self.width = width
         self.height = height
         self.vx = vx
@@ -184,7 +186,6 @@ class Tank(Weapon):
         self.orientated_right = True
         self.head_angle = self.angle
         self.border = border
-        self.health = health
 
     def get_speed(self):
         """
@@ -289,7 +290,7 @@ class Tank(Weapon):
 
 
 class Gun(Weapon):
-    def __init__(self, x=gun_x, y=gun_y, default_power=gun_default_power, width=gun_width, height=gun_height):
+    def __init__(self, y=gun_y, default_power=gun_default_power, width=gun_width, height=gun_height):
         """
         Конструктор класса охотничьих ружей
         :param x: начальная координата центра ружья по горизонтали

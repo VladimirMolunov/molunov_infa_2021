@@ -129,8 +129,9 @@ class Plane(GameObject):
         bomb = self.new_bomb(lifetime, width, height, self.x, self.y)
         self.charge -= 1
         return bomb
-
-    def new_bomb(self, lifetime, width, height, x, y, vx=bomb_vx, vy=bomb_vy):
+    
+    @staticmethod
+    def new_bomb(lifetime, width, height, x, y, vx=bomb_vx, vy=bomb_vy):
         """
         Создаёт новую бомбу
         :param lifetime: время жизни бомбы в секундах

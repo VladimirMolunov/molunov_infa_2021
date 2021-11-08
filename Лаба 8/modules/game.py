@@ -80,7 +80,7 @@ class Game(Showable):
                             self.score += score_for_catch
                 ball.remove_life()
                 if ball.live <= 0:
-                    bullet_list.smart_pop(0)
+                    bullet_list.smart_pop(bullet_list.index(ball))
             cannon.power_up()
         for group in group_list:
             group.empty()
@@ -144,6 +144,9 @@ class Game(Showable):
                     tank.hit()
                     if tank.health == 0:
                         tank.kill()
+                bomb.remove_life()
+                if bomb.live <= 0:
+                    enemy_bullet_list.smart_pop(enemy_bullet_list.index(bomb))
 
             for shell in bullet_list:
                 shell.move()
@@ -160,7 +163,7 @@ class Game(Showable):
                         break
                 shell.remove_life()
                 if shell.live <= 0:
-                    bullet_list.smart_pop(0)
+                    bullet_list.smart_pop(bullet_list.index(shell))
         for group in group_list:
             group.empty()
         num = 11
@@ -212,7 +215,7 @@ class Game(Showable):
                             self.score += score_for_catch
                 ball.remove_life()
                 if ball.live <= 0:
-                    bullet_list.smart_pop(0)
+                    bullet_list.smart_pop(bullet_list.index(ball))
         for group in group_list:
             group.empty()
         num = 13
@@ -276,7 +279,7 @@ class Game(Showable):
                         break
                 shell.remove_life()
                 if shell.live <= 0:
-                    bullet_list.smart_pop(0)
+                    bullet_list.smart_pop(bullet_list.index(shell))
         for group in group_list:
             group.empty()
         if time == -1:
