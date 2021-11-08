@@ -335,8 +335,18 @@ class Menu(Showable):
     def set_text(self, new_text: str):
         """
         Задаёт новый текст для меню
+        :param new_text: новый текст
         """
         self.text = new_text
+        self.text_surface = self.get_text()
+        self.get_coords()
+
+    def add_text(self, added_text: str):
+        """
+        Добавляет текст в меню с новой строки
+        :param added_text: добавленный текст
+        """
+        self.text += ('\n' + added_text)
         self.text_surface = self.get_text()
         self.get_coords()
 

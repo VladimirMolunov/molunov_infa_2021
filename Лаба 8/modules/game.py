@@ -92,6 +92,7 @@ class Game(Showable):
         """
         Проводит игру "Война", возвращает номер меню окончания игры с подсчитанными очками
         """
+        won = True
         self.score = 0
         menu = menu_list[10]
         bullet_list = GameObjectsList()
@@ -143,6 +144,7 @@ class Game(Showable):
                     tank.hit()
                     if tank.health == 0:
                         tank.kill()
+                        self.game_finished = True
                 bomb.remove_life()
                 if bomb.live <= 0:
                     enemy_bullet_list.smart_pop(enemy_bullet_list.index(bomb))
@@ -165,8 +167,11 @@ class Game(Showable):
                     bullet_list.smart_pop(bullet_list.index(shell))
         for group in group_list:
             group.empty()
-        num = 11
-        menu_list[num].set_text('Your score is ' + str(self.score) + '!')
+        if won:
+            num = 11
+            menu_list[num].add_text('Your score is ' + str(self.score) + '.')
+        else:
+            num = 12
         return num
 
     def hunt_game(self):
@@ -174,7 +179,7 @@ class Game(Showable):
         Проводит игру "Охота", возвращает номер меню окончания игры с подсчитанными очками
         """
         self.score = 0
-        menu = menu_list[12]
+        menu = menu_list[13]
         bullet_list = GameObjectsList()
         target_list = GameObjectsList()
         gun = weapons.Gun()
@@ -217,7 +222,7 @@ class Game(Showable):
                     bullet_list.smart_pop(bullet_list.index(ball))
         for group in group_list:
             group.empty()
-        num = 13
+        num = 14
         menu_list[num].set_text('Your score is ' + str(self.score) + '!')
         return num
 
@@ -226,7 +231,7 @@ class Game(Showable):
         Проводит игру "Minecraft", возвращает номер меню окончания игры с подсчитанными очками
         """
         self.score = 0
-        menu = menu_list[14]
+        menu = menu_list[15]
         bullet_list = GameObjectsList()
         target_list = GameObjectsList()
         tank = weapons.Tank()
@@ -282,9 +287,9 @@ class Game(Showable):
         for group in group_list:
             group.empty()
         if time == -1:
-            num = 16
+            num = 17
         else:
-            num = 15
+            num = 16
             menu_list[num].set_text('Your time is ' + str(time) + ' s!')
         return num
 

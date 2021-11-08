@@ -24,6 +24,7 @@ cannon_game_texts = []
 cannon_score_texts = []
 war_game_texts = []
 war_score_texts = []
+war_lose_texts = []
 hunt_game_texts = []
 hunt_score_texts = []
 minecraft_game_texts = []
@@ -42,6 +43,7 @@ cannon_game_links = []
 cannon_score_links = []
 war_game_links = []
 war_score_links = []
+war_lose_links = []
 hunt_game_links = []
 hunt_score_links = []
 minecraft_game_links = []
@@ -59,9 +61,10 @@ minecraft_menu_text = 'Still in progress'
 cannon_game_menu_text = ''
 cannon_score_menu_text = ''
 war_game_menu_text = ''
-war_score_menu_text = ''
+war_score_menu_text = 'You won!'
+war_lose_menu_text = 'You lost!'
 hunt_game_menu_text = ''
-hunt_score_menu_text = 'You won!'
+hunt_score_menu_text = ''
 minecraft_game_menu_text = ''
 minecraft_score_menu_text = 'Still in progress'
 minecraft_lose_menu_text = 'You lost!'
@@ -78,6 +81,7 @@ cannon_game_grid = ButtonGrid(button_text_color, 250, -40, cannon_game_texts)
 cannon_score_grid = ButtonGrid(button_text_color, 400, 400, cannon_score_texts, main=True)
 war_game_grid = ButtonGrid(button_text_color, 250, -40, war_game_texts)
 war_score_grid = ButtonGrid(button_text_color, 400, 400, war_score_texts, main=True)
+war_lose_grid = ButtonGrid(button_text_color, 400, 400, war_lose_texts, main=True)
 hunt_game_grid = ButtonGrid(button_text_color, 250, -40, hunt_game_texts)
 hunt_score_grid = ButtonGrid(button_text_color, 400, 400, hunt_score_texts, main=True)
 minecraft_game_grid = ButtonGrid(button_text_color, 250, -40, minecraft_game_texts)
@@ -99,7 +103,9 @@ cannon_score_menu = Menu(cannon_score_grid, cannon_score_links, cannon_score_men
                          cannon_finish_bg, x=400, y=200, size=80, font=None)
 war_game_menu = GameMenu(war_game_grid, war_game_links, war_game_menu_text, button_text_color, war_bg, 4, game='War')
 war_score_menu = Menu(war_score_grid, war_score_links, war_score_menu_text, war_finish_screen_color,
-                      war_finish_bg, x=400, y=200, size=80, font=None)
+                      war_finish_bg, x=400, y=200, line_gap=40, size=80, font=None)
+war_lose_menu = Menu(war_lose_grid, war_lose_links, war_lose_menu_text, war_finish_screen_color,
+                     war_finish_bg, x=400, y=200, size=80, font=None)
 hunt_game_menu = GameMenu(hunt_game_grid, hunt_game_links, hunt_game_menu_text, button_text_color, hunt_bg, 4,
                           game='Hunt')
 hunt_score_menu = Menu(hunt_score_grid, hunt_score_links, hunt_score_menu_text, hunt_finish_screen_color,
@@ -112,5 +118,5 @@ minecraft_lose_menu = Menu(minecraft_lose_grid, minecraft_lose_links, minecraft_
                            minecraft_lost_color, minecraft_lost_bg, x=400, y=200, size=80, font=None)
 
 menu_list = [main_menu, choose_mode_menu, hotkeys_menu, settings_menu, cannon_menu, war_menu, hunt_menu, minecraft_menu,
-             cannon_game_menu, cannon_score_menu, war_game_menu, war_score_menu, hunt_game_menu, hunt_score_menu,
-             minecraft_game_menu, minecraft_score_menu, minecraft_lose_menu]
+             cannon_game_menu, cannon_score_menu, war_game_menu, war_score_menu, war_lose_menu, hunt_game_menu,
+             hunt_score_menu, minecraft_game_menu, minecraft_score_menu, minecraft_lose_menu]
