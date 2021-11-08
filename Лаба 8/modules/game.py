@@ -1,6 +1,7 @@
 import math
 import pygame
 from pathlib import Path
+from random import randint
 
 from modules import bullets, weapons, targets
 from modules.buttons import Menu
@@ -93,12 +94,14 @@ class Game(Showable):
         """
         won = False
         self.score = 0
+        plane_timeout = 0
         menu = menu_list[10]
         bullet_list = GameObjectsList()
         enemy_bullet_list = GameObjectsList()
         target_list = GameObjectsList()
         plane_list = GameObjectsList()
         tank = weapons.Tank()
+        fort = targets.Fortification()
         for i in range(target_count):
             target_list.append(targets.BallTarget(self.ball_target_color, health=6, show_healthbar=True))
 
@@ -130,14 +133,18 @@ class Game(Showable):
                         tank.add_left_speed()
 
             tank.move()
-            if len(plane_list) < plane_count:
-                plane_list.append(targets.Plane())
+            fort.move()
+            if len(plane_list) < plane_count and plane_timeout == 0:
+                n = randint(1, plane_chance_per_second * self.fps)
+                if n == 1:
+                    plane_list.append(targets.Plane())
+                    plane_timeout = plane_minimum_timeout * self.fps
             for plane in plane_list:
                 plane.move()
                 if 0 < (plane.x - tank.x) < 200:
                     if plane.check_charge():
                         enemy_bullet_list.append(plane.fire_bomb())
-                if plane.x < -plane.width:
+                if plane.x < - 8 * plane.healthbar_size:
                     plane_list.smart_pop(plane_list.index(plane))
             for target in target_list:
                 target.move()
@@ -170,19 +177,26 @@ class Game(Showable):
                         shell.live = 0
                         plane.hit()
                         if plane.health == 0:
-                            target_list.smart_pop(target_list.index(plane))
-                            target_list.append(targets.BallTarget(self.ball_target_color, health=6,
-                                                                  show_healthbar=True))
-                            self.score += score_for_catch
+                            plane_list.smart_pop(plane_list.index(plane))
                         break
+                if shell.is_hit(fort) and fort.health > 0:
+                    shell.live = 0
+                    print(fort.health)
+                    fort.hit()
+                    if fort.health == 0:
+                        self.game_finished = True
+                        won = True
                 shell.remove_life()
                 if shell.live <= 0:
                     bullet_list.smart_pop(bullet_list.index(shell))
+            if plane_timeout >= 1:
+                plane_timeout -= 1
+            elif plane_timeout < 1:
+                plane_timeout = 0
         for group in group_list:
             group.empty()
         if won:
             num = 11
-            menu_list[num].add_text('Your score is ' + str(self.score) + '.')
         else:
             num = 12
         return num

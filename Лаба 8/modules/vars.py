@@ -17,6 +17,8 @@ minecraft_lost_color = (6, 40, 17)
 target_count = 2
 score_for_catch = 1
 plane_count = 2
+plane_minimum_timeout = 2
+plane_chance_per_second = 5
 
 red = (255, 0, 0)
 yellow = (255, 255, 0)
@@ -79,9 +81,16 @@ border = 450
 plane_image = load(Path('images', 'plane.png').resolve()).convert_alpha()
 plane_width = 100
 plane_height = 35
-plane_health = 4
-plane_vx = -180
+plane_health = 2
+plane_vx = -150
 plane_y = 60
+
+fort_image = load(Path('images', 'fort.png').resolve()).convert_alpha()
+fort_health = 200
+fort_x = 700
+fort_y = 350
+fort_width = 200
+fort_height = 70
 
 dragon_period = 2
 dragon_health = 100
@@ -124,6 +133,8 @@ cannon_width = 30
 cannon_height = 20
 cannon_default_power = 500
 tank_default_power = 2400
+tank_x = 152
+tank_y = 460
 tank_width = 244
 tank_height = 88
 tank_vx = 50

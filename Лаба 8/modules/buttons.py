@@ -236,6 +236,7 @@ class Menu(Showable):
         Showable.__init__(self)
         self.grid = grid
         self.text = text
+        self.default_text = text
         self.x_inp = x
         self.y_inp = y
         self.x = 0
@@ -346,7 +347,7 @@ class Menu(Showable):
         Добавляет текст в меню с новой строки
         :param added_text: добавленный текст
         """
-        self.text += ('\n' + added_text)
+        self.text = self.default_text + ('\n' + added_text)
         self.text_surface = self.get_text()
         self.get_coords()
 

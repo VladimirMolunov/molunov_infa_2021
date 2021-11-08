@@ -166,18 +166,20 @@ class SimpleCannon(Weapon):
 
 
 class Tank(Weapon):
-    def __init__(self, width=tank_width, height=tank_height, power=tank_default_power,
+    def __init__(self, width=tank_width, height=tank_height, power=tank_default_power, x=tank_x, y=tank_y,
                  vx=tank_vx, border=tank_border, health=tank_health):
         """
         Конструктор класса танков
         :param width: ширина танка
         :param height: высота танка
-        :param default_power: скорость снаряда, только что вылетевшего из танка
+        :param power: скорость снаряда, только что вылетевшего из танка
+        :param x: начальная координата центра танка по горизонтали
+        :param y: начальная координата центра танка по вертикали
         :param vx: горизонтальная скорость танка
         :param border: координата границы области, по которой может двигаться танк, по горизонтали
         :param health: здоровье танка
         """
-        Weapon.__init__(self, power, 80, 460, health, True)
+        Weapon.__init__(self, power, x, y, health, True)
         self.width = width
         self.height = height
         self.vx = vx

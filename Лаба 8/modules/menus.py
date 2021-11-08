@@ -29,7 +29,7 @@ hunt_game_texts = []
 hunt_score_texts = []
 minecraft_game_texts = []
 minecraft_score_texts = []
-minecraft_lose_texts = []
+minecraft_lose_texts = ['Играть снова']
 
 main_links = [1, 2, 3]
 choose_mode_links = [4, 5, 6, 7]
@@ -48,26 +48,27 @@ hunt_game_links = []
 hunt_score_links = []
 minecraft_game_links = []
 minecraft_score_links = []
-minecraft_lose_links = []
+minecraft_lose_links = [15]
 
 main_menu_text = ''
 choose_mode_menu_text = ''
 hotkeys_menu_text = 'Управляйте игрой левой кнопкой мыши\n\nESC - выход из игры\nA, D или <-, -> - управление танком'
 settings_menu_text = 'Yet to be done...'
 cannon_menu_text = ''
-war_menu_text = 'Still in progress'
+war_menu_text = 'Уничтожьте вражеское укрепление, пока не поздно!\n\nПеремещайте танк клавишами <- и -> или A и D.\n' \
+                'Не забывайте заранее сбивать истребители - \nпосле 5 попаданий их бомб вы погибнете!'
 hunt_menu_text = 'Still in progress'
 minecraft_menu_text = 'Still in progress'
 cannon_game_menu_text = ''
 cannon_score_menu_text = ''
 war_game_menu_text = ''
-war_score_menu_text = 'You won!'
-war_lose_menu_text = 'You lost!'
+war_score_menu_text = 'Вы победили!'
+war_lose_menu_text = 'Вы проиграли!'
 hunt_game_menu_text = ''
 hunt_score_menu_text = ''
 minecraft_game_menu_text = ''
 minecraft_score_menu_text = 'Still in progress'
-minecraft_lose_menu_text = 'You lost!'
+minecraft_lose_menu_text = 'Дракон оказался сильнее...\nПопробуете ещё раз?'
 
 main_grid = ButtonGrid(button_text_color, 400, 200, main_texts)
 choose_mode_grid = ButtonGrid(button_text_color, 400, 100, choose_mode_texts, back=True)
@@ -86,14 +87,14 @@ hunt_game_grid = ButtonGrid(button_text_color, 250, -40, hunt_game_texts)
 hunt_score_grid = ButtonGrid(button_text_color, 400, 400, hunt_score_texts, main=True)
 minecraft_game_grid = ButtonGrid(button_text_color, 250, -40, minecraft_game_texts)
 minecraft_score_grid = ButtonGrid(button_text_color, 400, 400, minecraft_score_texts, main=True)
-minecraft_lose_grid = ButtonGrid(button_text_color, 400, 400, minecraft_lose_texts, main=True)
+minecraft_lose_grid = ButtonGrid(button_text_color, 400, 330, minecraft_lose_texts, main=True)
 
 main_menu = Menu(main_grid, main_links, main_menu_text, button_text_color, menu_bg)
 choose_mode_menu = Menu(choose_mode_grid, choose_mode_links, choose_mode_menu_text, button_text_color, menu_bg, 0)
 hotkeys_menu = Menu(hotkeys_grid, hotkeys_links, hotkeys_menu_text, button_text_color, menu_bg, 0, x=400, y=180)
 settings_menu = Menu(settings_grid, settings_links, settings_menu_text, button_text_color, menu_bg, 0, x=400, y=230)
 cannon_menu = Menu(cannon_grid, cannon_links, cannon_menu_text, button_text_color, menu_bg, 1, x=400, y=230)
-war_menu = Menu(war_grid, war_links, war_menu_text, button_text_color, menu_bg, 1, x=400, y=230)
+war_menu = Menu(war_grid, war_links, war_menu_text, button_text_color, menu_bg, 1, x=400, y=150)
 hunt_menu = Menu(hunt_grid, hunt_links, hunt_menu_text, button_text_color, menu_bg, 1, x=400, y=230)
 minecraft_menu = Menu(minecraft_grid, minecraft_links, minecraft_menu_text, button_text_color, menu_bg, 1, x=400, y=230)
 
@@ -115,7 +116,7 @@ minecraft_game_menu = GameMenu(minecraft_game_grid, minecraft_game_links, minecr
 minecraft_score_menu = Menu(minecraft_score_grid, minecraft_score_links, minecraft_score_menu_text,
                             minecraft_finish_screen_color, minecraft_finish_bg, x=400, y=200, size=80, font=None)
 minecraft_lose_menu = Menu(minecraft_lose_grid, minecraft_lose_links, minecraft_lose_menu_text,
-                           minecraft_lost_color, minecraft_lost_bg, x=400, y=200, size=80, font=None)
+                           minecraft_lost_color, minecraft_lost_bg, x=400, y=200)
 
 menu_list = [main_menu, choose_mode_menu, hotkeys_menu, settings_menu, cannon_menu, war_menu, hunt_menu, minecraft_menu,
              cannon_game_menu, cannon_score_menu, war_game_menu, war_score_menu, war_lose_menu, hunt_game_menu,

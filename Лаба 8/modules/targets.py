@@ -12,7 +12,7 @@ class BallTarget(Target):
     def __init__(self, color, min_radius=min_radius, max_radius=max_radius, min_x=min_x, max_x=max_x, min_y=min_y,
                  max_y=max_y, health=ball_health, border=border, show_healthbar=False):
         """
-        Конструктор класса мишеней
+        Конструктор класса мишеней в виде шаров
         :param color: цвет мишени
         :param min_radius: минимальный радиус мишени
         :param max_radius: максимальный радиус мишени
@@ -21,15 +21,16 @@ class BallTarget(Target):
         :param min_y: минимальная координата мишени по вертикали
         :param max_y: максимальная координата мишени по вертикали
         :param health: количество очков здоровья мишени
+        :param border: границапо горизонтали, от которой отражается мишень
+        :param show_healthbar: определяет, отображается ли шкала здоровья мишени
         """
-        Target.__init__(self, health, border)
+        Target.__init__(self, health, border, show_healthbar=show_healthbar)
         self.x = randint(min_x, max_x)
         self.y = randint(min_y, max_y)
         self.vx = randint(-1 * ball_max_x_speed, ball_max_x_speed)
         self.vy = randint(-1 * ball_max_y_speed, ball_max_y_speed)
         self.r = randint(min_radius, max_radius)
         self.color = color
-        self.show_healthbar = show_healthbar
 
     def draw(self):
         """
@@ -105,7 +106,7 @@ class Plane(GameObject):
         """
         GameObject.__init__(self, x, y, health, show_healthbar)
         if x is None:
-            self.x = self.screen_width + plane_width
+            self.x = self.screen_width + 8 * self.healthbar_size
         self.width = width
         self.height = height
         self.vx = vx
@@ -161,3 +162,26 @@ class Plane(GameObject):
 
     def check_charge(self):
         return True if self.charge > 0 else False
+
+
+class Fortification(Target):
+    def __init__(self, health=fort_health, x=fort_x, y=fort_y, width=fort_width, height=fort_height):
+        """
+        Конструктор класса вражеских укреплений, по которым стреляет танк
+        :param health: здоровье укрепления
+        :param x: координата центра укрепления по горизонтали
+        :param y: координата центра укрепления по вертикали
+        :param width: ширина укрепления
+        :param height: высота укрепления
+        """
+        Target.__init__(self, health, 0, x, y, True)
+        self.width = width
+        self.height = height
+        self.healthbar_size = 12
+        self.image = pygame.transform.scale(fort_image, (self.width, self.height))
+
+    def draw(self):
+        """
+        Рисует укрепление и возвращает поверхность с ним
+        """
+        return self.image

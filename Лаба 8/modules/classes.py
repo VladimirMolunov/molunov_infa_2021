@@ -279,14 +279,15 @@ class Bullet(GameObject):
 
 
 class Target(GameObject):
-    def __init__(self, health, border, x=0, y=0):
+    def __init__(self, health, border, x=0, y=0, show_healthbar=False):
         """
         Конструктор класса мишеней
         :param health: количество очков здоровья мишени
         :param border: граница области по горизонтали, которую не может пересекать снаряд
         :param x: начальная координата центра мишени по горизонтали
         :param y: начальная координата центра мишени по вертикали
+        :param show_healthbar: определяет, отображается ли шкала здоровья мишени
         """
-        GameObject.__init__(self, x, y, health)
+        GameObject.__init__(self, x, y, health, show_healthbar)
         target_group.add(self.sprite)
         self.border = border
