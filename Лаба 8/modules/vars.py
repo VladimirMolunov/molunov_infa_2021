@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import pygame.image
 from pygame.image import load
 from pygame.display import set_mode
 
@@ -100,9 +101,41 @@ fort_height = 70
 
 dragon_period = 2
 dragon_health = 100
+dragon_x = 600
+dragon_y = 300
 dragon_width = 250
 dragon_height = 250
 dragon_hittime = 1
+
+partridge_period = 1
+partridge_health = 1
+partridge_x = 850
+partridge_y = 70
+partridge_vx = -120
+partridge_vy = 0
+partridge_width = 100
+partridge_height = 100
+partridge_hittime = 1
+
+deer_period = 1
+deer_health = 4
+deer_x = 850
+deer_y = 450
+deer_vx = -80
+deer_vy = 0
+deer_width = 160
+deer_height = 160
+deer_hittime = 1
+
+hare_period = 1
+hare_health = 2
+hare_x = 850
+hare_y = 500
+hare_vx = -120
+hare_vy = 240
+hare_width = 60
+hare_height = 60
+hare_hittime = 1
 
 
 def get_dragon_array():
@@ -149,11 +182,61 @@ def get_red_partridge_array():
     return red_array
 
 
+def get_deer_array():
+    """
+    Получает список кадров для анимации оленя
+    """
+    array = []
+    for i in range(1, 10, 1):
+        txt = 'frame-' + str(i) + '.gif'
+        array.append(load(Path('deer', txt)))
+    return array
+
+
+def get_red_deer_array():
+    """
+    Получает список кадров для анимации оленя, получившего урон
+    """
+    red_array = []
+    for i in range(1, 10, 1):
+        txt = str(i) + '.png'
+        red_array.append(load(Path('deer_red', txt)))
+    return red_array
+
+
+def get_hare_array():
+    """
+    Получает список кадров для анимации зайца
+    """
+    array = []
+    for i in range(1, 8, 1):
+        txt = 'frame-' + str(i) + '.gif'
+        array.append(load(Path('hare', txt)))
+    return array
+
+
+def get_red_hare_array():
+    """
+    Получает список кадров для анимации зайца, получившего урон
+    """
+    red_array = []
+    for i in range(1, 8, 1):
+        txt = str(i) + '.png'
+        red_array.append(load(Path('hare_red', txt)))
+    return red_array
+
+
 dragon_array = get_dragon_array()
 red_dragon_array = get_red_dragon_array()
 
 partridge_array = get_partridge_array()
 red_partridge_array = get_red_partridge_array()
+
+deer_array = get_deer_array()
+red_deer_array = get_red_deer_array()
+
+hare_array = get_hare_array()
+red_hare_array = get_red_hare_array()
 
 # weapons
 charge_per_second = 750
@@ -179,3 +262,26 @@ gun_default_power = 2400
 gun_width = 200
 gun_height = 45
 gun_delta = 0.366
+
+
+def sh(surface: pygame.Surface):
+    mask = pygame.mask.from_surface(surface)
+    w = surface.get_width()
+    h = surface.get_height()
+    s1 = pygame.Surface((w, h), pygame.SRCALPHA)
+    for i in range(w):
+        for j in range(h):
+            if mask.get_at((i, j)) == 1:
+                s1.set_at((i, j), (255, 0, 0, 128))
+    surface.blit(s1, (0, 0))
+    return surface
+
+
+def ch():
+    for i in range(1, 8, 1):
+        txt = 'frame-' + str(i) + '.gif'
+        txt2 = str(i) + '.png'
+        p = Path('deer', txt).resolve()
+        p2 = Path('deer_red', txt2).resolve()
+        a = load(p).convert_alpha()
+        pygame.image.save(sh(a), p2)

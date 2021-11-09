@@ -208,8 +208,13 @@ class Game(Showable):
         bullet_list = GameObjectsList()
         target_list = GameObjectsList()
         gun = weapons.Gun()
+        hare = targets.Hare()
+        deer = targets.Deer()
+        partridge = targets.Partridge()
         for i in range(target_count):
-            target_list.append(targets.BallTarget(self.ball_target_color))
+            target_list.append(hare)
+            target_list.append(deer)
+            target_list.append(partridge)
 
         while not self.finished and not self.game_finished:
             menu.bg.blit()
@@ -236,11 +241,12 @@ class Game(Showable):
                 ball.move()
                 for target in target_list:
                     if ball.is_hit(target) and target.health > 0:
+                        ball.live = 0
                         target.hit()
                         if target.health == 0:
                             target_list.smart_pop(target_list.index(target))
-                            target_list.append(targets.BallTarget(self.ball_target_color))
                             self.score += score_for_catch
+                        break
                 ball.remove_life()
                 if ball.live <= 0:
                     bullet_list.smart_pop(bullet_list.index(ball))

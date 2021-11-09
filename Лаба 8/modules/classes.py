@@ -236,6 +236,17 @@ class Animated(GameObject):
         frame = int((((pygame.time.get_ticks() - self.init_time) / (1000 * self.period)) % 1) * len(self.image_array))
         return frame
 
+    def draw(self):
+        """
+        Рисует объект, возвращает поверхность с ним
+        """
+        if self.hit_is_shown and self.hit_timeleft > 0:
+            surface = self.red_image_array[self.get_frame_number()]
+        else:
+            surface = self.image_array[self.get_frame_number()]
+        surface = pygame.transform.scale(surface, (self.width, self.height)).convert_alpha()
+        return surface
+
 
 class Bullet(GameObject):
     def __init__(self, lifetime, alpha, beta, x=0, y=0, is_enemy=False, g=g):

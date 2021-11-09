@@ -58,30 +58,22 @@ class BallTarget(Target):
 
 
 class Dragon(Animated):
-    def __init__(self, width=dragon_width, height=dragon_height, period=dragon_period, health=dragon_health):
+    def __init__(self, x=dragon_x, y=dragon_y,
+                 width=dragon_width, height=dragon_height, period=dragon_period, health=dragon_health):
         """
         Конструктор класса драконов
 
+        :param x: начальная координата центра дракона по горизонтали
+        :param y: начальная координата центра дракона по вертикали
         :param width: ширина дракона
         :param height: высота дракона
         :param period: период анимации в секундах
         :param health: здоровье дракона
         """
-        Animated.__init__(self, dragon_array, period, red_dragon_array, 600, 300, health, show_healthbar=True,
+        Animated.__init__(self, dragon_array, period, red_dragon_array, x, y, health, show_healthbar=True,
                           hit_is_shown=True, hit_time=dragon_hittime)
         self.width = width
         self.height = height
-
-    def draw(self):
-        """
-        Рисует дракона, возвращает поверхность с ним
-        """
-        if self.hit_is_shown and self.hit_timeleft > 0:
-            surface = self.red_image_array[self.get_frame_number()]
-        else:
-            surface = self.image_array[self.get_frame_number()]
-        surface = pygame.transform.scale(surface, (self.width, self.height)).convert_alpha()
-        return surface
 
     def move_object(self):
         """
@@ -185,3 +177,90 @@ class Fortification(Target):
         Рисует укрепление и возвращает поверхность с ним
         """
         return self.image
+
+
+class Partridge(Animated):
+    def __init__(self, x=partridge_x, y=partridge_y, vx=partridge_vx, vy=partridge_vy,
+                 width=partridge_width, height=partridge_height, period=partridge_period, health=partridge_health):
+        """
+        Конструктор класса куропаток
+
+        :param x: начальная координата центра куропатки по горизонтали
+        :param y: начальная координата центра куропатки по вертикали
+        :param vx: начальная скорость куропатки по горизонтали
+        :param vy: начальная скорость куропатки по вертикали
+        :param width: ширина куропатки
+        :param height: высота куропатки
+        :param period: период анимации в секундах
+        :param health: здоровье куропатки
+        """
+        Animated.__init__(self, partridge_array, period, red_partridge_array,
+                          x, y, health, hit_is_shown=True, hit_time=partridge_hittime)
+        self.width = width
+        self.height = height
+        self.vx = vx
+        self.vy = vy
+
+    def move_object(self):
+        """
+        Перемещает куропатку по прошествии единицы времени
+        """
+        self.x += self.vx / self.fps
+
+
+class Deer(Animated):
+    def __init__(self, x=deer_x, y=deer_y, vx=deer_vx, vy=deer_vy,
+                 width=deer_width, height=deer_height, period=deer_period, health=deer_health):
+        """
+        Конструктор класса оленей
+
+        :param x: начальная координата центра оленя по горизонтали
+        :param y: начальная координата центра оленя по вертикали
+        :param vx: начальная скорость оленя по горизонтали
+        :param vy: начальная скорость оленя по вертикали
+        :param width: ширина оленя
+        :param height: высота оленя
+        :param period: период анимации в секундах
+        :param health: здоровье оленя
+        """
+        Animated.__init__(self, deer_array, period, red_deer_array, x, y, health, show_healthbar=True,
+                          hit_is_shown=True, hit_time=deer_hittime)
+        self.width = width
+        self.height = height
+        self.vx = vx
+        self.vy = vy
+
+    def move_object(self):
+        """
+        Перемещает оленя по прошествии единицы времени
+        """
+        self.x += self.vx / self.fps
+
+
+class Hare(Animated):
+    def __init__(self, x=hare_x, y=hare_y, vx=hare_vx, vy=hare_vy,
+                 width=hare_width, height=hare_height, period=hare_period, health=hare_health):
+        """
+        Конструктор класса зайцев
+
+        :param x: начальная координата центра зайца по горизонтали
+        :param y: начальная координата центра зайца по вертикали
+        :param vx: скорость зайца по горизонтали
+        :param vy: скорость зайца по вертикали в начале прыжка
+        :param width: ширина зайца
+        :param height: высота зайца
+        :param period: период анимации в секундах
+        :param health: здоровье зайца
+        """
+        Animated.__init__(self, hare_array, period, red_hare_array, x, y, health, show_healthbar=True,
+                          hit_is_shown=True, hit_time=deer_hittime)
+        self.width = width
+        self.height = height
+        self.vx = vx
+        self.vy = vy
+
+    def move_object(self):
+        """
+        Перемещает зайца по прошествии единицы времени
+        """
+        self.x += self.vx / self.fps
