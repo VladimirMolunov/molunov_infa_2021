@@ -170,7 +170,6 @@ class Game(Showable):
                             target_list.smart_pop(target_list.index(target))
                             target_list.append(targets.BallTarget(self.ball_target_color, health=6,
                                                                   show_healthbar=True))
-                            self.score += score_for_catch
                         break
                 for plane in plane_list:
                     if shell.is_hit(plane) and plane.health > 0:
@@ -181,7 +180,6 @@ class Game(Showable):
                         break
                 if shell.is_hit(fort) and fort.health > 0:
                     shell.live = 0
-                    print(fort.health)
                     fort.hit()
                     if fort.health == 0:
                         self.game_finished = True

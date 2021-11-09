@@ -1,6 +1,19 @@
 from pathlib import Path
+
 from pygame.image import load
 from pygame.display import set_mode
+
+# buttons
+make_transparent = (255, 255, 255)
+screen = set_mode((800, 600))
+def_image = load(Path('images', 'def_button.png').resolve()).convert_alpha()
+image_pressed = load(Path('images', 'pressed_button.png').resolve()).convert_alpha()
+image_pointed = load(Path('images', 'pointed_button.png').resolve()).convert_alpha()
+
+# misc
+hare_skin = load(Path('images', 'hare_skin.png').resolve()).convert_alpha()
+horns = load(Path('images', 'horns.png').resolve()).convert_alpha()
+bird = load(Path('images', 'bird.png').resolve()).convert_alpha()
 
 # groups
 transparent = (255, 255, 255, 0)
@@ -31,13 +44,6 @@ cannon_grey = (102, 102, 102)
 cannon_red = (255, 0, 0)
 cannon_green = (0, 255, 0)
 ball_colors = (red, blue, yellow, green, magenta, cyan)
-
-# buttons
-make_transparent = (255, 255, 255)
-screen = set_mode((800, 600))
-def_image = load(Path('images', 'def_button.png').resolve()).convert_alpha()
-image_pressed = load(Path('images', 'pressed_button.png').resolve()).convert_alpha()
-image_pointed = load(Path('images', 'pointed_button.png').resolve()).convert_alpha()
 
 # classes
 FPS = 60
@@ -121,8 +127,33 @@ def get_red_dragon_array():
     return red_array
 
 
+def get_partridge_array():
+    """
+    Получает список кадров для анимации куропатки
+    """
+    array = []
+    for i in range(1, 7, 1):
+        txt = str(i) + '.png'
+        array.append(load(Path('partridge', txt)))
+    return array
+
+
+def get_red_partridge_array():
+    """
+    Получает список кадров для анимации куропатки, получившей урон
+    """
+    red_array = []
+    for i in range(1, 7, 1):
+        txt = str(i) + '.png'
+        red_array.append(load(Path('partridge_red', txt)))
+    return red_array
+
+
 dragon_array = get_dragon_array()
 red_dragon_array = get_red_dragon_array()
+
+partridge_array = get_partridge_array()
+red_partridge_array = get_red_partridge_array()
 
 # weapons
 charge_per_second = 750
@@ -133,7 +164,7 @@ cannon_width = 30
 cannon_height = 20
 cannon_default_power = 500
 tank_default_power = 2400
-tank_x = 152
+tank_x = 225
 tank_y = 460
 tank_width = 244
 tank_height = 88

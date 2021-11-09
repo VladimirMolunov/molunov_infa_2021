@@ -6,6 +6,7 @@ cannon_bg = 'cannon_bg.jpg'
 cannon_finish_bg = 'cannon_finish_bg.jpg'
 war_bg = 'war_bg.jpg'
 war_finish_bg = 'war_finish_bg.jpg'
+war_lost_bg = 'war_lost_bg.jpg'
 hunt_bg = 'hunt_bg.jpg'
 hunt_finish_bg = 'hunt_finish_bg.jpg'
 minecraft_bg = 'minecraft_bg.jpg'
@@ -54,7 +55,8 @@ main_menu_text = ''
 choose_mode_menu_text = ''
 hotkeys_menu_text = 'Управляйте игрой левой кнопкой мыши\n\nESC - выход из игры\nA, D или <-, -> - управление танком'
 settings_menu_text = 'Yet to be done...'
-cannon_menu_text = ''
+cannon_menu_text = 'Стреляйте по мячам из пушки!\n\nЧтобы выстрелить с максимальной силой,\nполностью зарядите пушку.\n' \
+                   '(Когда пушка станвится красной - она заряжена.)'
 war_menu_text = 'Уничтожьте вражеское укрепление, пока не поздно!\n\nПеремещайте танк клавишами <- и -> или A и D.\n' \
                 'Не забывайте заранее сбивать истребители - \nпосле 5 попаданий их бомб вы погибнете!'
 hunt_menu_text = 'Still in progress'
@@ -74,7 +76,7 @@ main_grid = ButtonGrid(button_text_color, 400, 200, main_texts)
 choose_mode_grid = ButtonGrid(button_text_color, 400, 100, choose_mode_texts, back=True)
 hotkeys_grid = ButtonGrid(button_text_color, 400, 300, hotkeys_texts, back=True)
 settings_grid = ButtonGrid(button_text_color, 400, 300, settings_texts, back=True)
-cannon_grid = ButtonGrid(button_text_color, 400, 260, cannon_texts, back=True)
+cannon_grid = ButtonGrid(button_text_color, 400, 300, cannon_texts, back=True)
 war_grid = ButtonGrid(button_text_color, 400, 300, war_texts, back=True)
 hunt_grid = ButtonGrid(button_text_color, 400, 300, hunt_texts, back=True)
 minecraft_grid = ButtonGrid(button_text_color, 400, 300, minecraft_texts, back=True)
@@ -93,7 +95,7 @@ main_menu = Menu(main_grid, main_links, main_menu_text, button_text_color, menu_
 choose_mode_menu = Menu(choose_mode_grid, choose_mode_links, choose_mode_menu_text, button_text_color, menu_bg, 0)
 hotkeys_menu = Menu(hotkeys_grid, hotkeys_links, hotkeys_menu_text, button_text_color, menu_bg, 0, x=400, y=180)
 settings_menu = Menu(settings_grid, settings_links, settings_menu_text, button_text_color, menu_bg, 0, x=400, y=230)
-cannon_menu = Menu(cannon_grid, cannon_links, cannon_menu_text, button_text_color, menu_bg, 1, x=400, y=230)
+cannon_menu = Menu(cannon_grid, cannon_links, cannon_menu_text, button_text_color, menu_bg, 1, x=400, y=150)
 war_menu = Menu(war_grid, war_links, war_menu_text, button_text_color, menu_bg, 1, x=400, y=150)
 hunt_menu = Menu(hunt_grid, hunt_links, hunt_menu_text, button_text_color, menu_bg, 1, x=400, y=230)
 minecraft_menu = Menu(minecraft_grid, minecraft_links, minecraft_menu_text, button_text_color, menu_bg, 1, x=400, y=230)
@@ -106,7 +108,7 @@ war_game_menu = GameMenu(war_game_grid, war_game_links, war_game_menu_text, butt
 war_score_menu = Menu(war_score_grid, war_score_links, war_score_menu_text, war_finish_screen_color,
                       war_finish_bg, x=400, y=200, line_gap=40, size=80, font=None)
 war_lose_menu = Menu(war_lose_grid, war_lose_links, war_lose_menu_text, war_finish_screen_color,
-                     war_finish_bg, x=400, y=200, size=80, font=None)
+                     war_lost_bg, x=400, y=250, size=80, font=None)
 hunt_game_menu = GameMenu(hunt_game_grid, hunt_game_links, hunt_game_menu_text, button_text_color, hunt_bg, 4,
                           game='Hunt')
 hunt_score_menu = Menu(hunt_score_grid, hunt_score_links, hunt_score_menu_text, hunt_finish_screen_color,
