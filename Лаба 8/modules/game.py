@@ -253,7 +253,13 @@ class Game(Showable):
         for group in group_list:
             group.empty()
         num = 14
-        menu_list[num].set_text('Your score is ' + str(self.score) + '!')
+        if self.score % 10 == 1:
+            txt = ' очко'
+        elif self.score % 10 in (2, 3, 4):
+            txt = ' очка'
+        else:
+            txt = ' очков'
+        menu_list[num].set_text('Вы набрали ' + str(self.score) + txt + '!\n\nВаши трофеи:')
         return num
 
     def minecraft_game(self):

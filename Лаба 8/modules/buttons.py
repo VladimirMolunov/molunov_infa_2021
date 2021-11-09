@@ -361,3 +361,12 @@ class GameMenu(Menu):
         """
         Menu.__init__(self, grid, link_array, text, color, bg_filename, back, x, y, gap)
         self.game = game
+
+
+class TrophyScreen(Showable):
+    def __init__(self):
+        """
+        Конструктор класса полоски с количеством полученных трофеев
+        """
+        Showable.__init__(self)
+
