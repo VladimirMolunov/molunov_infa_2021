@@ -363,10 +363,16 @@ class GameMenu(Menu):
         self.game = game
 
 
+class Trophy(Showable):
+    pass
+
+
 class TrophyScreen(Showable):
-    def __init__(self):
+    def __init__(self, hare_skin=None, horns=None, bird=None):
         """
         Конструктор класса полоски с количеством полученных трофеев
         """
         Showable.__init__(self)
-
+        self.hare_skin = hare_skin
+        self.horns = horns
+        self.bird = bird

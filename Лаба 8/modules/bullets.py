@@ -140,3 +140,48 @@ class Bomb(Bullet):
         self.x += self.vx / self.fps
         self.y += self.vy / self.fps
         self.angle = - atan2(self.vy, self.vx)
+
+
+class Slug(Bullet):
+    def __init__(self, x=0, y=0, vx=0, vy=0, lifetime=slug_lifetime, width=slug_width,
+                 height=slug_height, alpha=slug_alpha, beta=slug_beta):
+        """
+         Конструктор класса ружеёных пуль
+        :param lifetime: время жизни пули в секундах
+        :param alpha: параметр a в формуле силы трения F = -av - bv^2
+        :param beta: параметр b в формуле силы трения F = -av - bv^2
+        :param width: длина пули
+        :param height: толщина пули
+        :param x: начальная координата центра пули по горизонтали
+        :param y: начальная координата центра пули по вертикали
+        :param vx: начальная скорость пули по горизонтали
+        :param vy: начальная скорость пули по вертикали
+        """
+        Bullet.__init__(self, lifetime, alpha, beta, x, y, True)
+        self.width = width
+        self.height = height
+        self.vx = vx
+        self.vy = vy
+        self.angle = - atan2(self.vy, self.vx)
+        self.surface = pygame.transform.smoothscale(slug_image, (self.width, self.height))
+        self.surface.set_colorkey(make_transparent)
+
+    def draw(self):
+        """
+        Рисует пулю, возвращает поверхность с ней
+        """
+        surface = pygame.transform.rotate(self.surface, self.angle * 180 / pi).convert_alpha()
+        return surface
+
+    def move_object(self):
+        """
+        Перемещает пулю по прошествии единицы времени
+        Переопределяет её скорость в соответствии с силами, действующими на неё
+        """
+        self.ax = - self.alpha * self.vx - self.beta * self.vx * abs(self.vx)
+        self.ay = self.g - self.alpha * self.vy - self.beta * self.vy * abs(self.vy)
+        self.vx += self.ax / self.fps
+        self.vy += self.ay / self.fps
+        self.x += self.vx / self.fps
+        self.y += self.vy / self.fps
+        self.angle = - atan2(self.vy, self.vx)

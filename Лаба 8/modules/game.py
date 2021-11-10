@@ -227,7 +227,7 @@ class Game(Showable):
                     self.finished = True
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if event.button == 1:
-                        bullet_list.append(gun.fire_ball(self.ball_colors))
+                        bullet_list.append(gun.fire_slug())
                 elif event.type == pygame.MOUSEMOTION:
                     gun.targetting(event)
                 elif event.type == pygame.KEYDOWN:

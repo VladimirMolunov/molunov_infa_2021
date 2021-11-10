@@ -3,7 +3,7 @@ import pygame
 from pathlib import Path
 from random import choice
 
-from modules.bullets import ball_lifetime, ball_r, Ball, TankShell, shell_lifetime, shell_h
+from modules.bullets import Ball, TankShell, Slug
 from modules.groups import weapon_group
 from modules.classes import GameObject
 from modules.vars import *
@@ -90,6 +90,28 @@ class Weapon(GameObject):
         shell.vx = self.power * cos(angle)
         shell.vy = self.power * sin(angle)
         return shell
+
+    def fire_slug(self):
+        """
+        Производит выстрел пулей
+        :return: новый объект пули
+        """
+        slug = self.new_slug(self.head_x, self.head_y, self.angle)
+        return slug
+
+    def new_slug(self, x, y, angle):
+        """
+        Создаёт новую пулю
+        :param x: начальная координата пули по горизонтали
+        :param y: начальная координата пули по вертикали
+        :param angle: угол наклона начальной скорости пули к горизонтальной оси, направленной вправо
+        (против часовой стрелки)
+        :return: новый объект пули
+        """
+        slug = Slug(x, y)
+        slug.vx = self.power * cos(angle)
+        slug.vy = self.power * sin(angle)
+        return slug
 
 
 class SimpleCannon(Weapon):

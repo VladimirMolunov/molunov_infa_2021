@@ -72,6 +72,12 @@ bomb_width = 60
 bomb_height = 17
 bomb_vx = -180
 bomb_vy = 200
+slug_lifetime = 10
+slug_width = 32
+slug_height = 14
+slug_image = load(Path('images', 'slug.png').resolve()).convert_alpha()
+slug_alpha = 0.01
+slug_beta = 0.0003
 
 # targets
 min_radius = 20

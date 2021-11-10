@@ -118,7 +118,7 @@ minecraft_game_menu = GameMenu(minecraft_game_grid, minecraft_game_links, minecr
 minecraft_score_menu = Menu(minecraft_score_grid, minecraft_score_links, minecraft_score_menu_text,
                             minecraft_finish_screen_color, minecraft_finish_bg, x=400, y=200, size=80, font=None)
 minecraft_lose_menu = Menu(minecraft_lose_grid, minecraft_lose_links, minecraft_lose_menu_text,
-                           minecraft_lost_color, minecraft_lost_bg, x=400, y=200)
+                           minecraft_lost_color, minecraft_lost_bg, x=400, y=200, line_gap=40, size=80, font=None)
 
 menu_list = [main_menu, choose_mode_menu, hotkeys_menu, settings_menu, cannon_menu, war_menu, hunt_menu, minecraft_menu,
              cannon_game_menu, cannon_score_menu, war_game_menu, war_score_menu, war_lose_menu, hunt_game_menu,
