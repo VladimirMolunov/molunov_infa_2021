@@ -4,7 +4,7 @@ from pathlib import Path
 from random import randint
 
 from modules import bullets, weapons, targets
-from modules.buttons import Menu
+from modules.buttons import Menu, Counter
 from modules.menus import menu_list
 from modules.groups import group_list
 from modules.classes import Showable, GameObjectsList, Background
@@ -85,7 +85,15 @@ class Game(Showable):
         for group in group_list:
             group.empty()
         num = 9
-        menu_list[num].set_text('Your score is ' + str(self.score) + '!')
+        if 10 < self.score < 15:
+            txt = 'ов'
+        elif self.score % 10 == 1:
+            txt = 'о'
+        elif self.score % 10 in (2, 3, 4):
+            txt = 'а'
+        else:
+            txt = 'ов'
+        menu_list[num].set_text('Вы набрали ' + str(self.score) + ' очк' + txt + '!')
         return num
 
     def war_game(self):
@@ -208,16 +216,12 @@ class Game(Showable):
         bullet_list = GameObjectsList()
         target_list = GameObjectsList()
         gun = weapons.Gun()
-        hare = targets.Hare()
-        deer = targets.Deer()
-        partridge = targets.Partridge()
-        for i in range(target_count):
-            target_list.append(hare)
-            target_list.append(deer)
-            target_list.append(partridge)
+        slug_counter = Counter(slug_icon, 25, 200, number=20, width=30)
 
         while not self.finished and not self.game_finished:
             menu.bg.blit()
+            slug_counter.change_number(gun.get_charge())
+            slug_counter.blit()
             for group in group_list:
                 group.draw(self.screen)
             pygame.display.update()
@@ -227,39 +231,58 @@ class Game(Showable):
                     self.finished = True
                 elif event.type == pygame.MOUSEBUTTONUP:
                     if event.button == 1:
-                        bullet_list.append(gun.fire_slug())
+                        if gun.get_charge() > 0:
+                            bullet_list.append(gun.fire_slug())
+                            gun.lose_charge()
                 elif event.type == pygame.MOUSEMOTION:
                     gun.targetting(event)
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self.game_finished = True
+                    if event.key in (pygame.K_r, pygame.K_q):
+                        gun.recharge()
+
+            d = randint(1, deer_chance_per_second * self.fps)
+            if d == 1:
+                deer = targets.Deer()
+                target_list.append(deer)
+            p = randint(1, partridge_chance_per_second * self.fps)
+            if p == 1:
+                partridge = targets.Partridge()
+                target_list.append(partridge)
+            h = randint(1, deer_chance_per_second * self.fps)
+            if h == 1:
+                hare = targets.Hare()
+                target_list.append(hare)
 
             gun.move()
             for target in target_list:
                 target.move()
-            for ball in bullet_list:
-                ball.move()
+            for slug in bullet_list:
+                slug.move()
                 for target in target_list:
-                    if ball.is_hit(target) and target.health > 0:
-                        ball.live = 0
+                    if slug.is_hit(target) and target.health > 0:
+                        slug.live = 0
                         target.hit()
                         if target.health == 0:
                             target_list.smart_pop(target_list.index(target))
                             self.score += score_for_catch
                         break
-                ball.remove_life()
-                if ball.live <= 0:
-                    bullet_list.smart_pop(bullet_list.index(ball))
+                slug.remove_life()
+                if slug.live <= 0 or slug.outside:
+                    bullet_list.smart_pop(bullet_list.index(slug))
         for group in group_list:
             group.empty()
         num = 14
-        if self.score % 10 == 1:
-            txt = ' очко'
+        if 10 < self.score < 15:
+            txt = 'ов'
+        elif self.score % 10 == 1:
+            txt = 'о'
         elif self.score % 10 in (2, 3, 4):
-            txt = ' очка'
+            txt = 'а'
         else:
-            txt = ' очков'
-        menu_list[num].set_text('Вы набрали ' + str(self.score) + txt + '!\n\nВаши трофеи:')
+            txt = 'ов'
+        menu_list[num].set_text('Вы набрали ' + str(self.score) + ' очк' + txt + '!\n\nВаши трофеи:')
         return num
 
     def minecraft_game(self):

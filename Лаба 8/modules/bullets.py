@@ -146,7 +146,7 @@ class Slug(Bullet):
     def __init__(self, x=0, y=0, vx=0, vy=0, lifetime=slug_lifetime, width=slug_width,
                  height=slug_height, alpha=slug_alpha, beta=slug_beta):
         """
-         Конструктор класса ружеёных пуль
+         Конструктор класса ружейных пуль
         :param lifetime: время жизни пули в секундах
         :param alpha: параметр a в формуле силы трения F = -av - bv^2
         :param beta: параметр b в формуле силы трения F = -av - bv^2
@@ -165,6 +165,7 @@ class Slug(Bullet):
         self.angle = - atan2(self.vy, self.vx)
         self.surface = pygame.transform.smoothscale(slug_image, (self.width, self.height))
         self.surface.set_colorkey(make_transparent)
+        self.outside = False
 
     def draw(self):
         """
@@ -185,3 +186,6 @@ class Slug(Bullet):
         self.x += self.vx / self.fps
         self.y += self.vy / self.fps
         self.angle = - atan2(self.vy, self.vx)
+        if self.x - self.width > self.screen_width or self.x + self.width < 0 or self.y - self.height >\
+                self.screen_height or self.y + self.height < 0:
+            self.outside = True

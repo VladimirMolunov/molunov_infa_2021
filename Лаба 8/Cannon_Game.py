@@ -2,8 +2,8 @@ from modules.game import Game
 
 
 def main():
-    mygame = Game()
-    mygame.main()
+    game = Game()
+    game.main()
 
 
 if __name__ == "__main__":

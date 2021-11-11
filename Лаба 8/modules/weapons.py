@@ -314,7 +314,8 @@ class Tank(Weapon):
 
 
 class Gun(Weapon):
-    def __init__(self, y=gun_y, default_power=gun_default_power, width=gun_width, height=gun_height):
+    def __init__(self, y=gun_y, default_power=gun_default_power, width=gun_width, height=gun_height,
+                 bullet_count=gun_bullet_count):
         """
         Конструктор класса охотничьих ружей
         :param x: начальная координата центра ружья по горизонтали
@@ -322,6 +323,7 @@ class Gun(Weapon):
         :param width: ширина ружья
         :param height: высота ружья
         :param default_power: скорость снаряда, только что вылетевшего из ружья
+        :param bullet_count: количество патронов в магазине
         """
         Weapon.__init__(self, default_power, - height / 2, y)
         self.width = width
@@ -329,6 +331,8 @@ class Gun(Weapon):
         self.angle = 0
         self.head_x = 0
         self.head_y = 0
+        self.bullet_count = bullet_count
+        self.bullets = bullet_count
 
     def targetting(self, event: pygame.event.Event):
         """
@@ -359,3 +363,23 @@ class Gun(Weapon):
         h = self.height
         self.head_x = w * c - h * (gun_delta * abs(s) + 0.5)
         self.head_y = self.y + w * s - h * gun_delta * c
+
+    def lose_charge(self):
+        """
+        Уменьшает количество патронов на 1
+        """
+        self.bullets -= 1
+        if self.bullets < 0:
+            self.bullets = 0
+
+    def recharge(self):
+        """
+        Перезаряжает ружьё
+        """
+        self.bullets = self.bullet_count
+
+    def get_charge(self):
+        """
+        Возвращает количество патронов в магазине ружья
+        """
+        return self.bullets

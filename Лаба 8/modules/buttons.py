@@ -363,8 +363,62 @@ class GameMenu(Menu):
         self.game = game
 
 
-class Trophy(Showable):
-    pass
+class Counter(Showable):
+    def __init__(self, image, x, y, width=40, height=None, number=0, font=None, fontsize=40, text_color=counter_color,
+                 left_gap=10, right_gap=10):
+        Showable.__init__(self)
+        self.image = image
+        self.number = number
+        self.def_x = x
+        self.def_y = y
+        self.x = 0
+        self.y = 0
+        self.width = width
+        self.font = font
+        self.text_color = text_color
+        self.fontsize = fontsize
+        self.left_gap = left_gap
+        self.right_gap = right_gap
+        if height is None:
+            self.height = width * image.get_height() / image.get_width()
+        else:
+            self.height = height
+
+    def add(self):
+        self.number += 1
+
+    def subtract(self):
+        self.number -= 1
+        if self.number < 0:
+            self.number = 0
+
+    def change_number(self, value):
+        self.number = value
+
+    def draw(self):
+        surface1 = pygame.transform.scale(self.image, (int(self.width), int(self.height))).convert_alpha()
+        surface1.set_colorkey(make_transparent)
+        font = pygame.font.SysFont(self.font, self.fontsize)
+        text = font.render(str(self.number), True, self.text_color)
+        w = text.get_width()
+        h = text.get_height()
+        x = font.render('x', True, self.text_color)
+        wx = x.get_width()
+        hx = x.get_height()
+        width = self.width + w + wx + self.left_gap + self.right_gap
+        height = self.height
+        surface = pygame.Surface((width, height), pygame.SRCALPHA)
+        surface.fill(transparent)
+        surface.blit(surface1, (0, 0))
+        surface.blit(x, (self.width + self.left_gap, (self.height - hx) / 2))
+        surface.blit(text, (self.width + self.left_gap + wx + self.right_gap, (self.height - h) / 2))
+        self.x = self.def_x + (w + wx + self.left_gap + self.right_gap) / 2
+        self.y = self.def_y
+        return surface
+
+    def blit(self):
+        s = self.draw()
+        self.screen.blit(s, (self.x - s.get_width() / 2, self.y - s.get_height() / 2))
 
 
 class TrophyScreen(Showable):

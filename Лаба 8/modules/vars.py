@@ -12,9 +12,11 @@ image_pressed = load(Path('images', 'pressed_button.png').resolve()).convert_alp
 image_pointed = load(Path('images', 'pointed_button.png').resolve()).convert_alpha()
 
 # misc
+counter_color = (255, 200, 200)
 hare_skin = load(Path('images', 'hare_skin.png').resolve()).convert_alpha()
 horns = load(Path('images', 'horns.png').resolve()).convert_alpha()
 bird = load(Path('images', 'bird.png').resolve()).convert_alpha()
+slug_icon = load(Path('images', 'slug_icon.png').resolve()).convert_alpha()
 
 # groups
 transparent = (255, 255, 255, 0)
@@ -33,6 +35,9 @@ score_for_catch = 1
 plane_count = 2
 plane_minimum_timeout = 2
 plane_chance_per_second = 5
+deer_chance_per_second = 10
+hare_chance_per_second = 15
+partridge_chance_per_second = 8
 
 red = (255, 0, 0)
 yellow = (255, 255, 0)
@@ -268,6 +273,7 @@ gun_default_power = 2400
 gun_width = 200
 gun_height = 45
 gun_delta = 0.366
+gun_bullet_count = 20
 
 
 def sh(surface: pygame.Surface):

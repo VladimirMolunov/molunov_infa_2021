@@ -59,7 +59,8 @@ cannon_menu_text = 'Стреляйте по мячам из пушки!\n\nЧт�
                    '(Когда пушка станвится красной - она заряжена.)'
 war_menu_text = 'Уничтожьте вражеское укрепление, пока не поздно!\n\nПеремещайте танк клавишами <- и -> или A и D.\n' \
                 'Не забывайте заранее сбивать истребители - \nпосле 5 попаданий их бомб вы погибнете!'
-hunt_menu_text = ''
+hunt_menu_text = 'Охотьтесь на диких животных,\nчтобы добыть ценные трофеи!\n\nПерезаряжайтесь кнопками Q или R.\n' \
+                 'Не забывайте, что пули не бесконечные!'
 minecraft_menu_text = 'Still in progress'
 cannon_game_menu_text = ''
 cannon_score_menu_text = ''
@@ -97,7 +98,7 @@ hotkeys_menu = Menu(hotkeys_grid, hotkeys_links, hotkeys_menu_text, button_text_
 settings_menu = Menu(settings_grid, settings_links, settings_menu_text, button_text_color, menu_bg, 0, x=400, y=230)
 cannon_menu = Menu(cannon_grid, cannon_links, cannon_menu_text, button_text_color, menu_bg, 1, x=400, y=150)
 war_menu = Menu(war_grid, war_links, war_menu_text, button_text_color, menu_bg, 1, x=400, y=150)
-hunt_menu = Menu(hunt_grid, hunt_links, hunt_menu_text, button_text_color, menu_bg, 1, x=400, y=230)
+hunt_menu = Menu(hunt_grid, hunt_links, hunt_menu_text, button_text_color, menu_bg, 1, x=400, y=150)
 minecraft_menu = Menu(minecraft_grid, minecraft_links, minecraft_menu_text, button_text_color, menu_bg, 1, x=400, y=230)
 
 cannon_game_menu = GameMenu(cannon_game_grid, cannon_game_links, cannon_game_menu_text, button_text_color, cannon_bg, 4,
