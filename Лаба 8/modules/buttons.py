@@ -217,7 +217,7 @@ class ButtonGrid(Showable):
 
 class Menu(Showable):
     def __init__(self, grid: ButtonGrid, link_array: list, text, color, bg_filename, back=0, x=-1, y=-1, gap=30,
-                 line_gap=20, size=40, font='arial'):
+                 added_gap=30, line_gap=20, size=40, font='arial'):
         """
         Конструктор класса меню
         :param grid: столбец кнопок
@@ -229,6 +229,7 @@ class Menu(Showable):
         :param x: координата центра текста по горизонтали
         :param y: координата центра текста по вертикали (если обе координаты не заданы, помещается под столбцом кнопок)
         :param gap: отступ от нижнего края столбца кнопок до текста
+        :param added_gap: отступ от нижнего края текста до дополнительных изображений
         :param line_gap: отступ между строками текста
         :param size: размер текста меню
         :param font: шрифт текста меню
@@ -248,9 +249,11 @@ class Menu(Showable):
         self.font = font
         self.size = size
         self.gap = gap
+        self.added_gap = added_gap
         self.line_gap = line_gap - self.size * 17/40
         self.text_surface = self.get_text()
         self.get_coords()
+        self.added_images = []
         self.game = None
 
     def get_coords(self):
@@ -298,6 +301,19 @@ class Menu(Showable):
         """
         self.screen.blit(self.text_surface, (self.x, self.y))
 
+    def image_add(self, surface: pygame.Surface):
+        """
+        Добавляет дополнительное изображение под текстом в меню
+        """
+        self.added_images.append(surface)
+
+    def image_blit(self, surface: pygame.Surface):
+        """
+        Выводит дополнительное изображение под текстом на экран
+        """
+        self.screen.blit(surface, ((self.screen_width - surface.get_width()) / 2,
+                                   self.get_text_bottom() + self.added_gap))
+
     def blit(self):
         """
         Выводит меню на экран
@@ -305,6 +321,8 @@ class Menu(Showable):
         self.bg.blit()
         self.grid.blit()
         self.put_text()
+        for i in self.added_images:
+            self.image_blit(i)
 
     def check(self, event):
         """
@@ -351,6 +369,12 @@ class Menu(Showable):
         self.text_surface = self.get_text()
         self.get_coords()
 
+    def get_text_bottom(self):
+        """
+        Возвращает нижнюю координату текста по вертикали
+        """
+        return self.x + self.text_surface.get_height()
+
 
 class GameMenu(Menu):
     def __init__(self, grid: ButtonGrid, link_array: list, text, color, bg_filename, back=0, x=-1, y=-1, gap=30,
@@ -364,8 +388,23 @@ class GameMenu(Menu):
 
 
 class Counter(Showable):
-    def __init__(self, image, x, y, width=40, height=None, number=0, font=None, fontsize=40, text_color=counter_color,
-                 left_gap=10, right_gap=10):
+    def __init__(self, image, x=0, y=0, width=None, height=40, number=0,
+                 font=None, fontsize=80, text_color=counter_color, left_gap=10, right_gap=10):
+        """
+        Конструктор класса счётчиков некоторых объектов
+
+        :param image: иконка объекта, который он считает
+        :param x: координата центра иконки на экране по горизонтали
+        :param y: координата центра иконки на экране по вертикали
+        :param height: высота иконки
+        :param width: ширина иконки (None - сохранить пропорции картинки)
+        :param number: количество объектов
+        :param font: шрифт, которым отображается число
+        :param fontsize: размер шрифта
+        :param text_color: цвет текста
+        :param left_gap: отступ от иконки до "крестика"
+        :param right_gap: отступ от "крестика" до числа
+        """
         Showable.__init__(self)
         self.image = image
         self.number = number
@@ -373,29 +412,45 @@ class Counter(Showable):
         self.def_y = y
         self.x = 0
         self.y = 0
-        self.width = width
+        self.height = height
         self.font = font
         self.text_color = text_color
         self.fontsize = fontsize
         self.left_gap = left_gap
         self.right_gap = right_gap
-        if height is None:
-            self.height = width * image.get_height() / image.get_width()
+        if width is None:
+            self.width = height * image.get_width() / image.get_height()
         else:
-            self.height = height
+            self.width = width
 
     def add(self):
+        """
+        Добавляет 1 к количеству
+        """
         self.number += 1
 
     def subtract(self):
+        """
+        Вычитает 1 из количества, обнуляет его в случае получения отрицательного значения
+        """
         self.number -= 1
         if self.number < 0:
             self.number = 0
 
     def change_number(self, value):
+        """
+        Меняет количество
+        :param value: новое значени количества
+        :return:
+        """
         self.number = value
 
     def draw(self):
+        """
+        Рисует счётчик, возвращает поверхность с ним
+        Определяет координаты центра этой поверхности
+        :return: объект типа pygame.Surface
+        """
         surface1 = pygame.transform.scale(self.image, (int(self.width), int(self.height))).convert_alpha()
         surface1.set_colorkey(make_transparent)
         font = pygame.font.SysFont(self.font, self.fontsize)
@@ -417,16 +472,68 @@ class Counter(Showable):
         return surface
 
     def blit(self):
+        """
+        Выводит счётчик на экран
+        """
         s = self.draw()
         self.screen.blit(s, (self.x - s.get_width() / 2, self.y - s.get_height() / 2))
 
 
 class TrophyScreen(Showable):
-    def __init__(self, hare_skin=None, horns=None, bird=None):
+    def __init__(self, hare_skin_count=None, horns_count=None, bird_count=None, height=100, gap=20):
         """
-        Конструктор класса полоски с количеством полученных трофеев
+        Конструктор класса полоски с количеством полученных трофеев, отображаемой на финальном экране игры "Охота"
+
+        :param hare_skin_count: количество заячьих шкурок
+        :param horns_count: количество оленьих рогов
+        :param bird_count: количество птиц
+        :param height: высота иконок трофеев в полоске
+        :param gap: отступ между изображениями в полоске
         """
         Showable.__init__(self)
-        self.hare_skin = hare_skin
-        self.horns = horns
-        self.bird = bird
+        self.hare_skin_count = hare_skin_count
+        self.horns_count = horns_count
+        self.bird_count = bird_count
+        self.height = height
+        self.gap = gap
+        self.array = self.config_array()
+
+    def config_array(self):
+        """
+        Создаёт список счётчиков, находящихся в полоске
+        :return: список объектов класса Counter
+        """
+        array = []
+        if self.hare_skin_count is not None:
+            array.append(Counter(hare_skin, height=self.height, number=self.hare_skin_count))
+        if self.horns_count is not None:
+            array.append(Counter(horns, height=self.height, number=self.horns_count))
+        if self.bird_count is not None:
+            array.append(Counter(bird, height=self.height, number=self.bird_count))
+        return array
+
+    def draw(self):
+        """
+        Рисует полоску трофеев, возвращает поверхность с ней
+        :return: объект типа pygame.Surface
+        """
+        (w, h) = (-self.gap, 0)
+        for i in self.array:
+            w += i.draw().get_width() + self.gap
+            h_new = i.draw().get_height()
+            if h < h_new:
+                h = h_new
+        surface = pygame.Surface((w, h), pygame.SRCALPHA)
+        w = 0
+        for i in self.array:
+            s = i.draw()
+            surface.blit(s, (w, (h - s.get_height()) / 2))
+            w += s.get_width() + self.gap
+        return surface
+
+    def to_menu(self, menu: Menu):
+        """
+        Помещает полоску трофеев в меню
+        :param menu: меню, в которое нужно поместить полоску
+        """
+        menu.image_add(self.draw())

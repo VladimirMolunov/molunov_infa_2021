@@ -4,7 +4,7 @@ from pathlib import Path
 from random import randint
 
 from modules import bullets, weapons, targets
-from modules.buttons import Menu, Counter
+from modules.buttons import Menu, Counter, TrophyScreen
 from modules.menus import menu_list
 from modules.groups import group_list
 from modules.classes import Showable, GameObjectsList, Background
@@ -212,11 +212,12 @@ class Game(Showable):
         Проводит игру "Охота", возвращает номер меню окончания игры с подсчитанными очками
         """
         self.score = 0
+        (hare_skin_count, horns_count, bird_count) = (0, 0, 0)
         menu = menu_list[13]
         bullet_list = GameObjectsList()
         target_list = GameObjectsList()
         gun = weapons.Gun()
-        slug_counter = Counter(slug_icon, 25, 200, number=20, width=30)
+        slug_counter = Counter(slug_icon, 25, 200, number=20, height=75, text_color=(255, 200, 200), fontsize=40)
 
         while not self.finished and not self.game_finished:
             menu.bg.blit()
@@ -261,12 +262,18 @@ class Game(Showable):
             for slug in bullet_list:
                 slug.move()
                 for target in target_list:
-                    if slug.is_hit(target) and target.health > 0:
+                    if slug.is_hit(target) and target.health > 0 and not slug.outside:
                         slug.live = 0
                         target.hit()
                         if target.health == 0:
                             target_list.smart_pop(target_list.index(target))
                             self.score += score_for_catch
+                            if type(target) == targets.Deer:
+                                horns_count += 1
+                            elif type(target) == targets.Hare:
+                                hare_skin_count += 1
+                            elif type(target) == targets.Partridge:
+                                bird_count += 1
                         break
                 slug.remove_life()
                 if slug.live <= 0 or slug.outside:
@@ -283,6 +290,8 @@ class Game(Showable):
         else:
             txt = 'ов'
         menu_list[num].set_text('Вы набрали ' + str(self.score) + ' очк' + txt + '!\n\nВаши трофеи:')
+        trophy_screen = TrophyScreen(hare_skin_count, horns_count, bird_count)
+        trophy_screen.to_menu(menu_list[num])
         return num
 
     def minecraft_game(self):

@@ -12,11 +12,12 @@ image_pressed = load(Path('images', 'pressed_button.png').resolve()).convert_alp
 image_pointed = load(Path('images', 'pointed_button.png').resolve()).convert_alpha()
 
 # misc
-counter_color = (255, 200, 200)
+counter_color = (0, 0, 0)  # цвет крестика и чисел в счётчиках
 hare_skin = load(Path('images', 'hare_skin.png').resolve()).convert_alpha()
 horns = load(Path('images', 'horns.png').resolve()).convert_alpha()
 bird = load(Path('images', 'bird.png').resolve()).convert_alpha()
 slug_icon = load(Path('images', 'slug_icon.png').resolve()).convert_alpha()
+trophy_line_gap = 20  # отступ от текста меню до полоски трофеев
 
 # groups
 transparent = (255, 255, 255, 0)

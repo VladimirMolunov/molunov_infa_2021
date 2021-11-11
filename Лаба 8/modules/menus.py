@@ -113,7 +113,7 @@ war_lose_menu = Menu(war_lose_grid, war_lose_links, war_lose_menu_text, war_fini
 hunt_game_menu = GameMenu(hunt_game_grid, hunt_game_links, hunt_game_menu_text, button_text_color, hunt_bg, 4,
                           game='Hunt')
 hunt_score_menu = Menu(hunt_score_grid, hunt_score_links, hunt_score_menu_text, hunt_finish_screen_color,
-                       hunt_finish_bg, x=400, y=200, size=80, font=None)
+                       hunt_finish_bg, x=400, y=150, size=80, font=None)
 minecraft_game_menu = GameMenu(minecraft_game_grid, minecraft_game_links, minecraft_game_menu_text, button_text_color,
                                minecraft_bg, 4, game='Minecraft')
 minecraft_score_menu = Menu(minecraft_score_grid, minecraft_score_links, minecraft_score_menu_text,
