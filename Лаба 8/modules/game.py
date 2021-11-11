@@ -4,7 +4,8 @@ from pathlib import Path
 from random import randint
 
 from modules import bullets, weapons, targets
-from modules.buttons import Menu, Counter, TrophyScreen
+from modules.menu import Menu
+from modules.counters import Counter, TrophyScreen
 from modules.menus import menu_list
 from modules.groups import group_list
 from modules.classes import Showable, GameObjectsList, Background

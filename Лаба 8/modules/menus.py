@@ -1,4 +1,5 @@
-from modules.buttons import ButtonGrid, Menu, GameMenu
+from modules.buttons import ButtonGrid
+from modules.menu import Menu, GameMenu
 from modules.vars import *
 
 menu_bg = 'menu_bg.jpg'
